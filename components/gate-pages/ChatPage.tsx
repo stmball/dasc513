@@ -14,6 +14,7 @@ import type { FormatPageProps } from "./types";
 export function ChatPage({ session, gate, opened, onOpen }: FormatPageProps) {
   const firstId = gate.evidence[0]?.id ?? null;
   const [selectedId, setSelectedId] = useState<string | null>(firstId);
+  const [tableOpen, setTableOpen] = useState(false);
   const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
 
   useEffect(() => {
@@ -22,8 +23,20 @@ export function ChatPage({ session, gate, opened, onOpen }: FormatPageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!tableOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setTableOpen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [tableOpen]);
+
   function select(id: string) {
     setSelectedId(id);
+    // A table popped out in one channel shouldn't still be open after
+    // switching to a different one.
+    setTableOpen(false);
     onOpen(id);
   }
 
@@ -84,8 +97,10 @@ export function ChatPage({ session, gate, opened, onOpen }: FormatPageProps) {
                 </p>
               </div>
               <div className="flex-1 overflow-y-auto pt-2">
-                <TranscriptBody item={selected} />
-                <DocumentTable item={selected} />
+                <TranscriptBody
+                  item={selected}
+                  onOpenTable={selected.table ? () => setTableOpen(true) : undefined}
+                />
               </div>
             </div>
           ) : (
@@ -96,6 +111,32 @@ export function ChatPage({ session, gate, opened, onOpen }: FormatPageProps) {
         onBack={() => setSelectedId(null)}
         backLabel="← All channels"
       />
+      {selected?.table && tableOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setTableOpen(false)}
+        >
+          <div
+            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-5 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-1 flex items-center justify-between gap-3">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Shared in #{selected.title}
+              </p>
+              <button
+                type="button"
+                onClick={() => setTableOpen(false)}
+                aria-label="Close table"
+                className="shrink-0 rounded px-1.5 py-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+              >
+                ✕
+              </button>
+            </div>
+            <DocumentTable item={selected} />
+          </div>
+        </div>
+      ) : null}
       <BackLink slug={session.slug} />
     </>
   );

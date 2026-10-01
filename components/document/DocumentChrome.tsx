@@ -350,9 +350,65 @@ function DataBody({ item }: { item: EvidenceItem }) {
   );
 }
 
+/** The literal token a transcript message's text can embed — in session
+ * data, not markup a student ever sees — to mark the point where that
+ * message shares the item's `table`. `MessageText` swaps it for a clickable
+ * attachment chip, the way a real chat client turns a pasted file into a
+ * small "open" affordance rather than dumping the whole spreadsheet inline. */
+export const TABLE_TOKEN = "{{table}}";
+
+/** A transcript message's own text: plain prose, or — if it contains
+ * `TABLE_TOKEN` and the channel was given an `onOpenTable` handler — prose
+ * with a clickable "open table" chip spliced in where the token was. */
+function MessageText({
+  text,
+  className,
+  onOpenTable,
+}: {
+  text: string;
+  className: string;
+  onOpenTable?: () => void;
+}) {
+  if (onOpenTable && text.includes(TABLE_TOKEN)) {
+    const [before, after] = text.split(TABLE_TOKEN);
+    return (
+      <p className={className}>
+        {before.trim() ? <Inline text={before.trim()} /> : null}
+        <button
+          type="button"
+          onClick={onOpenTable}
+          className="mx-1 inline-flex items-center gap-1.5 rounded border border-slate-300 bg-slate-50 px-2 py-1 align-middle text-xs font-semibold text-slate-700 hover:border-slate-400 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+        >
+          <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden>
+            <rect x="1.5" y="2.5" width="13" height="11" rx="1" fill="none" stroke="currentColor" strokeWidth="1.3" />
+            <path d="M1.5 6.5h13M6 2.5v11" stroke="currentColor" strokeWidth="1.3" />
+          </svg>
+          Open table
+        </button>
+        {after.trim() ? <Inline text={after.trim()} /> : null}
+      </p>
+    );
+  }
+  return (
+    <p className={className}>
+      <Inline text={text} />
+    </p>
+  );
+}
+
 /** An interview or chat log: alternating bubbles, with pure narration
- * ("*No further messages*") breaking out as a centred caption. */
-export function TranscriptBody({ item }: { item: EvidenceItem }) {
+ * ("*No further messages*") breaking out as a centred caption. A message
+ * whose text embeds `TABLE_TOKEN` renders an "Open table" chip in place of
+ * the token and calls `onOpenTable` — the channel's own table never renders
+ * as a plain block under the conversation, only as something a specific
+ * message actually shared. */
+export function TranscriptBody({
+  item,
+  onOpenTable,
+}: {
+  item: EvidenceItem;
+  onOpenTable?: () => void;
+}) {
   return (
     <div className="flex flex-col">
       {item.body.map((paragraph, index) => {
@@ -369,9 +425,12 @@ export function TranscriptBody({ item }: { item: EvidenceItem }) {
         const split = splitLead(paragraph);
         if (!split) {
           return (
-            <p key={index} className="py-1.5 text-sm leading-relaxed text-slate-800">
-              <Inline text={paragraph} />
-            </p>
+            <MessageText
+              key={index}
+              text={paragraph}
+              className="py-1.5 text-sm leading-relaxed text-slate-800"
+              onOpenTable={onOpenTable}
+            />
           );
         }
         return (
@@ -384,9 +443,11 @@ export function TranscriptBody({ item }: { item: EvidenceItem }) {
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-bold text-slate-900">{split.lead}</p>
-              <p className="text-sm leading-relaxed text-slate-800">
-                <Inline text={split.rest} />
-              </p>
+              <MessageText
+                text={split.rest}
+                className="text-sm leading-relaxed text-slate-800"
+                onOpenTable={onOpenTable}
+              />
             </div>
           </div>
         );

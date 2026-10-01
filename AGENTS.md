@@ -230,15 +230,27 @@ Conventions worth keeping:
   shared drive keeps admin clutter separate from the actual investigation —
   that separation is itself part of what makes a folder "obviously not
   relevant" without a lock ever saying so.
-- **A `chat`-format gate is exactly four channels, and every item in it must
-  be `kind: "transcript"`.** Nothing sits in a chat gate's sidebar as a
-  pinned document — a table, a set of definitions, a reference note all have
-  to arrive as something someone actually typed into the channel (a message
-  introducing a pasted table, a colleague explaining a formula in a Q&A
-  exchange), not as a `dataset`/`report`/`policy`/`memo` item alongside the
-  real conversations. If content doesn't fit any of the gate's four channels
-  as a plausible message, it belongs in a different gate (the archive, the
-  blog) instead of being wedged into the chat gate as a non-chat item.
+- **A `chat`-format gate is exactly eight channels, and every item in it must
+  be `kind: "transcript"`.** Four are real — the ones at least one lock's
+  `evidenceIds` draws on — and four are pure decoy: a whole channel of
+  world-building with no clue value, never referenced by any `evidenceIds`,
+  at least a full page of messages (not a couple of lines — a real busy
+  channel has history). Decoy channels want their own distinct flavour
+  rather than four versions of the same joke: a social-committee channel, an
+  on-call/ops channel, a now-dead project's channel nobody archived, a
+  regional-office or new-starters channel, that kind of thing. Nothing sits
+  in a chat gate's sidebar as a pinned document — a table, a set of
+  definitions, a reference note all have to arrive as something someone
+  actually typed into a channel (a message introducing a pasted table, a
+  colleague explaining a formula in a Q&A exchange), not as a `dataset`/
+  `report`/`policy`/`memo` item alongside the conversations. A message that
+  shares the item's `table` embeds the literal token `{{table}}` in its text
+  (see `TABLE_TOKEN` in `components/document/DocumentChrome.tsx`) — the
+  reading pane swaps it for a clickable "Open table" chip that pops the
+  table out in a modal, the way a real chat client turns a shared file into
+  an attachment rather than pasting the whole spreadsheet into the channel.
+  If content doesn't fit any channel as a plausible message, it belongs in a
+  different gate (the archive, the blog) instead of being wedged in here.
 - Accents are `coral | teal` — the two brand accents. Tailwind cannot see
   interpolated class names, so each is written out in full in `lib/accents.ts`.
   See *House style* below before touching anything visual.

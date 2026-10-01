@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/*
+ * Samuel's house brand, translated from the PowerPoint template.
+ *
+ *   navy  #242D5C   all text, all rules, all borders
+ *   coral #EE416F   FILLED SHAPES ONLY
+ *   teal  #00A588   FILLED SHAPES ONLY
+ *   white #FFFFFF   text and rules on navy
+ *
+ * The one rule that governs everything below: accent colours are only ever a
+ * background fill. They never appear on text, lines, rules or borders. If you
+ * want to draw the eye, fill a box and put white text on it.
+ */
+@theme inline {
+  --font-sans: var(--font-poppins);
+
+  --color-navy: #242d5c;
+  --color-coral: #ee416f;
+  --color-teal: #00a588;
+
+  /* Navy at reduced alpha — for rules, hairlines and tints. Still navy. */
+  --color-navy-90: rgba(36, 45, 92, 0.9);
+  --color-navy-70: rgba(36, 45, 92, 0.7);
+  --color-navy-55: rgba(36, 45, 92, 0.55);
+  --color-navy-30: rgba(36, 45, 92, 0.3);
+  --color-navy-15: rgba(36, 45, 92, 0.15);
+  --color-navy-08: rgba(36, 45, 92, 0.08);
+  --color-navy-04: rgba(36, 45, 92, 0.04);
+
+  /* White at reduced alpha — the same idea, for use on navy grounds. */
+  --color-white-70: rgba(255, 255, 255, 0.7);
+}
+
+/*
+ * Content surfaces are white, cover and divider surfaces are navy — the two
+ * slide grounds from the template. The page does not follow the viewer's
+ * theme; the brand is a fixed light scheme.
+ */
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: #ffffff;
+  color: #242d5c;
+}
+
+/*
+ * Selection has to be set per ground rather than once globally. A single navy
+ * highlight vanishes against the navy cover, divider and table headers — the
+ * fill matches the background — and it muddies the accent-filled shapes.
+ *
+ * So each ground inverts to the other brand colour: the highlight is always
+ * navy-on-white or white-on-navy, which keeps it legible everywhere and keeps
+ * the accents off text and out of the highlight entirely. These key off the
+ * fill classes already in the markup, so they cannot drift out of sync with it.
+ */
+::selection {
+  background-color: #242d5c;
+  color: #ffffff;
+}
+
+/* Navy grounds: cover, section dividers, footer, table header bands. */
+.bg-navy::selection,
+.bg-navy ::selection {
+  background-color: #ffffff;
+  color: #242d5c;
+}
+
+/* Accent-filled shapes: objective panels, badges, pills, buttons. */
+.bg-coral::selection,
+.bg-coral ::selection,
+.bg-teal::selection,
+.bg-teal ::selection {
+  background-color: #ffffff;
+  color: #242d5c;
+}
+
+/*
+ * The template uses Poppins for everything, including the small tracked-out
+ * labels that would otherwise reach for a monospace face. There is no mono in
+ * the brand, so labels are Poppins with letter-spacing instead, and numeric
+ * columns lean on tabular figures rather than a different typeface.
+ */
+.label {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

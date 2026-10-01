@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import type { EvidenceItem, EvidenceKind } from "@/lib/types";
 import { DocumentBody, DocumentHeader, DocumentTable, hashId } from "../document/DocumentChrome";
 import { GridDetailShell } from "./GridDetailShell";
@@ -169,17 +170,198 @@ function FolderTileIcon() {
 }
 
 /**
+ * The physical tone and texture a kind's sheet was actually produced on — a
+ * warm near-white for a formal letter, pale newsprint for a press clipping,
+ * green-bar stripes for a machine-printed extract, faint graph-paper for a
+ * data extract — so the frame reads as a specific real artefact rather than
+ * one white card with a label swapped.
+ */
+function paperStyle(kind: EvidenceKind): CSSProperties {
+  switch (kind) {
+    case "code":
+      return {
+        backgroundColor: "#f6faf5",
+        backgroundImage:
+          "repeating-linear-gradient(180deg, rgba(22,101,52,0.08) 0px, rgba(22,101,52,0.08) 11px, transparent 11px, transparent 22px)",
+      };
+    case "dataset":
+      return {
+        backgroundColor: "#fdfcf7",
+        backgroundImage:
+          "linear-gradient(rgba(15,23,42,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.08) 1px, transparent 1px)",
+        backgroundSize: "18px 18px",
+      };
+    case "press":
+      return { backgroundColor: "#f1efe4" };
+    default:
+      return { backgroundColor: "#fdfbf3" };
+  }
+}
+
+/** The typeface a sheet was "typed" or "printed" in — serif for formal
+ * prose, monospace for a terminal extract or a typed-up transcript, and the
+ * page's own inherited system font for anything closer to a plain printout
+ * (a data table, a forwarded email) that was never meant to look literary. */
+function paperFontClass(kind: EvidenceKind): string {
+  if (kind === "code" || kind === "transcript") return "font-mono";
+  if (kind === "memo" || kind === "report" || kind === "policy" || kind === "ticket" || kind === "press") {
+    return "font-serif";
+  }
+  return "";
+}
+
+/** A small deterministic tilt from the item's own id, so a shelf of papers
+ * doesn't all sit perfectly square the way an on-screen stack of cards
+ * would — never random, so it doesn't shift between renders. */
+function paperTilt(id: string): number {
+  return ((hashId(id) % 17) - 8) / 7;
+}
+
+const HAS_LETTERHEAD: Partial<Record<EvidenceKind, true>> = {
+  memo: true,
+  report: true,
+  policy: true,
+};
+
+// Ticket kind already carries its own "Logged" pill in `DocumentHeader`
+// (`components/document/DocumentChrome.tsx`) — a second stamp there would
+// double up, so only policy gets the archive's own ink stamp.
+const STAMP_BY_KIND: Partial<Record<EvidenceKind, { label: string; sublabel: string }>> = {
+  policy: { label: "On file", sublabel: "Compliance" },
+};
+
+/** The headed paper a formal Meridian document actually left the building
+ * on — a crest, the company name and a thin double rule — for the kinds
+ * that would plausibly have been printed on letterhead. A ticket or a code
+ * extract never gets one; those are internal, unheaded sheets. */
+function Letterhead() {
+  return (
+    <div className="px-6 pb-3 pt-6">
+      <div className="flex items-center gap-3">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden className="shrink-0 text-slate-700">
+          <path
+            d="M16 1.5 29.5 7v9.5c0 8.3-5.6 12.7-13.5 14.3C8.1 29.2 2.5 24.8 2.5 16.5V7z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.3"
+          />
+          <text x="16" y="20" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="currentColor">
+            MHA
+          </text>
+        </svg>
+        <div className="min-w-0">
+          <p className="text-[12.5px] font-bold uppercase tracking-[0.1em] text-slate-800">
+            Meridian Health Analytics Ltd
+          </p>
+          <p className="text-[9.5px] uppercase tracking-[0.16em] text-slate-400">
+            Assurance &amp; Governance Office
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 border-t-2 border-slate-700" />
+      <div className="mt-[3px] border-t border-slate-300" />
+    </div>
+  );
+}
+
+/** The paperclip holding a loose memo's pages together, drawn overlapping
+ * the sheet's own top-left corner the way a real one catches the edge. */
+function PaperClip() {
+  return (
+    <svg
+      aria-hidden
+      width="30"
+      height="30"
+      viewBox="0 0 24 24"
+      className="pointer-events-none absolute -left-2.5 -top-2.5 -rotate-[18deg] text-slate-400 drop-shadow"
+    >
+      <path
+        d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49L13 2.56a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** A rectangular ink stamp — the kind a records clerk or an incident desk
+ * actually presses onto a sheet — rotated slightly off true the way a real
+ * hand stamp always lands, never dead square. */
+function InkStamp({ label, sublabel }: { label: string; sublabel: string }) {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute right-5 top-5 rotate-[-7deg] rounded-sm border-[3px] border-double border-slate-400 px-2.5 py-1 opacity-70 mix-blend-multiply"
+    >
+      <p className="text-center text-[11px] font-black uppercase leading-none tracking-[0.18em] text-slate-500">
+        {label}
+      </p>
+      <p className="mt-0.5 text-center text-[8px] font-semibold uppercase leading-none tracking-wide text-slate-400">
+        {sublabel}
+      </p>
+    </div>
+  );
+}
+
+/** Real perforation — a row of tear-off holes along the top of a pad sheet,
+ * or down both edges of a fanfold printer extract — rather than a dashed
+ * CSS border standing in for one. */
+function Perforation({ orientation }: { orientation: "top" | "sides" }) {
+  if (orientation === "top") {
+    return (
+      <div
+        aria-hidden
+        className="h-2.5 w-full"
+        style={{
+          backgroundImage: "radial-gradient(circle, #cbd5e1 2px, transparent 2.1px)",
+          backgroundSize: "13px 100%",
+        }}
+      />
+    );
+  }
+  return (
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 top-0 left-1.5 w-2"
+        style={{
+          backgroundImage: "radial-gradient(circle, #cbd5e1 2.2px, transparent 2.3px)",
+          backgroundSize: "100% 15px",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 top-0 right-1.5 w-2"
+        style={{
+          backgroundImage: "radial-gradient(circle, #cbd5e1 2.2px, transparent 2.3px)",
+          backgroundSize: "100% 15px",
+        }}
+      />
+    </>
+  );
+}
+
+/**
  * The record itself, filed rather than just displayed — but opened inside a
  * Quick-Look-shaped floating window: its own small traffic-light title bar,
  * rounded corners and a soft shadow against the Finder-grey backdrop, the
- * way pressing Space on a selected file actually looks on macOS. The
- * reference/classification strip stands in for the row of details Quick
- * Look shows under the title. `DocumentHeader` and friends are dropped in
- * untouched, full width, exactly as every other gate uses them.
+ * way pressing Space on a selected file actually looks on macOS. Inside
+ * that chrome sits a second, physical layer: the actual sheet of paper,
+ * tilted a degree off true on a grey mat, in the tone, typeface and
+ * accessories (a letterhead, a paperclip, an ink stamp, tractor-feed holes)
+ * its own kind would really have been produced with — so a group is looking
+ * at a photographed document, not an HTML card with a label on it.
+ * `DocumentHeader` and friends still render the actual content, untouched,
+ * exactly as every other gate uses them.
  */
 function RecordSheet({ item }: { item: EvidenceItem }) {
   const ref = referenceOf(item);
   const pages = estimatePages(item);
+  const tilt = paperTilt(item.id);
+  const stamp = STAMP_BY_KIND[item.kind];
   return (
     <div className="overflow-hidden rounded-xl border border-slate-300/70 bg-white shadow-xl">
       <div className="flex items-center gap-3 border-b border-slate-200 bg-[#ececec] px-4 py-2.5">
@@ -189,17 +371,35 @@ function RecordSheet({ item }: { item: EvidenceItem }) {
         </p>
         <span aria-hidden className="w-[54px]" />
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-dashed border-slate-300 bg-slate-50 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-300 bg-[#dcdcdf] px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
         <span className="font-mono tracking-normal text-slate-600">{ref}</span>
         <span className={`rounded-full px-2 py-0.5 text-white ${kindBg(item.kind)}`}>
           {CLASSIFICATION[item.kind]}
         </span>
         <span>{pages} {pages === 1 ? "page" : "pages"}</span>
       </div>
-      <DocumentHeader item={item} />
-      <div className="px-6 py-5">
-        <DocumentBody item={item} />
-        <DocumentTable item={item} />
+      <div className="bg-[#d7d7da] px-4 py-7 sm:px-10">
+        <div
+          className="relative mx-auto max-w-2xl overflow-hidden rounded-[2px] ring-1 ring-black/10"
+          style={{
+            ...paperStyle(item.kind),
+            transform: `rotate(${tilt}deg)`,
+            boxShadow: "0 22px 45px -18px rgba(15,23,42,0.45), 0 2px 6px rgba(15,23,42,0.08)",
+          }}
+        >
+          {item.kind === "memo" ? <PaperClip /> : null}
+          {stamp ? <InkStamp label={stamp.label} sublabel={stamp.sublabel} /> : null}
+          {item.kind === "ticket" ? <Perforation orientation="top" /> : null}
+          {item.kind === "code" ? <Perforation orientation="sides" /> : null}
+          <div className={paperFontClass(item.kind)}>
+            {HAS_LETTERHEAD[item.kind] ? <Letterhead /> : null}
+            <DocumentHeader item={item} />
+            <div className="px-6 py-5">
+              <DocumentBody item={item} />
+              <DocumentTable item={item} />
+            </div>
+          </div>
+        </div>
       </div>
       <div className="border-t border-dashed border-slate-300 bg-slate-50 px-4 py-2 text-[10px] text-slate-400">
         Retrieved from the archive · {ref} · logged for this session only

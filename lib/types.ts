@@ -60,12 +60,14 @@ export interface EvidenceItem {
    */
   thread?: EmailMessage[];
   /**
-   * `archive`- and `papers`-gate only: the grouping this document is filed
-   * under — a folder name for an archive ("Assurance case", "Facilities &
-   * Estates"), or an agenda-item label for a papers gate ("Item 6 — VITAL-LM
-   * data protection and sustainability assurance"). Ignored by every other
-   * gate format. Give every item in an `archive`- or `papers`-format gate one
-   * — a gate where nothing sets it falls back to the old flat file list.
+   * `archive`-, `papers`- and `register`-gate only: the grouping this
+   * document is filed under — a folder name for an archive ("Assurance
+   * case", "Facilities & Estates"), an agenda-item label for a papers gate
+   * ("Item 6 — VITAL-LM data protection and sustainability assurance"), or a
+   * workstream for a register ("HORIZON assurance", "IT & Security").
+   * Ignored by every other gate format. Give every item in an `archive`-,
+   * `papers`- or `register`-format gate one — a gate where nothing sets it
+   * falls back to the old flat file list.
    */
   folder?: string;
   /**
@@ -131,10 +133,12 @@ export interface Stage {
 }
 
 /**
- * The in-world medium a gate's evidence is presented through. `archive` and
- * `papers` are the two formal filed-documents treatments a session's final
- * gate can use; the others are lighter, more informal media that come
- * before it.
+ * The in-world medium a gate's evidence is presented through. `archive`,
+ * `papers` and `register` are the formal filed-documents treatments a
+ * session's final gate can use; the others are lighter, more informal media
+ * that come before it. `pager` (a secure clinical messaging app) and
+ * `board` (an early-2000s internal message board) are the uncertainty
+ * session's own pair of earlier-gate media, distinct from `chat` and `blog`.
  */
 export type GateFormat =
   | "inbox"
@@ -144,7 +148,10 @@ export type GateFormat =
   | "brochure"
   | "archive"
   | "tickets"
-  | "papers";
+  | "papers"
+  | "pager"
+  | "board"
+  | "register";
 
 export interface Gate {
   id: string;

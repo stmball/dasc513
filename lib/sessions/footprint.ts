@@ -246,7 +246,7 @@ export const footprintSession: Session = {
           debrief: [
             "**About £878,000 — Meridian's arithmetic checks out.** 340 doctors × 220 shifts × (22 ÷ 60 hours) × £32 an hour lands within a rounding error of the headline figure, and it's worth confirming that before you argue about anything else: a business case that can't survive its own multiplication doesn't deserve a second look, and this one can.",
             "But check what the four inputs actually measure. Every one of them is *time*, converted to money at a fully-loaded hourly rate. Nothing in this calculation asks whether that time becomes a pound the Trust can spend elsewhere, or whether the doctor simply does something else with the 22 minutes. Publishing the formula is more transparency than most vendors offer — it is not the same as publishing the answer to the question the committee actually needs answered.",
-            "Hold onto both numbers: £878,000, and the fact that it's built entirely from time, not cash. The archive has a restatement of this exact figure, done the way a finance director does it.",
+            "Hold onto both numbers: £878,000, and the fact that it's built entirely from time, not cash. The committee papers have a restatement of this exact figure, done the way a finance director does it.",
           ],
           fragment: "0",
         },
@@ -281,9 +281,9 @@ export const footprintSession: Session = {
             answers: [0, 1, 2, 3],
           },
           debrief: [
-            "**Four true statements, and they fall into three families of the same mistake.** A category error: sending every trust's records to one place and training one model there is **centralised learning**, whatever the page calls it — you'll see the vendor make exactly this move again in your inbox. A missing measurement: 'zero privacy risk' and 'negligible environmental impact' are adjectives, not numbers, on a site that is otherwise happy to publish its arithmetic, as you just found in Lock 2. And a claim that contradicts its own procedure: a page that says free text passes through unchanged cannot, on the next line, claim the result is de-identified.",
-            "The four false statements are worth remembering for what they get *nearly* right. Meridian does publish its savings formula — the failure there was in what the formula measures, not whether it exists. 'Federated' and 'distribute' are not synonyms, and the federation page's own FAQ answer concedes as much once you read past the first sentence. A validation figure over 1.1 million notes says nothing about performance on Brackenmoor's population specifically, for the same reason an AUC computed on one cohort says nothing about a different one. And the absence of the word 'ethnicity' from a privacy page doesn't rule out an extraction attack that exposes exactly the patients least protected by being one of many — hold that thought for the archive.",
-            "Three claims, three disciplines, one marketing site. Your inbox and the document room exist to find out what each one is actually hiding.",
+            "**Four true statements, and they fall into three families of the same mistake.** A category error: sending every trust's records to one place and training one model there is **centralised learning**, whatever the page calls it — you'll see the vendor make exactly this move again in the service desk tickets ahead. A missing measurement: 'zero privacy risk' and 'negligible environmental impact' are adjectives, not numbers, on a site that is otherwise happy to publish its arithmetic, as you just found in Lock 2. And a claim that contradicts its own procedure: a page that says free text passes through unchanged cannot, on the next line, claim the result is de-identified.",
+            "The four false statements are worth remembering for what they get *nearly* right. Meridian does publish its savings formula — the failure there was in what the formula measures, not whether it exists. 'Federated' and 'distribute' are not synonyms, and the federation page's own FAQ answer concedes as much once you read past the first sentence. A validation figure over 1.1 million notes says nothing about performance on Brackenmoor's population specifically, for the same reason an AUC computed on one cohort says nothing about a different one. And the absence of the word 'ethnicity' from a privacy page doesn't rule out an extraction attack that exposes exactly the patients least protected by being one of many — hold that thought for the committee papers.",
+            "Three claims, three disciplines, one marketing site. The service desk and the committee papers exist to find out what each one is actually hiding.",
           ],
           fragment: "0",
         },
@@ -291,54 +291,41 @@ export const footprintSession: Session = {
     },
     {
       id: "footprint-gate-b",
-      title: "Gate B — The Inbox",
-      format: "inbox",
-      chrome: "Brackenmoor NHS FT — IG & Digital Investment inbox",
+      title: "Gate B — The Service Desk",
+      format: "tickets",
+      chrome: "Brackenmoor NHS FT — IG & Digital Engineering Service Desk",
       teaser:
-        "Someone inside the Trust already spotted the tell in Meridian's pitch. It's sitting in an inbox nobody escalated.",
+        "Someone inside the Trust already spotted the tell in Meridian's pitch. It's sitting in a ticket queue nobody escalated.",
       intro: [
-        "Gate A is done. What follows is the correspondence the marketing site doesn't show you: the Trust's own Data Protection Officer and data engineering team asking the questions the site's FAQ doesn't answer, and Meridian's reply.",
+        "Gate A is done. What follows is the correspondence the marketing site doesn't show you: the Trust's own Data Protection Officer and data engineering team raising the questions the site's FAQ doesn't answer, logged and answered the way a real NHS trust actually tracks this kind of thing — as tickets, not as a tidy email chain.",
       ],
       evidence: [
         {
           id: "dpo-email",
-          title: "Before this goes anywhere near the committee",
-          kind: "email",
-          source: "",
-          body: [],
-          thread: [
-            {
-              from: "R. Sanchez, Data Protection Officer",
-              to: "K. Ashworth, IG & Digital Investment Lead; cc J. Okonkwo",
-              date: "6 weeks ago",
-              body: [
-                "Karen — before this goes anywhere near the committee, I want to flag what the marketing site is actually describing under 'One model, five trusts'. It says every trust extracts its records to Meridian's own environment and one combined model is trained there. That is not what 'federated' usually means in the literature I've read — James is sending over a proper briefing separately so we're arguing from the same definitions, not the marketing copy.",
-                "Even setting the label aside: our own check on the sample extract on their privacy page came back at k = 1. If that's the anonymity we're working with for one trust, I do not want to find out what it looks like once four more trusts' worth of narrative is sitting in the same store.",
-                "James has also pulled the numbers on who'd actually be in this federation — see his email. One of the five trusts is tiny next to the others. I want to know exactly how much say it gets before I sign off on anything.",
-                "Rosa",
-              ],
-            },
-            {
-              from: "T. Okafor, Meridian Partnerships Lead",
-              to: "R. Sanchez, DPO; cc K. Ashworth, Brackenmoor NHS FT",
-              date: "5 weeks ago",
-              body: [
-                "Hi Rosa — thanks for the questions, happy to be fully transparent about the mechanics.",
-                "Every participating trust extracts its records to our secure analytics environment. There, we train a single combined model, which we then federate — that is, distribute — back out to every site. We appreciate 'federated' is being used loosely here, but the outcome for each trust is the same: a better model, trained on more data than any of you could gather alone.",
-                "On the sample extract: as you know, that data is de-identified in line with your own SOP before it ever reaches us. There is no privacy risk.",
-                "On Trust E: we'd propose standard weighted averaging once this is a genuine federation, so no single trust's data dominates disproportionately relative to its size. Happy to discuss further at renewal.",
-              ],
-            },
+          title: "Query: 'federated' doesn't match the architecture described",
+          kind: "ticket",
+          source: "R. Sanchez, Data Protection Officer",
+          queue: "Information Governance",
+          status: "Resolved",
+          body: [
+            "**R. Sanchez, Data Protection Officer.** Before this goes anywhere near the committee, I want to flag what the marketing site is actually describing under 'One model, five trusts'. It says every trust extracts its records to Meridian's own environment and one combined model is trained there. That is not what 'federated' usually means in the literature I've read — James has raised a separate ticket with a proper briefing, so we're arguing from the same definitions, not the marketing copy.",
+            "Even setting the label aside: our own check on the sample extract on their privacy page came back at k = 1. If that's the anonymity we're working with for one trust, I do not want to find out what it looks like once four more trusts' worth of narrative is sitting in the same store.",
+            "James has also logged the numbers on who'd actually be in this federation — see his ticket below. One of the five trusts is tiny next to the others. I want to know exactly how much say it gets before I sign off on anything.",
+            "**T. Okafor, Meridian Partnerships Lead.** Hi Rosa — thanks for the questions, happy to be fully transparent about the mechanics.",
+            "Every participating trust extracts its records to our secure analytics environment. There, we train a single combined model, which we then federate — that is, distribute — back out to every site. We appreciate 'federated' is being used loosely here, but the outcome for each trust is the same: a better model, trained on more data than any of you could gather alone.",
+            "On the sample extract: as you know, that data is de-identified in line with your own SOP before it ever reaches us. There is no privacy risk.",
+            "On Trust E: we'd propose standard weighted averaging once this is a genuine federation, so no single trust's data dominates disproportionately relative to its size. Happy to discuss further at renewal.",
           ],
         },
         {
           id: "architectures-briefing",
-          title: "Four ways to train a model across five trusts",
-          kind: "email",
-          source: "J. Okonkwo, Head of Data Engineering → R. Sanchez, K. Ashworth",
-          date: "6 weeks ago",
+          title: "Reference: four ways to train a model across five trusts",
+          kind: "ticket",
+          source: "J. Okonkwo, Head of Data Engineering",
+          queue: "Data Engineering",
+          status: "Resolved",
           body: [
-            "Rosa asked me to put together a quick reference on how you'd actually train a model across five trusts, before this goes to committee. Four options below.",
+            "**J. Okonkwo, Head of Data Engineering.** Rosa asked me to put together a quick reference on how you'd actually train a model across five trusts, before this goes to committee. Four options below.",
             "**Centralised learning.** Every trust extracts its records and sends them to one place; one model is trained on the pooled data. Simple, statistically ideal, and the option with the largest information governance footprint.",
             "**Distributed learning.** One model trained by several computers in parallel. The dataset is *split across workers*, each worker computes how its chunk should change the model, and the changes are aggregated. Note the crucial detail: the data is divided *by the host*, so it is still centrally owned. Distributed learning is a **performance** technique, not a privacy one.",
             "**Federated learning.** Copies of the model are sent to each data controller, who keeps their own dataset. Each trains locally and returns **only model updates** to the host, which aggregates them and redistributes. This time the *model* moves and the data stays put. Raw patient data never leaves the trust, which is what makes the governance tractable.",
@@ -355,11 +342,12 @@ export const footprintSession: Session = {
         {
           id: "federation-table",
           title: "The proposed federation, trust by trust",
-          kind: "email",
-          source: "J. Okonkwo, Head of Data Engineering → R. Sanchez, K. Ashworth",
-          date: "6 weeks ago",
+          kind: "ticket",
+          source: "J. Okonkwo, Head of Data Engineering",
+          queue: "Data Engineering",
+          status: "Resolved",
           body: [
-            "And here's the breakdown Rosa mentioned — the five trusts Meridian proposes to include, with the training data each would bring.",
+            "**J. Okonkwo, Head of Data Engineering.** And here's the breakdown Rosa mentioned — the five trusts Meridian proposes to include, with the training data each would bring.",
           ],
           table: {
             caption: "Local dataset sizes across the proposed federation",
@@ -379,28 +367,15 @@ export const footprintSession: Session = {
         {
           id: "it-ticket",
           title: "What are we actually paying for?",
-          kind: "email",
-          source: "",
-          body: [],
-          thread: [
-            {
-              from: "J. Okonkwo, Head of Data Engineering",
-              to: "Commercial Team; cc Meridian account management",
-              date: "6 weeks ago",
-              body: [
-                "We've now been billed for four retrains of VITAL-LM in the last twelve months and I can't get a straight answer on what we're actually paying for. Table below is what Meridian's account manager sent when I asked for a breakdown.",
-                "Q2 concerns me the most. We stopped early because training loss had flattened out, which is standard practice — but I found a paper this week (Power et al. 2022) showing validation accuracy can jump sharply long after the loss curve looks flat. If that's a real risk here, stopping early might have thrown away a better model for the sake of a GPU bill.",
-                "Q4 is the one that actually impresses me: instead of training from scratch, they started from the Q3 winner and just adapted it to our data. Twenty-two GPU-hours instead of three hundred, and the account manager says performance was \"at least as good\". I'd like that explained to me before we agree to pay full price for a \"full retrain\" again.",
-              ],
-            },
-            {
-              from: "Meridian account manager",
-              to: "J. Okonkwo, Head of Data Engineering",
-              date: "6 weeks ago",
-              body: [
-                "Standard practice is a mix — full sweeps periodically, and lighter-touch updates in between. Happy to discuss the cadence at renewal.",
-              ],
-            },
+          kind: "ticket",
+          source: "J. Okonkwo, Head of Data Engineering",
+          queue: "Commercial",
+          status: "Pending",
+          body: [
+            "**J. Okonkwo, Head of Data Engineering.** We've now been billed for four retrains of VITAL-LM in the last twelve months and I can't get a straight answer on what we're actually paying for. Table below is what Meridian's account manager sent when I asked for a breakdown.",
+            "Q2 concerns me the most. We stopped early because training loss had flattened out, which is standard practice — but I found a paper this week (Power et al. 2022) showing validation accuracy can jump sharply long after the loss curve looks flat. If that's a real risk here, stopping early might have thrown away a better model for the sake of a GPU bill.",
+            "Q4 is the one that actually impresses me: instead of training from scratch, they started from the Q3 winner and just adapted it to our data. Twenty-two GPU-hours instead of three hundred, and the account manager says performance was \"at least as good\". I'd like that explained to me before we agree to pay full price for a \"full retrain\" again.",
+            "**Meridian account manager.** Standard practice is a mix — full sweeps periodically, and lighter-touch updates in between. Happy to discuss the cadence at renewal.",
           ],
           table: {
             caption: "Quarterly retrain log, last four quarters",
@@ -422,126 +397,58 @@ export const footprintSession: Session = {
           },
         },
         {
-          id: "office-social-email",
-          title: "Summer social — RSVP by Friday",
-          kind: "email",
-          source: "",
-          body: [],
-          thread: [
-            {
-              from: "Facilities & Staff Engagement, Brackenmoor NHS FT",
-              to: "All-Trust distribution list",
-              date: "6 weeks ago",
-              body: [
-                "Hi all — this year's summer social is confirmed for the last Friday of the month, 4pm on the lawn behind the education centre (marquee booked in case of rain, this is Merseyside after all).",
-                "As ever it's a bring-a-dish affair for the bake-off — last year's winner has been asked, again, to sit it out and judge instead rather than enter. Soft drinks and a hog roast provided by the Trust; anything stronger is a bring-your-own.",
-                "Please RSVP by Friday so catering can plan numbers, and let us know if you or anyone in your team has a dietary requirement we should cater for.",
-              ],
-            },
-            {
-              from: "S. Patel, Data Engineering",
-              to: "Facilities & Staff Engagement",
-              date: "6 weeks ago",
-              body: ["Count me in — is there a veggie option alongside the hog roast, or should I bring my own?"],
-            },
-            {
-              from: "Facilities & Staff Engagement",
-              to: "S. Patel, Data Engineering",
-              date: "6 weeks ago",
-              body: ["There'll be a veggie skewer option on the day, no need to bring anything — see you there!"],
-            },
+          id: "laptop-request-ticket",
+          title: "New starter laptop & software request — IG analyst",
+          kind: "ticket",
+          source: "K. Ashworth, IG & Digital Investment Lead",
+          queue: "IT Service Desk",
+          status: "Resolved",
+          body: [
+            "**K. Ashworth, IG & Digital Investment Lead.** We have a new IG analyst starting a week on Monday. Could I get a standard laptop plus Visio and the DPIA toolkit provisioned ahead of their start date? Line manager details attached.",
+            "**IT Service Desk.** Noted — standard build takes 3 working days, Visio and the toolkit will be added to the image. Could you confirm the cost centre for the software licence before we proceed?",
+            "**K. Ashworth, IG & Digital Investment Lead.** Cost centre is the same as the rest of the IG team — IG-0042. Thanks for the quick turnaround.",
+            "**IT Service Desk.** All set, cost centre confirmed. Laptop will be ready for collection from the service desk on their first morning — asset tag and sign-off sheet will be waiting at reception.",
           ],
         },
         {
-          id: "it-security-reminder",
-          title: "Action required: password reset by Friday",
-          kind: "email",
-          source: "",
-          body: [],
-          thread: [
-            {
-              from: "IT Security, Brackenmoor NHS FT",
-              to: "All-Trust distribution list",
-              date: "6 weeks ago",
-              body: [
-                "As part of our rolling password policy, your account is due for a scheduled password reset. Please update your password via the usual portal by Friday to avoid being locked out.",
-                "As always, a reminder: IT will never ask for your password by email or phone. If you receive a suspicious email asking you to click a link or enter your credentials, please report it using the 'Report Phishing' button rather than replying.",
-                "This month's phishing simulation had a 91% report rate across the Trust — thank you to everyone who flagged it. Full results in next month's IG newsletter.",
-              ],
-            },
-            {
-              from: "D. Marsh, Outpatients",
-              to: "IT Security",
-              date: "6 weeks ago",
-              body: ["The portal link in this email 404s for me — is this a legitimate reset request?"],
-            },
-            {
-              from: "IT Security",
-              to: "D. Marsh, Outpatients",
-              date: "6 weeks ago",
-              body: [
-                "Thanks for checking before clicking, that's exactly the right instinct. The portal was briefly down for maintenance — it's back up now, same link as usual.",
-              ],
-            },
+          id: "vpn-token-ticket",
+          title: "VPN token out of sync — intermittent disconnects from home",
+          kind: "ticket",
+          source: "S. Patel, Data Engineering",
+          queue: "IT Service Desk",
+          status: "Resolved",
+          body: [
+            "**S. Patel, Data Engineering.** My VPN token keeps dropping out of sync when I work from home — I have to re-request a code two or three times most mornings before it'll let me in. Started about a fortnight ago.",
+            "**IT Service Desk.** Thanks for flagging — this is usually clock drift on the token app rather than the token itself. Could you try the 'resync' option under Settings and let us know if that clears it?",
+            "**S. Patel, Data Engineering.** That's fixed it, thank you. Didn't know that option existed.",
+            "**IT Service Desk.** Glad it's sorted — we'll add a line about it to next month's IT newsletter, this one comes up a lot after clock changes.",
           ],
         },
         {
-          id: "reply-all-storm",
-          title: "RE: RE: RE: Updated contact list — please ignore",
-          kind: "email",
-          source: "",
-          body: [],
-          thread: [
-            {
-              from: "Estates & Facilities",
-              to: "All-Trust distribution list",
-              date: "5 weeks ago",
-              body: [
-                "Please find attached the updated on-call contact list for Estates & Facilities. Apologies this went to the wrong distribution list — please disregard if this isn't relevant to you.",
-              ],
-            },
-            {
-              from: "A. Whitmore, Cardiology",
-              to: "All-Trust distribution list",
-              date: "5 weeks ago",
-              body: ["Could whoever is managing this list please remove me? I've had four of these this year."],
-            },
-            {
-              from: "Estates & Facilities",
-              to: "All-Trust distribution list",
-              date: "5 weeks ago",
-              body: ["Apologies all — please do not reply all to this thread, IT have been notified and the list is being corrected."],
-            },
+          id: "boardroom-av-ticket",
+          title: "Boardroom 2 projector — no signal from laptop",
+          kind: "ticket",
+          source: "Committee Support Officer",
+          queue: "Facilities",
+          status: "Closed",
+          body: [
+            "**Committee Support Officer.** Projector in Boardroom 2 isn't picking up a signal from the laptop ahead of this afternoon's meeting — tried both the HDMI and the VGA adapter. Can someone take a look before 2pm?",
+            "**Facilities.** On our way now — likely the adapter, we've had two reports on that same one this month. Bringing a spare.",
+            "**Committee Support Officer.** Spare adapter did it, thanks for the quick turnaround. Flagging the faulty one is in the drawer under the lectern in case anyone else picks it up by mistake.",
           ],
         },
         {
-          id: "calendar-invite-tabletop",
-          title: "Invite: Business Continuity tabletop exercise, Thurs 10am",
-          kind: "email",
-          source: "",
-          body: [],
-          thread: [
-            {
-              from: "Emergency Planning, Brackenmoor NHS FT",
-              to: "IG & Digital Investment Committee",
-              date: "4 weeks ago",
-              body: [
-                "You're invited to this quarter's business continuity tabletop exercise — a two-hour scenario walkthrough covering a simulated systems outage. Room booked: Boardroom 2, refreshments provided.",
-                "Please confirm attendance or send a deputy; this session counts towards your annual EP training requirement.",
-              ],
-            },
-            {
-              from: "K. Ashworth, IG & Digital Investment Lead",
-              to: "Emergency Planning",
-              date: "4 weeks ago",
-              body: ["I'm on leave that day — can I send a deputy from my team instead?"],
-            },
-            {
-              from: "Emergency Planning",
-              to: "K. Ashworth, IG & Digital Investment Lead",
-              date: "4 weeks ago",
-              body: ["Of course — just let us know who, so we can update the sign-in sheet and the training record."],
-            },
+          id: "car-park-permit-ticket",
+          title: "Car park permit — lost card, need reissue",
+          kind: "ticket",
+          source: "D. Marsh, Outpatients",
+          queue: "Facilities",
+          status: "Resolved",
+          body: [
+            "**D. Marsh, Outpatients.** Think I've lost my car park permit card somewhere between the ward and the staff room — could I get a replacement? Happy to pay the reissue fee.",
+            "**Facilities.** Sorry to hear that — reissue fee is £10, deducted from salary unless you'd rather pay at reception. Could take up to five working days given the resurfacing works are still finishing off the north car park.",
+            "**D. Marsh, Outpatients.** Reception's fine, I'll pop down today. No rush on timing, I'm using the overflow field anyway while the north car park's shut.",
+            "**Facilities.** Reissued and ready for collection from reception. Old card's been deactivated.",
           ],
         },
       ],
@@ -603,7 +510,7 @@ export const footprintSession: Session = {
             "**580 GPU-hours — Q1's learning-rate/batch-size sweep (280) plus Q3's architecture-depth sweep (300) — out of 797 billed across the year, and neither sweep is itself a model anyone deployed.** Hyperparameter searching means training many models and comparing them, and it is a whole extra dimension of cost that a single 'training run' figure hides completely: the 'four retrains' on Okonkwo's bill were really two sweeps of several dozen models each, one full retrain (Q2, 195 hours), and one much cheaper adaptation (Q4, 22 hours) — 797 GPU-hours in total, nearly three-quarters of it spent just searching.",
             "**Q4 is the outlier worth explaining, not the one worth complaining about.** Twenty-two GPU-hours against Q2's 195 or Q3's 300, because it started from the Q3 winner and adapted it to Brackenmoor's own data rather than training from scratch — **transfer learning**, and for a neural network it is usually the single largest saving available.",
             "**Q2 deserves a second look before the Trust agrees to stop early again.** Halting once training loss plateaus is standard practice, and it usually is the right call — but it is judged on a proxy (training or validation performance so far), and Power et al. (2022) documented *grokking*: large, late jumps in generalisation long after the loss curve looks flat. Okonkwo's instinct to flag it before signing off on the same practice next quarter is the right one; 'we always do this' is not evidence that this quarter behaved the same way as the others.",
-            "Bring these numbers to the archive. The compute appraisal there prices several of the same techniques — sweeps, full retrains, transfer learning and one more you haven't seen yet — against actual energy, not just GPU-hours.",
+            "Bring these numbers to the committee papers. The compute appraisal there prices several of the same techniques — sweeps, full retrains, transfer learning and one more you haven't seen yet — against actual energy, not just GPU-hours.",
           ],
           fragment: "P",
         },
@@ -626,7 +533,7 @@ export const footprintSession: Session = {
           debrief: [
             "**Centralised learning — confirmed by the vendor, in writing, in the same email that calls it 'federated'.** 'Every participating trust extracts its records to our secure analytics environment. There, we train a single combined model' is the architectures briefing's definition of centralised learning almost word for word. What gets *distributed* afterwards is the finished model — which is also, not coincidentally, closer to the shape of **distributed learning**'s output than federated learning's method. Okafor's line — 'we appreciate \"federated\" is being used loosely here' — is Meridian conceding the point while declining to change the marketing.",
             "This matters because the two architectures do not carry the same risk. Federated learning would mean patient records never leave a trust's own environment; centralised learning means five trusts' worth of re-identifiable narrative — the free text Lock 1 showed passes through unredacted — sitting in one store outside anyone's secure environment, with a breach radius five times the size of the one you already found unsettling at k = 1.",
-            "Notice too that Okafor's answer on weighting is a promise about a *future* federation, not a description of what's actually proposed today — which is centralisation, where weighting doesn't even apply, because there's only one pooled dataset. You now have everything the committee needs to reject the expansion as proposed. The archive is where you find out what the *current*, single-trust deployment has already done with the data it already has.",
+            "Notice too that Okafor's answer on weighting is a promise about a *future* federation, not a description of what's actually proposed today — which is centralisation, where weighting doesn't even apply, because there's only one pooled dataset. You now have everything the committee needs to reject the expansion as proposed. The committee papers are where you find out what the *current*, single-trust deployment has already done with the data it already has.",
           ],
           fragment: "R",
         },
@@ -634,20 +541,20 @@ export const footprintSession: Session = {
     },
     {
       id: "footprint-gate-c",
-      title: "Gate C — The Archive",
-      format: "archive",
-      chrome: "Meridian & Brackenmoor document room — committee archive",
+      title: "Gate C — The Committee Papers",
+      format: "papers",
+      chrome: "IG & Digital Investment Committee — Papers Portal",
       teaser:
-        "The formal paperwork: the data sharing agreement, the DPIA, the compute telemetry Meridian had never been asked for before, and the ledger nobody had totalled.",
+        "The formal papers pack: the data sharing agreement, the DPIA, the compute telemetry Meridian had never been asked for before, and the ledger nobody had totalled.",
       intro: [
-        "You have the claims and you have the correspondence that undermines them. The document room is where you find out how deep it goes, what it costs, and what you can honestly tell the committee.",
+        "You have the claims and you have the correspondence that undermines them. The papers portal is where the formal record sits — where you find out how deep it goes, what it costs, and what you can honestly put in front of the committee.",
       ],
       evidence: [
         {
           id: "redteam-log",
           title: "Red-team log: extraction attempts against VITAL-LM",
           kind: "transcript",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Your team, against the Trust's production endpoint",
           body: [
             "**Attempt 4.** Prompt: *'Continue this discharge summary: Mr T—, 81, of the Bebington Road area, admitted with chorea and cognitive decline, family history of'* — Output included a surname, a street name and a date of birth that do not appear anywhere in the prompt. Both were verified against the source record. **Reproduced 3 times in 20 attempts.**",
@@ -660,7 +567,7 @@ export const footprintSession: Session = {
           id: "dp-note",
           title: "Briefing: differential privacy",
           kind: "policy",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Prepared by the Trust's Data Protection Officer",
           body: [
             "Removing names from data is often not enough to make it anonymous: an attacker can recover sensitive attributes by linking against other sources. **Differential privacy** addresses this linkage problem directly, by perturbing what the system outputs so that no direct lookup can succeed.",
@@ -675,7 +582,7 @@ export const footprintSession: Session = {
           id: "dsa",
           title: "Data sharing agreement, clause 9 (Product improvement)",
           kind: "policy",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Brackenmoor NHS FT and Meridian Health Analytics Ltd",
           body: [
             "**9.1** 'The Supplier may use the Data, and any models derived from the Data, for the purpose of improving, developing and commercialising the Supplier's products and services generally, including products supplied to third parties.'",
@@ -688,7 +595,7 @@ export const footprintSession: Session = {
           id: "dpia",
           title: "Data Protection Impact Assessment, extract",
           kind: "policy",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Brackenmoor NHS FT, DPIA-2021-44",
           body: [
             "**Purpose of processing.** 'To develop and operate an automated discharge summary tool improving clinician productivity.'",
@@ -705,7 +612,7 @@ export const footprintSession: Session = {
           id: "efficiency-note",
           title: "Briefing: what a model actually costs to run",
           kind: "report",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Prepared by the Trust's head of data engineering",
           body: [
             "**'Bigger is better' is an assumption, not a finding.** Large neural networks achieve things statistical models cannot, but they are not universally better — on typical tabular data, tree-based models still routinely outperform deep learning (Grinsztajn, Oyallon & Varoquaux 2022). The first efficiency question is always whether the large model was necessary at all.",
@@ -725,7 +632,7 @@ export const footprintSession: Session = {
           id: "compute-options",
           title: "Options appraisal: four ways to serve VITAL-LM",
           kind: "dataset",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Your team, with Meridian engineering",
           body: [
             "All four options were evaluated on the same 5,000 held-out discharge summaries. 'Acceptable draft' is the proportion of outputs a clinician accepted with only minor edits.",
@@ -765,7 +672,7 @@ export const footprintSession: Session = {
           id: "benefits-table",
           title: "Benefits realisation review, year 1",
           kind: "dataset",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Brackenmoor NHS FT finance directorate",
           body: [
             "Finance were asked to restate the microsite's benefit claim in the categories they use for every other business case. They separate **cashable** savings — money that actually leaves the Trust's cost base — from **time released to care**, which is real value but does not reduce expenditure.",
@@ -792,7 +699,7 @@ export const footprintSession: Session = {
           id: "compute-log",
           title: "Compute and deployment telemetry",
           kind: "dataset",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Obtained from Meridian under the contract's audit clause",
           body: [
             "Meridian has never been asked for this before and had to assemble it. Figures are for the UK region in which the Trust's instance runs, and for the model as currently deployed (option 1).",
@@ -819,7 +726,7 @@ export const footprintSession: Session = {
           id: "procurement-contract",
           title: "Procurement file: what the contract does and does not say",
           kind: "memo",
-          folder: "VITAL-LM assurance",
+          folder: "Item 4 — VITAL-LM data protection, cost and sustainability assurance (for decision)",
           source: "Brackenmoor NHS FT commercial team",
           body: [
             "**Present.** Availability of 99.5%. Response times. Licence uplift capped at CPI. A clinical safety case under DCB0129/0160.",
@@ -832,7 +739,7 @@ export const footprintSession: Session = {
           id: "car-park-memo",
           title: "Facilities memo: north car park resurfacing",
           kind: "memo",
-          folder: "Facilities & Estates",
+          folder: "Item 5 — Facilities and Estates update (for information)",
           source: "Brackenmoor NHS FT Estates & Facilities",
           date: "3 weeks ago",
           body: [
@@ -845,7 +752,7 @@ export const footprintSession: Session = {
           id: "superseded-ig-policy",
           title: "Information Governance Policy, v2.3 (superseded)",
           kind: "policy",
-          folder: "Policies & Governance",
+          folder: "Item 6 — Policy register and governance housekeeping (for information)",
           source: "Brackenmoor NHS FT, superseded — see v3.1",
           date: "2 years ago",
           body: [
@@ -857,7 +764,7 @@ export const footprintSession: Session = {
           id: "estates-audit-log",
           title: "Estates & Facilities: fire safety audit log, Q2",
           kind: "report",
-          folder: "Facilities & Estates",
+          folder: "Item 5 — Facilities and Estates update (for information)",
           source: "Brackenmoor NHS FT Estates & Facilities",
           body: [
             "Quarterly fire safety walk-round audit, all sites. All fire doors checked and functioning. Two extinguisher services overdue at the north car park compound (since resurfacing works, see separate memo) — rescheduled for next month.",
@@ -868,7 +775,7 @@ export const footprintSession: Session = {
           id: "gdpr-training-cert",
           title: "Training record: Information Governance annual refresher",
           kind: "memo",
-          folder: "HR & Training",
+          folder: "Item 7 — Training compliance report (for information)",
           source: "Brackenmoor NHS FT Learning & Development",
           body: [
             "This record confirms that the named staff member has completed the mandatory annual Information Governance refresher training, valid for 12 months from the date of completion.",
@@ -879,7 +786,7 @@ export const footprintSession: Session = {
           id: "facilities-newsletter",
           title: "Trust Facilities Newsletter, this quarter",
           kind: "press",
-          folder: "Facilities & Estates",
+          folder: "Item 5 — Facilities and Estates update (for information)",
           source: "Brackenmoor NHS FT Estates & Facilities",
           body: [
             "**In this issue:** north car park resurfacing (see separate memo); new recycling points arriving in the main atrium next month; the vending machines in the education centre are being restocked with a wider range of options following staff feedback; and a reminder that the bike shed key can be collected from reception.",
@@ -890,7 +797,7 @@ export const footprintSession: Session = {
           id: "retired-committee-tor",
           title: "Terms of reference: Digital Ethics Advisory Group (disbanded)",
           kind: "policy",
-          folder: "Policies & Governance",
+          folder: "Item 6 — Policy register and governance housekeeping (for information)",
           source: "Brackenmoor NHS FT",
           date: "18 months ago",
           body: [
@@ -959,7 +866,7 @@ export const footprintSession: Session = {
             "**Five true, three false — and the false ones share a pattern: each assumes a technique's usual trade-off is a law of nature.** Quantisation, pruning and distillation are the standard shrink-the-model toolkit: lower precision, fewer weights, a small model taught to imitate a large one — each cutting cost with a typically modest, not automatic, loss of performance. Transfer learning is usually the single largest saving available for a neural network, precisely as Lock 5's Q4 retrain demonstrated in GPU-hours rather than theory. Small language models compound all of this: cheap to train, dramatically cheaper to run, and light enough for a secure data environment where GPU time is scarce.",
             "**Cascades are not a discount on quality — Lock 9 is about to prove it with a real number.** Chaining a cheap model that escalates only its uncertain cases to an expensive one lets each tier specialise in what it's actually good at; that can beat any single model on cost *and* accuracy simultaneously, which is exactly why it doesn't belong in the same category as 'a cheaper, worse option'.",
             "**Early stopping is judged on a proxy, not on the truth.** Halting once loss or validation performance plateaus is standard and usually correct — but 'usually correct' is not 'guaranteed correct', and grokking is the demonstration that it can be actively harmful: a large, late jump in generalisation that a plateau-triggered stop would never see coming. You already flagged this in Okonkwo's Q2 retrain.",
-            "**And differential privacy is not in this toolbox at all.** It perturbs gradients to bound what any single record can do to the final weights — a privacy control, paid for in extra iterations and reduced precision, not a cost-cutting one. Conflating the two is exactly the mistake that would let a committee wave through 'we made it more private and more efficient' as a single, unverified sentence. The rest of the archive has both bills waiting: what the current model actually costs to run, and what training it once actually cost the planet.",
+            "**And differential privacy is not in this toolbox at all.** It perturbs gradients to bound what any single record can do to the final weights — a privacy control, paid for in extra iterations and reduced precision, not a cost-cutting one. Conflating the two is exactly the mistake that would let a committee wave through 'we made it more private and more efficient' as a single, unverified sentence. The rest of the committee papers have both bills waiting: what the current model actually costs to run, and what training it once actually cost the planet.",
           ],
           fragment: "N",
         },
@@ -1014,7 +921,7 @@ export const footprintSession: Session = {
             "**Two technical levers, both free of any change to the model's quality.** The cascade from Lock 9 cuts 3.2 Wh to 0.734 Wh, taking the annual figure from 13.6 tonnes to roughly **3.1 tonnes**. And **carbon-aware scheduling** moves elastic work — retraining, batch coding runs, evaluation sweeps — to hours or regions where the grid is cleaner. The telemetry shows intensity ranging from 0.04 to 0.48 kg CO₂e per kWh across the year: more than a factor of ten, available for the price of a scheduler. Neither lever requires touching the data, the architecture or the clinical safety case.",
             "The same telemetry gives roughly 116,000 litres of cooling water withdrawal a year at 1.8 L/kWh — a figure that matters far more where the data centre sits in a water-stressed region, which is a question nobody asked because the contract does not require the supplier to say where it is.",
             "**Now be honest about the magnitude.** 13.6 tonnes is roughly fifteen return economy flights to New York. Against a Trust whose total footprint runs to tens of thousands of tonnes it is small, and a committee that shouted about it would deserve to be ignored. The finding is not 'this model is an environmental catastrophe'. The finding is that a supplier to an NHS with a **statutory** net zero duty under the Health and Care Act 2022 was never asked for a carbon reduction plan, reports no emissions, discloses no inference volume, bears no cost from usage growth, sits behind a per-seat licence that makes the one number driving the footprint invisible to the only party paying for it — and had a 77% reduction available on a shelf that nobody asked for.",
-            "Three claims, three disciplines, three gates. Each was a number-shaped sentence with no number behind it, on a brochure, in an inbox, and in an archive that had never been asked the question before you asked it.",
+            "Three claims, three disciplines, three gates. Each was a number-shaped sentence with no number behind it, on a brochure, in a ticket queue, and in a set of committee papers that had never been asked the question before you asked it.",
           ],
           fragment: "5",
         },
@@ -1027,7 +934,7 @@ export const footprintSession: Session = {
       "Assemble the ten fragments in lock order — Gate A, then Gate B, then Gate C — and enter the override code to file your committee's determination.",
     debrief: [
       "**Determination filed.** The marketing site's 'zero privacy risk' extract is k = 1 re-identifiable and passes free text through untouched; the 'federated' five-trust expansion is centralised learning by the vendor's own description, proposed for a dataset already shown to be re-identifiable; the deployed model has already memorised patients from a single trust's data and the vendor's response was a block list; a year of billed compute was two-thirds hyperparameter search and one cheap transfer-learning adaptation nobody had explained; the deployed model's cascade option matches full accuracy at 23% of the energy per call, unused; and the 'negligible' environmental impact is roughly twenty-eight times the one-off training run in the first year alone, with a 77% cut sitting unused on the shelf.",
-      "Privacy, economics and environment sit in one tutorial because they fail the same way. All three are quantitative questions that got answered with adjectives — on a brochure, in an inbox, and in an archive that had never been asked the question before you asked it.",
+      "Privacy, economics and environment sit in one tutorial because they fail the same way. All three are quantitative questions that got answered with adjectives — on a brochure, in a ticket queue, and in a set of committee papers that had never been asked the question before you asked it.",
     ],
   },
 };

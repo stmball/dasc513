@@ -1,14 +1,6 @@
 import type { Gate } from "@/lib/types";
+import { FORMAT_LABEL } from "@/lib/gateFormat";
 import { Inline } from "../Inline";
-
-const FORMAT_LABEL: Record<Gate["format"], string> = {
-  inbox: "Inbox",
-  chat: "Chat channel",
-  wiki: "Wiki",
-  blog: "Blog",
-  brochure: "Marketing site",
-  archive: "Archive",
-};
 
 /** A locked gate: title, format and a one-line hook are visible, nothing
  * else — the card that shows what's next without giving it away. */

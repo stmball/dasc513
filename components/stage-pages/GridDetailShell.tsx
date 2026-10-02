@@ -16,6 +16,7 @@ export function GridDetailShell({
   backLabel = "← Back to the front page",
   containerClassName = "bg-white",
   backButtonClassName = "text-slate-500 hover:text-slate-900",
+  maxWidthClassName = "max-w-5xl",
 }: {
   headerBar: ReactNode;
   grid: ReactNode;
@@ -25,11 +26,15 @@ export function GridDetailShell({
   backLabel?: string;
   containerClassName?: string;
   backButtonClassName?: string;
+  /** The reading/browsing column's width — a marketing microsite's bento
+   * grid wants more breathing room than an editorial reading column does,
+   * so each format page can own its own measure rather than share one. */
+  maxWidthClassName?: string;
 }) {
   return (
     <div className={`flex min-h-screen flex-col ${containerClassName}`}>
       {headerBar}
-      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 lg:py-10">
+      <div className={`mx-auto w-full flex-1 px-4 py-8 sm:px-6 lg:py-10 ${maxWidthClassName}`}>
         {hasSelection ? (
           <div>
             <button

@@ -169,6 +169,45 @@ function FolderTileIcon() {
   );
 }
 
+/** A "Recently viewed" rail at the root of the archive — the one thing a
+ * real document-management system almost always puts on its home screen,
+ * ahead of the folder shelf, so a group returning to the archive can jump
+ * straight back to what it was just looking at instead of re-navigating the
+ * folder tree from scratch. */
+function RecentlyOpened({
+  ids,
+  evidence,
+  onOpen,
+}: {
+  ids: string[];
+  evidence: EvidenceItem[];
+  onOpen: (id: string) => void;
+}) {
+  if (ids.length === 0) return null;
+  return (
+    <div className="mb-5 border-b border-slate-200 pb-5">
+      <p className="mb-2.5 text-[11px] font-semibold text-slate-500">Recently viewed</p>
+      <div className="flex gap-1 overflow-x-auto pb-1">
+        {ids.map((id) => {
+          const item = evidence.find((e) => e.id === id);
+          if (!item) return null;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onOpen(id)}
+              className="flex w-20 shrink-0 flex-col items-center gap-1.5 rounded-md p-2 text-center hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0a84ff]"
+            >
+              <FileIcon kind={item.kind} />
+              <span className="line-clamp-2 text-[11px] leading-snug text-slate-600">{item.title}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /**
  * The physical tone and texture a kind's sheet was actually produced on — a
  * warm near-white for a formal letter, pale newsprint for a press clipping,
@@ -486,6 +525,10 @@ type Location = "root" | "all" | { folder: string };
 export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
+  // Most-recently-opened ids, newest first — purely a browsing convenience
+  // local to this component (not persisted, not `opened`, which is a Set
+  // with no ordering), the way a real DMS's "Recently viewed" rail works.
+  const [recentIds, setRecentIds] = useState<string[]>([]);
 
   const folderOf = (item: EvidenceItem) => item.folder ?? UNFILED;
 
@@ -518,6 +561,7 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
   function openFile(id: string) {
     setSelectedId(id);
     onOpen(id);
+    setRecentIds((prev) => [id, ...prev.filter((x) => x !== id)].slice(0, 6));
   }
 
   function sidebarButtonClass(active: boolean) {
@@ -608,7 +652,9 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
             </nav>
             <div className="flex-1 p-5">
               {location === "root" ? (
-                <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 lg:grid-cols-5">
+                <>
+                  <RecentlyOpened ids={recentIds} evidence={stage.evidence} onOpen={openFile} />
+                  <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 lg:grid-cols-5">
                   {folders.map((name) => {
                     const count = stage.evidence.filter((item) => folderOf(item) === name).length;
                     return (
@@ -628,7 +674,8 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
                       </button>
                     );
                   })}
-                </div>
+                  </div>
+                </>
               ) : (
                 <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 lg:grid-cols-5">
                   {filesInView.map((item) => {

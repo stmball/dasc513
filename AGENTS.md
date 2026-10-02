@@ -72,9 +72,10 @@ What each room must keep covering, by lecture:
 Material **beyond** the slides is allowed but must be introduced explicitly in
 the evidence rather than assumed — currently: Obermeyer et al. 2019 (label
 bias); Kleinberg et al. 2016 / Chouldechova 2017 (the impossibility result);
-Hardt et al. 2016; Rudin 2019; UK GDPR Article 22 and the ICO/Turing six
-explanation types; k-anonymity; confidence vs prediction intervals and
-empirical coverage; conformal prediction.
+Hardt et al. 2016; Rudin 2019; Caruana et al. 2015 (the pneumonia/asthma
+interpretability case); UK GDPR Article 22 and the ICO/Turing six explanation
+types; k-anonymity; confidence vs prediction intervals and empirical coverage;
+conformal prediction.
 
 ## How a room works
 

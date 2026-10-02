@@ -61,12 +61,14 @@ export interface EvidenceItem {
    */
   thread?: EmailMessage[];
   /**
-   * `archive`- and `papers`-stage only: the grouping this document is filed
-   * under — a folder name for an archive ("Assurance case", "Facilities &
-   * Estates"), or an agenda-item label for a papers stage ("Item 6 — VITAL-LM
-   * data protection and sustainability assurance"). Ignored by every other
-   * stage format. Give every item in an `archive`- or `papers`-format stage
-   * one — a stage where nothing sets it falls back to the old flat file list.
+   * `archive`-, `papers`- and `register`-stage only: the grouping this
+   * document is filed under — a folder name for an archive ("Assurance
+   * case", "Facilities & Estates"), an agenda-item label for a papers stage
+   * ("Item 6 — VITAL-LM data protection and sustainability assurance"), or a
+   * workstream for a register ("HORIZON assurance", "IT & Security").
+   * Ignored by every other stage format. Give every item in an `archive`-,
+   * `papers`- or `register`-format stage one — a stage where nothing sets it
+   * falls back to the old flat file list.
    */
   folder?: string;
   /**
@@ -132,10 +134,12 @@ export interface Question {
 }
 
 /**
- * The in-world medium a stage's evidence is presented through. `archive` and
- * `papers` are the two formal filed-documents treatments a session's final
- * stage can use; the others are lighter, more informal media that come
- * before it.
+ * The in-world medium a stage's evidence is presented through. `archive`,
+ * `papers` and `register` are the formal filed-documents treatments a
+ * session's final stage can use; the others are lighter, more informal media
+ * that come before it. `pager` (a secure clinical messaging app) and
+ * `board` (an early-2000s internal message board) are the uncertainty
+ * session's own pair of earlier-stage media, distinct from `chat` and `blog`.
  */
 export type StageFormat =
   | "inbox"
@@ -145,7 +149,10 @@ export type StageFormat =
   | "brochure"
   | "archive"
   | "tickets"
-  | "papers";
+  | "papers"
+  | "pager"
+  | "board"
+  | "register";
 
 export interface Stage {
   id: string;

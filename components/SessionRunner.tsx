@@ -88,7 +88,8 @@ export function SessionRunner({ session }: { session: Session }) {
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-10">
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
+        <div className="mx-auto max-w-3xl">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-navy-15 pb-4">
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-navy-55 label">
@@ -177,26 +178,34 @@ export function SessionRunner({ session }: { session: Session }) {
             </div>
           ) : null}
         </section>
+        </div>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 space-y-6">
           {session.stages.map((stage, stageIndex) => {
             const unlocked = stageUnlocked(stageIndex);
 
             if (!unlocked) {
               return (
-                <StageTeaser
-                  key={stage.id}
-                  stage={stage}
-                  previousStageTitle={session.stages[stageIndex - 1].title}
-                />
+                <div key={stage.id} className="mx-auto max-w-3xl">
+                  <StageTeaser
+                    stage={stage}
+                    previousStageTitle={session.stages[stageIndex - 1].title}
+                  />
+                </div>
               );
             }
 
             const readCount = stage.evidence.filter((item) => opened.has(item.id)).length;
 
             return (
-              <div key={stage.id} className="space-y-4">
-                <div className="rounded-xl border border-navy-15 bg-white px-5 py-4">
+              <div
+                key={stage.id}
+                className="grid gap-4 lg:grid-cols-[20rem_1fr] lg:items-start lg:gap-6"
+              >
+                {/* Left column: the sub-app stage — its brief and the launcher
+                    into the stage page. Sticky on desktop so it stays visible
+                    while the questions on the right are worked through. */}
+                <div className="rounded-xl border border-navy-15 bg-white px-5 py-4 lg:sticky lg:top-6">
                   <p className="text-[11px] font-semibold text-navy-55 label">
                     {stage.title} · {FORMAT_LABEL[stage.format]}
                   </p>
@@ -222,35 +231,38 @@ export function SessionRunner({ session }: { session: Session }) {
                   </div>
                 </div>
 
-                {stage.questions.map((question) => {
-                  const index = globalIndex++;
-                  const state: QuestionState = solved.has(question.id) ? "solved" : "current";
-                  return (
-                    <QuestionPanel
-                      key={question.id}
-                      question={question}
-                      index={index}
-                      total={questions.length}
-                      state={state}
-                      accent={accent}
-                      onSolved={() => solveQuestion(question.id)}
-                      expanded={expandedQuestions.includes(question.id)}
-                      onToggleExpanded={() =>
-                        setExpandedQuestions((current) =>
-                          current.includes(question.id)
-                            ? current.filter((id) => id !== question.id)
-                            : [...current, question.id],
-                        )
-                      }
-                    />
-                  );
-                })}
+                {/* Right column: this stage's questions. */}
+                <div className="space-y-4">
+                  {stage.questions.map((question) => {
+                    const index = globalIndex++;
+                    const state: QuestionState = solved.has(question.id) ? "solved" : "current";
+                    return (
+                      <QuestionPanel
+                        key={question.id}
+                        question={question}
+                        index={index}
+                        total={questions.length}
+                        state={state}
+                        accent={accent}
+                        onSolved={() => solveQuestion(question.id)}
+                        expanded={expandedQuestions.includes(question.id)}
+                        onToggleExpanded={() =>
+                          setExpandedQuestions((current) =>
+                            current.includes(question.id)
+                              ? current.filter((id) => id !== question.id)
+                              : [...current, question.id],
+                          )
+                        }
+                      />
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
 
           {allSolved ? (
-            <section className="relative overflow-hidden rounded-xl border border-navy-15 bg-white pt-1">
+            <section className="relative mx-auto max-w-3xl overflow-hidden rounded-xl border border-navy-15 bg-white pt-1">
               <span
                 aria-hidden
                 className="absolute inset-x-0 top-0 h-1 bg-navy"

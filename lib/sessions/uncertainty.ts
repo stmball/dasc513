@@ -17,7 +17,7 @@ export const uncertaintySession: Session = {
   },
   brief: [
     "You are the Trust's model assurance group, brought in after a complaint reached Brackenmoor NHS Foundation Trust about a prognosis given at a lung cancer multidisciplinary team meeting. HORIZON v3, Meridian Health Analytics' oncology prognosis model, returned a single number, 11.8 months, and, in three years of use, has never once returned a range.",
-    "A registrar and a palliative care consultant have been messaging about it since the meeting. A biostatistician has been publicly checking Meridian's arithmetic on her blog for months. And the Trust's own document room holds the formal audit nobody commissioned until now. Ten questions stand between you and the override code that closes the investigation, opening in **three stages**. Stage A, the pager thread, is open now. Stage B and Stage C stay sealed until you have cleared every question ahead of them.",
+    "A registrar and a palliative care consultant have been messaging about it since the meeting. A biostatistician has been quietly checking Meridian's arithmetic on an internal message board for months. And the Trust's own risk register holds the formal audit nobody commissioned until now. Ten questions stand between you and the override code that closes the investigation, opening in **three stages**. Stage A, the pager thread, is open now. Stage B and Stage C stay sealed until you have cleared every question ahead of them.",
     "Each question needs **evidence**, not intuition: the dossier will not accept an answer until your group has read the documents it depends on.",
   ],
   learningOutcomes: [
@@ -31,8 +31,8 @@ export const uncertaintySession: Session = {
     {
       id: "uncertainty-gate-a",
       title: "Stage A — The Pager Thread",
-      format: "chat",
-      chrome: "#HORIZON-oncall",
+      format: "pager",
+      chrome: "MediLink Secure Messaging — Brackenmoor NHS FT, clinical staff",
       teaser:
         "A registrar and a palliative care consultant are messaging about a number that never comes with a range.",
       intro: [
@@ -41,7 +41,7 @@ export const uncertaintySession: Session = {
       evidence: [
         {
           id: "mdt-transcript",
-          title: "horizon-mdt",
+          title: "MDT recording (shared file)",
           kind: "transcript",
           source: "Brackenmoor NHS FT, MDT recording, disclosed to the investigation",
           body: [
@@ -56,7 +56,7 @@ export const uncertaintySession: Session = {
             "**Dr Fenwick.** 'It gives what you see. There's one box and one number in it.'",
             "**Dr Okafor.** 'Because if the honest answer is somewhere between two months and three years, that's a completely different conversation to have with her and her daughter.'",
             "**Dr Fenwick.** 'I agree. It doesn't say that. It says 11.8.'",
-            "*The MDT proceeded on the basis of the point estimate. The patient died 48 days later.*",
+            "*The MDT proceeded on the basis of the point estimate. She was readmitted as an emergency 48 days later, her condition having deteriorated far faster than the number on the screen had suggested.*",
             "**Chair.** 'Right — next patient, bed 14, similar picture I think.'",
             "**Dr Whitfield, aside.** 'Bleep's stopped, false alarm, someone else picked it up. Staying put.'",
             "**Dr Okafor.** 'Two minutes, need to grab water first.'",
@@ -64,7 +64,7 @@ export const uncertaintySession: Session = {
         },
         {
           id: "pager-thread",
-          title: "horizon-oncall",
+          title: "Dr Whitfield ↔ Dr Okafor",
           kind: "transcript",
           source: "Secure-messaging export, Brackenmoor NHS FT, disclosed to the investigation",
           date: "Same afternoon",
@@ -97,7 +97,7 @@ export const uncertaintySession: Session = {
         },
         {
           id: "vocab-note",
-          title: "horizon-assurance",
+          title: "J. Adeyemi ↔ Dr Bhatt",
           kind: "transcript",
           source: "Exported from the Trust's messaging platform, disclosed to the investigation",
           body: [
@@ -105,7 +105,7 @@ export const uncertaintySession: Session = {
             "**Dr R. Bhatt (statistician), 09:59** — Governance finished early for once, 10 is fine.",
             "**J. Adeyemi, 10:02** — Before I write this up — can you give me the fast version of uncertainty vs variability vs error? I keep mixing them up.",
             "**Dr R. Bhatt, 10:05** — Uncertainty is incomplete knowledge about a parameter, prediction or outcome — basically, what we don't know. Variability is the observed differences between individuals or repeat measurements — it's usually how we evidence uncertainty, though not the only way. Error is the gap between what was predicted and what actually happened, and you can only measure it once you have a real outcome to compare against.",
-            "**Dr R. Bhatt, 10:06** — So for HORIZON: uncertainty existed the moment it produced 11.8 months. Variability is sitting in the training population somewhere. Error only exists now, because the patient has died.",
+            "**Dr R. Bhatt, 10:06** — So for HORIZON: uncertainty existed the moment it produced 11.8 months. Variability is sitting in the training population somewhere. Error only exists now, because we know how her illness actually progressed.",
             "**J. Adeyemi, 10:08** — Sorry, one sec, someone at my desk. Back.",
             "**J. Adeyemi, 10:10** — And the aleatoric/epistemic split?",
             "**Dr R. Bhatt, 10:12** — Aleatoric is irreducible — two patients identical on every recorded variable still die at different times because the underlying process is stochastic. More data doesn't fix it, you can only characterise it with a distribution instead of a point estimate.",
@@ -121,9 +121,9 @@ export const uncertaintySession: Session = {
         },
         {
           id: "handover-note",
-          title: "ward-14",
+          title: "Ward 14 (handover group)",
           kind: "transcript",
-          source: "Brackenmoor NHS FT, ward messaging channel, disclosed to the investigation",
+          source: "Brackenmoor NHS FT, ward messaging group, disclosed to the investigation",
           date: "Day of the MDT, 19:00",
           body: [
             "**S. Ng (staff nurse), 18:52** — Before handover kicks off: flu jab clinic's in the staff room till 5, sign the sheet by the kettle if you haven't already.",
@@ -137,9 +137,9 @@ export const uncertaintySession: Session = {
         },
         {
           id: "rota-swaps-channel",
-          title: "rota-swaps",
+          title: "Rota coordination (group)",
           kind: "transcript",
-          source: "Brackenmoor NHS FT, ward messaging channel, disclosed to the investigation",
+          source: "Brackenmoor NHS FT, ward messaging group, disclosed to the investigation",
           date: "Ongoing",
           body: [
             "**Dr Patel (SHO), 07:12** — Anyone able to cover my Saturday late? Need to swap for a wedding.",
@@ -171,7 +171,7 @@ export const uncertaintySession: Session = {
         },
         {
           id: "staff-social-channel",
-          title: "staff-social",
+          title: "Staff social (group)",
           kind: "transcript",
           source: "Brackenmoor NHS FT, staff messaging platform, disclosed to the investigation",
           date: "Ongoing",
@@ -205,13 +205,13 @@ export const uncertaintySession: Session = {
         },
         {
           id: "telehealth-pilot-channel",
-          title: "telehealth-pilot",
+          title: "Telehealth pilot (inactive group)",
           kind: "transcript",
           source: "Brackenmoor NHS FT, staff messaging platform, disclosed to the investigation",
-          date: "A dead project channel, still open",
+          date: "A dead project group, still open",
           body: [
-            "*The telehealth pilot channel, created a little over two years before the MDT.*",
-            "**Project lead (comms)** — Welcome to the telehealth pilot channel — updates on the remote monitoring trial for post-discharge cardiology patients will go here.",
+            "*The telehealth pilot group, created a little over two years before the MDT.*",
+            "**Project lead (comms)** — Welcome to the telehealth pilot group — updates on the remote monitoring trial for post-discharge cardiology patients will go here.",
             "**Dr N. Osei (registrar)** — Looking forward to this, hope it cuts down readmissions.",
             "**IT lead** — Devices arriving next week, training session booked for the 14th.",
             "**Project lead** — Pilot now live, 40 patients enrolled across two wards.",
@@ -224,7 +224,7 @@ export const uncertaintySession: Session = {
             "**Project lead** — Funding wasn't renewed, pilot's formally closed. Will post the final report once it's signed off.",
             "**Dr N. Osei** — Shame, the patients liked it.",
             "*Several months pass with no messages.*",
-            "**D. Farrow (staff nurse)** — Does anyone know whose channel this is, it's showing up in my sidebar and I can't work out why.",
+            "**D. Farrow (staff nurse)** — Does anyone know whose group this is, it's showing up in my chats and I can't work out why.",
             "**S. Ng (staff nurse)** — Think it's an old pilot that finished, nobody archived it.",
             "**D. Farrow** — Can we just use it as a general chat then? Easier than starting a new one.",
             "**S. Ng** — Works for me.",
@@ -238,12 +238,12 @@ export const uncertaintySession: Session = {
         },
         {
           id: "new-starters-channel",
-          title: "new-starters",
+          title: "New starters (group)",
           kind: "transcript",
           source: "Brackenmoor NHS FT, staff messaging platform, disclosed to the investigation",
           date: "Ongoing",
           body: [
-            "**Induction coordinator, 08:00** — Morning all, welcome to the new-starters channel — ask anything here, no such thing as a silly question.",
+            "**Induction coordinator, 08:00** — Morning all, welcome to the new-starters group — ask anything here, no such thing as a silly question.",
             "**Dr L. Mensah (new SHO), 08:05** — Thank you! Quick one — where do I pick up my ID badge, nobody mentioned it at induction yesterday.",
             "**Induction coordinator, 08:07** — HR office, ground floor, take your offer letter with you.",
             "**Dr L. Mensah, 08:08** — Perfect, heading there now.",
@@ -328,7 +328,7 @@ export const uncertaintySession: Session = {
           },
           debrief: [
             "**Five real entry points, mapped to the briefing's list.** Population and sampling: four centres, one scanner vendor; you'll meet the consequence of that at Site B later in the dossier. Selection: 3,208 excluded patients, missing from the model's grounding in exactly the group whose work-up is most uncertain. Feature measurement: nodule size read off a report rather than remeasured. Missing data: mean imputation, which manufactures a plausible value with nothing behind it for this patient. Model design and evaluation: MSE loss and a single seed, both choices, neither tested against an alternative.",
-            "**Three traps, not two.** A softmax summing to one is arithmetic, not a promise: it says nothing about whether the number it produces means what it says, which is exactly the discrimination-versus-calibration distinction you'll meet properly at the blog. 'Weights are fixed after training' quietly assumes uncertainty can only enter during training, when it ignores that the model still has to be *evaluated*, and evaluated on a population it may never have seen the like of. And a marketing claim is not data: '94% accurate' is a sentence Meridian published, not a measurement that shrinks anyone's ignorance about how the model actually performs. If anything, it is itself a fact you have to be uncertain about, once you know what it does and doesn't establish.",
+            "**Three traps, not two.** A softmax summing to one is arithmetic, not a promise: it says nothing about whether the number it produces means what it says, which is exactly the discrimination-versus-calibration distinction you'll meet properly at the board. 'Weights are fixed after training' quietly assumes uncertainty can only enter during training, when it ignores that the model still has to be *evaluated*, and evaluated on a population it may never have seen the like of. And a marketing claim is not data: '94% accurate' is a sentence Meridian published, not a measurement that shrinks anyone's ignorance about how the model actually performs. If anything, it is itself a fact you have to be uncertain about, once you know what it does and doesn't establish.",
             "One further distinction sits underneath the single-vendor point: it is technically a subset of one of the four kinds of uncertainty the briefing named, and important enough that the module gives it its own name. You'll place it precisely once you have more of the dossier.",
           ],
           fragment: "4",
@@ -356,7 +356,7 @@ export const uncertaintySession: Session = {
           },
           debrief: [
             "**Aleatoric.** No amount of additional measurement removes it, because it isn't a gap in what was measured: it's the stochasticity of the underlying process. This is the floor beneath every prognosis in this dossier, and it is not the same height for every patient: a multimorbid patient carries more of it than a straightforward one.",
-            "Contrast it with the rare histologies from Question 2: 1.4% of the development cohort, never separately assessed. That gap *would* shrink with more of the right data, so it's epistemic. And the single-scanner-vendor fact is neither of those cleanly: it's a special, named case of epistemic uncertainty that more training data of the *same* kind cannot fix, only data from where the model is actually deployed. You'll need all three distinctions again, more precisely, once you reach the archive.",
+            "Contrast it with the rare histologies from Question 2: 1.4% of the development cohort, never separately assessed. That gap *would* shrink with more of the right data, so it's epistemic. And the single-scanner-vendor fact is neither of those cleanly: it's a special, named case of epistemic uncertainty that more training data of the *same* kind cannot fix, only data from where the model is actually deployed. You'll need all three distinctions again, more precisely, once you reach the register.",
           ],
           fragment: "L",
         },
@@ -364,19 +364,19 @@ export const uncertaintySession: Session = {
     },
     {
       id: "uncertainty-gate-b",
-      title: "Stage B — The Blog",
-      format: "blog",
+      title: "Stage B — The Message Board",
+      format: "board",
       chrome: "The Reliability Diagram — clinical prediction, checked",
-      teaser: "A biostatistician has been quietly checking HORIZON's arithmetic in public, one post at a time.",
+      teaser: "A biostatistician has been quietly checking HORIZON's arithmetic on an internal message board, one thread at a time.",
       intro: [
-        "Stage A is done. The technical write-up you found leads somewhere: an independent biostatistician has been publishing, in public, exactly the checks Meridian never ran.",
+        "Stage A is done. The technical write-up you found leads somewhere: an independent biostatistician has been posting, out in the open, exactly the checks Meridian never ran, on the Trust's own internal message board.",
       ],
       evidence: [
         {
           id: "calibration-note",
-          title: "Blog post: 'A single accuracy figure is not the number you think it is'",
+          title: "A single accuracy figure is not the number you think it is",
           kind: "report",
-          source: "Dr Priya Anand, biostatistician — blog post, 'The Reliability Diagram'",
+          source: "Dr Priya Anand, biostatistician — posted on 'The Reliability Diagram' message board",
           date: "Posted six weeks ago",
           body: [
             "'I keep seeing prognostic models marketed on a single accuracy figure, so here is why that number is not the one you think it is. This post was prompted by a vendor page claiming its model is \"94% accurate\" and \"removes the uncertainty from prognosis\". Neither claim survives five minutes of arithmetic.'",
@@ -388,9 +388,9 @@ export const uncertaintySession: Session = {
         },
         {
           id: "forum-reply-1",
-          title: "Comment thread on the above post",
+          title: "Re: A single accuracy figure is not the number you think it is",
           kind: "forum",
-          source: "Comment thread, 'The Reliability Diagram'",
+          source: "Reply thread, 'The Reliability Diagram' message board",
           body: [
             "**J. Okoye, cardiology SpR.** 'Genuine question — if the AUC is 0.81, isn't that already telling us the model is trustworthy?'",
             "**Priya Anand (author).** 'It's telling you the model can rank a sicker patient above a healthier one 81% of the time it's given a random pair. It says nothing about whether the number attached to either patient means what it says. Multiply every one of the model's outputs by 0.5 and the AUC does not move — the ranking is identical — but every probability is now wildly wrong. That gap is calibration, and it has to be measured separately.'",
@@ -403,7 +403,7 @@ export const uncertaintySession: Session = {
           title: "Reliability table, 90-day mortality head",
           kind: "dataset",
           source:
-            "Guest data, shared with permission by a Trust model assurance group; published on 'The Reliability Diagram'",
+            "Trust model assurance group — guest data, posted to 'The Reliability Diagram' message board",
           body: [
             "Predictions from 1,650 held-out Brackenmoor patients, binned, with the mean predicted probability and the observed outcome frequency in each bin. This is the underlying data of a calibration plot.",
           ],
@@ -425,9 +425,9 @@ export const uncertaintySession: Session = {
         },
         {
           id: "resampling-note",
-          title: "Blog post: 'Getting an interval out of a model that does not give you one'",
+          title: "Getting an interval out of a model that does not give you one",
           kind: "report",
-          source: "Dr Priya Anand — blog post, 'The Reliability Diagram'",
+          source: "Dr Priya Anand — posted on 'The Reliability Diagram' message board",
           date: "Posted four weeks ago",
           body: [
             "'The model I've been picking on exposes a point estimate and nothing else. Two standard resampling techniques will give us a distribution anyway, without any cooperation from the vendor.'",
@@ -440,21 +440,21 @@ export const uncertaintySession: Session = {
         },
         {
           id: "forum-offtopic",
-          title: "Comment thread on 'Why I moved this blog off Wordpress'",
+          title: "OT: marathon recovery & a broken link",
           kind: "forum",
-          source: "Comment thread, 'The Reliability Diagram'",
+          source: "Reply thread, 'The Reliability Diagram' message board",
           body: [
             "**T. Iqbal, regular reader.** 'Off-topic, but congratulations on the half marathon last weekend — saw it on the socials. Recovery going okay?'",
             "**Priya Anand (author).** 'Ha, thank you — knees remembered they're not 25 anymore, but otherwise fine. Back to reliability diagrams next week as promised.'",
-            "**R. Cross.** 'The newsletter sign-up link at the bottom of the page 404s for me, by the way — might want to fix that.'",
-            "**Priya Anand (author).** 'Thanks, will sort it — the platform migration broke a few links over the summer, still finding them one at a time.'",
+            "**R. Cross.** 'The \"notify me of replies\" tickbox doesn't seem to be doing anything for me, by the way — might want to flag it to the admins.'",
+            "**Priya Anand (author).** 'Thanks, will sort it — the board software update over the summer broke a few things, still finding them one at a time.'",
           ],
         },
         {
           id: "forum-reply-2",
-          title: "Comment thread on the resampling post",
+          title: "Re: Getting an interval out of a model that does not give you one",
           kind: "forum",
-          source: "Comment thread, 'The Reliability Diagram'",
+          source: "Reply thread, 'The Reliability Diagram' message board",
           body: [
             "**M. Sood, ICU consultant.** 'So we just bootstrap it and we're done — problem solved?'",
             "**Priya Anand.** 'Not quite. Resampling only re-draws from the sample you already have. If that sample systematically leaves someone out — say, every training scan comes from one vendor — every resample leaves them out too, in exactly the same way, and the interval you get looks reassuringly narrow for entirely the wrong reason. I'll test that directly once I can get hold of an external validation set.'",
@@ -462,30 +462,30 @@ export const uncertaintySession: Session = {
         },
         {
           id: "blog-note-break",
-          title: "Blog post: 'Taking a fortnight off'",
+          title: "Taking a fortnight off (back soon)",
           kind: "report",
-          source: "Dr Priya Anand — blog post, 'The Reliability Diagram'",
+          source: "Dr Priya Anand — posted on 'The Reliability Diagram' message board",
           date: "Posted two weeks ago",
           body: [
-            "'No new post this week or next — I'm off to visit family and fully intend not to look at a reliability diagram for fourteen straight days. Back with the external validation results as promised. In the meantime the archive on the right has everything so far, and the comments are still open if you want to argue amongst yourselves.'",
-            "*(Updated two days later: fixed the archive link in the sidebar, which was pointing at the wrong year. Still on leave, this was a five-minute job from my phone.)*",
+            "'No new thread this week or next — I'm off to visit family and fully intend not to look at a reliability diagram for fourteen straight days. Back with the external validation results as promised. In the meantime the board index has everything so far, and the replies are still open if you want to argue amongst yourselves.'",
+            "*(Updated two days later: fixed the link to last year's thread, which was pointing at the wrong one. Still on leave, this was a five-minute job from my phone.)*",
           ],
         },
         {
           id: "blog-post-conference",
-          title: "Blog post: 'I'll be speaking at RSS Wales in the spring'",
+          title: "I'll be speaking at RSS Wales in the spring",
           kind: "report",
-          source: "Dr Priya Anand — blog post, 'The Reliability Diagram'",
+          source: "Dr Priya Anand — posted on 'The Reliability Diagram' message board",
           date: "Posted five weeks ago",
           body: [
-            "'Quick note for anyone local — I've been asked to give a talk at the Royal Statistical Society's Wales local group in March on communicating model uncertainty to non-specialists. Abstract and sign-up link below. Free, tea and biscuits provided, no relation to anything currently under discussion on this blog.'",
+            "'Quick note for anyone local — I've been asked to give a talk at the Royal Statistical Society's Wales local group in March on communicating model uncertainty to non-specialists. Abstract and sign-up link below. Free, tea and biscuits provided, no relation to anything currently under discussion on this board.'",
           ],
         },
         {
           id: "forum-conference-rsvp",
-          title: "Comment thread on 'I'll be speaking at RSS Wales in the spring'",
+          title: "Re: I'll be speaking at RSS Wales in the spring",
           kind: "forum",
-          source: "Comment thread, 'The Reliability Diagram'",
+          source: "Reply thread, 'The Reliability Diagram' message board",
           body: [
             "**G. Prosser.** 'Will this be recorded for those of us not in Wales in March?'",
             "**Priya Anand (author).** 'Hoping to, no promises — the venue's AV has let me down before. I'll post slides either way.'",
@@ -494,9 +494,9 @@ export const uncertaintySession: Session = {
         },
         {
           id: "forum-typo-thread",
-          title: "Comment thread on 'A single accuracy figure is not the number you think it is'",
+          title: "Spotted a typo in the accuracy thread",
           kind: "forum",
-          source: "Comment thread, 'The Reliability Diagram'",
+          source: "Reply thread, 'The Reliability Diagram' message board",
           body: [
             "**H. Duckworth.** 'Small thing — think you've got a typo in paragraph three, \"seperately\" should be \"separately\".'",
             "**Priya Anand (author).** 'Ha, thank you, fixed. That word gets me every time.'",
@@ -505,12 +505,12 @@ export const uncertaintySession: Session = {
         },
         {
           id: "forum-subscribe-question",
-          title: "Comment thread on 'Getting an interval out of a model that does not give you one'",
+          title: "Is there an email alert for new threads on this board?",
           kind: "forum",
-          source: "Comment thread, 'The Reliability Diagram'",
+          source: "Reply thread, 'The Reliability Diagram' message board",
           body: [
-            "**F. Adebayo.** 'Is there an RSS feed or email alert for new posts? Don't want to miss the next one.'",
-            "**Priya Anand (author).** 'There's a subscribe box in the sidebar — should be fixed now that R. Cross flagged the broken link elsewhere on the site. Let me know if it still doesn't work.'",
+            "**F. Adebayo.** 'Is there an email alert for new threads? Don't want to miss the next one.'",
+            "**Priya Anand (author).** 'There's a \"subscribe to board\" option under your profile settings — should be fixed now that R. Cross flagged the broken notify tickbox elsewhere on here. Let me know if it still doesn't work.'",
           ],
         },
       ],
@@ -547,7 +547,7 @@ export const uncertaintySession: Session = {
           title: "Question 5 — Does 0.31 mean 31%?",
           minutes: 12,
           scenario: [
-            "HORIZON told the MDT 0.31. The reliability table published on the blog is the underlying data of a calibration plot for exactly this outcome. Compute what it actually says.",
+            "HORIZON told the MDT 0.31. The reliability table posted to the board is the underlying data of a calibration plot for exactly this outcome. Compute what it actually says.",
           ],
           objective: "Quantify HORIZON's calibration error.",
           evidenceIds: ["calibration-table", "calibration-note"],
@@ -598,7 +598,7 @@ export const uncertaintySession: Session = {
             "**Five true statements, describing exactly what Anand's post promised and what her forum reply immediately qualified.** Bootstrap and cross-validation both refit the model repeatedly and both hand you an ensemble as a by-product: running all of them at prediction time and reading the spread is one of the cheapest useful things in this module, and nothing stopped Meridian doing it in three years of deployment.",
             "**And both are blind in exactly the same way.** They re-draw from the sample you already have. If that sample is unrepresentative (one scanner vendor, four centres, 3,208 excluded patients), every replicate is unrepresentative in the same direction, and the interval looks reassuringly narrow for entirely the wrong reason. This is Anand's answer to Sood, and it is the distributional uncertainty you first named at Question 2, about to become a number.",
             "**Three traps, not two.** Cross-validation folds are *not* independent, since their training sets overlap heavily, so more folds trades a bigger test-set problem for a smaller one rather than removing it, and very small held-out folds can miss a rare outcome entirely. Bootstrapping does not produce one model; it produces as many replicate models as you draw resamples, which is exactly what makes it useful for an ensemble in the first place. And sampling with replacement means some patients are drawn more than once *and* some are left out entirely: on average, about a third of the original dataset is absent from any single bootstrap replicate, which is precisely why the spread across replicates is informative rather than a guaranteed-complete re-run of the same data.",
-            "Your team has now built the interval Meridian never did, and tested it against reality. What it found is in the archive.",
+            "Your team has now built the interval Meridian never did, and tested it against reality. What it found is in the register.",
           ],
           fragment: "R",
         },
@@ -606,20 +606,20 @@ export const uncertaintySession: Session = {
     },
     {
       id: "uncertainty-gate-c",
-      title: "Stage C — The Archive",
-      format: "archive",
-      chrome: "Meridian assurance archive — calibration audit",
+      title: "Stage C — The Register",
+      format: "register",
+      chrome: "Meridian assurance register — calibration audit",
       teaser:
         "The formal audit: the interval nobody built, the confidence that doesn't fall, and the letter that started all of this.",
       intro: [
-        "You have the calibration gap and the method to build an interval HORIZON never supplied. The archive is where you test that interval against reality, work out whether the model knows when it's out of its depth, and decide what can honestly be told to a family.",
+        "You have the calibration gap and the method to build an interval HORIZON never supplied. The register is where you test that interval against reality, work out whether the model knows when it's out of its depth, and decide what can honestly be told to a family.",
       ],
       evidence: [
         {
           id: "interval-note",
           title: "Briefing: confidence, prediction, and whether either one held",
           kind: "report",
-          source: "Prepared by the assurance group's statistician, for the archive",
+          source: "Prepared by the assurance group's statistician, for the register",
           folder: "HORIZON assurance",
           body: [
             "**One further distinction, needed here.** A *confidence interval* expresses uncertainty about a **population quantity** — the mean survival of patients like this one. A *prediction interval* expresses uncertainty about **this individual's realised outcome**, and is always wider, because it must carry the aleatoric noise as well. Reporting the first while a clinician hears the second is a specific and common category error.",
@@ -820,7 +820,7 @@ export const uncertaintySession: Session = {
           source: "Meridian Health Analytics Ltd, enterprise risk register, archived entries",
           folder: "Policies & Governance",
           body: [
-            "One entry from the corporate risk register, unrelated to any clinical model, retained for completeness of the shared document room's export.",
+            "One entry from the corporate risk register, unrelated to any clinical model, retained for completeness of this register's full export.",
           ],
           table: {
             caption: "Risk register extract, entry closed",
@@ -843,8 +843,8 @@ export const uncertaintySession: Session = {
           source: "Brackenmoor NHS FT complaints file",
           folder: "HORIZON assurance",
           body: [
-            "'We were told the computer gave her about twelve months. We made decisions on twelve months. My brother was going to fly back at Christmas. She wanted to go home rather than have the second cycle, and we talked her out of it, because twelve months sounded like enough time to try.'",
-            "'She died seven weeks later. I am not writing because the doctors got it wrong. I am writing because nobody told us it was a guess. If someone had said it could be two months or it could be three years, we would have done everything differently, and she would have gone home.'",
+            "'We were told the computer gave her about twelve months. We made decisions on twelve months. My brother put off flying back until Christmas. She wanted to go home rather than have the second cycle, and we talked her out of it, because twelve months sounded like enough time to try.'",
+            "'Seven weeks later she was back in hospital as an emergency, far sooner and far worse than any of us had prepared for. I am not writing because the doctors got it wrong. I am writing because nobody told us it was a guess. If someone had said it could be two months or it could be three years, we would have done everything differently, and she would have gone home when she asked to.'",
           ],
         },
       ],
@@ -872,7 +872,7 @@ export const uncertaintySession: Session = {
           debrief: [
             "**56 more patients than the promise allowed for, at Site B.** HORIZON's development data was 'all imaged on the same scanner fleet, Vendor A' (the pager thread). Of the three validation sites, only Site B's note names a scanner vendor that shares nothing with that fleet ('Vendor C scanners, installed 2022'), while Site C's 'mixed fleet' could well include Vendor A machines among others, so it doesn't qualify as the clean case. Site B's table shows 124 of 200 inside the interval, so 76 fell outside it. A nominal 90% interval budgets for a 10% miss rate, 20 of those 200 patients, so the interval missed 76 − 20 = 56 more people than it was sold as missing. As a coverage rate that's 124/200 = 62% against a nominal 90%: nearly four patients in ten outside an interval advertised to miss one in ten. On the Brackenmoor held-out set, the same scanner fleet as development, coverage is 89%, almost exactly as promised. The interval is not broken in general. It is broken **where the data is no longer the data it was built on**: the distributional uncertainty you first named at Question 2, converted into a number, on real patients.",
             "This is exactly the failure Anand's forum reply predicted: resampling re-draws from the sample you already have, and if that sample is unrepresentative, every replicate is unrepresentative in the same direction. The Brackenmoor row looks fine because the resampling and the internal test set share the same systematic bias.",
-            "**And the distinction the archive briefing set up.** A confidence interval on mean survival for patients like this one might be narrow and perfectly correct: a statement about a population average. What the daughter needed, and what the MDT thought it was discussing, is a **prediction interval** for one woman's realised survival, which must carry the aleatoric spread as well and is always much wider. Reporting the first where the second is heard is not a rounding error; it is a different quantity.",
+            "**And the distinction the register briefing set up.** A confidence interval on mean survival for patients like this one might be narrow and perfectly correct: a statement about a population average. What the daughter needed, and what the MDT thought it was discussing, is a **prediction interval** for one woman's realised survival, which must carry the aleatoric spread as well and is always much wider. Reporting the first where the second is heard is not a rounding error; it is a different quantity.",
           ],
           fragment: "4",
         },

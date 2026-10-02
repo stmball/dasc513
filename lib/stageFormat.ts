@@ -9,6 +9,9 @@ export const FORMAT_LABEL: Record<StageFormat, string> = {
   archive: "Archive",
   tickets: "Service desk",
   papers: "Papers portal",
+  pager: "Secure messages",
+  board: "Message board",
+  register: "Risk register",
 };
 
 export const FORMAT_LAUNCH_LABEL: Record<StageFormat, string> = {
@@ -20,4 +23,7 @@ export const FORMAT_LAUNCH_LABEL: Record<StageFormat, string> = {
   archive: "Open the archive",
   tickets: "Open the service desk",
   papers: "Open the papers portal",
+  pager: "Open the messages",
+  board: "Open the board",
+  register: "Open the register",
 };

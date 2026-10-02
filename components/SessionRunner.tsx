@@ -88,7 +88,8 @@ export function SessionRunner({ session }: { session: Session }) {
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-10">
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
+        <div className="mx-auto max-w-3xl">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-navy-15 pb-4">
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-navy-55 label">
@@ -177,26 +178,34 @@ export function SessionRunner({ session }: { session: Session }) {
             </div>
           ) : null}
         </section>
+        </div>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 space-y-6">
           {session.gates.map((gate, gateIndex) => {
             const unlocked = gateUnlocked(gateIndex);
 
             if (!unlocked) {
               return (
-                <GateTeaser
-                  key={gate.id}
-                  gate={gate}
-                  previousGateTitle={session.gates[gateIndex - 1].title}
-                />
+                <div key={gate.id} className="mx-auto max-w-3xl">
+                  <GateTeaser
+                    gate={gate}
+                    previousGateTitle={session.gates[gateIndex - 1].title}
+                  />
+                </div>
               );
             }
 
             const readCount = gate.evidence.filter((item) => opened.has(item.id)).length;
 
             return (
-              <div key={gate.id} className="space-y-4">
-                <div className="rounded-xl border border-navy-15 bg-white px-5 py-4">
+              <div
+                key={gate.id}
+                className="grid gap-4 lg:grid-cols-[20rem_1fr] lg:items-start lg:gap-6"
+              >
+                {/* Left column: the sub-app gate — its brief and the launcher
+                    into the gate page. Sticky on desktop so it stays visible
+                    while the locks on the right are worked through. */}
+                <div className="rounded-xl border border-navy-15 bg-white px-5 py-4 lg:sticky lg:top-6">
                   <p className="text-[11px] font-semibold text-navy-55 label">
                     {gate.title} · {FORMAT_LABEL[gate.format]}
                   </p>
@@ -222,35 +231,38 @@ export function SessionRunner({ session }: { session: Session }) {
                   </div>
                 </div>
 
-                {gate.stages.map((stage) => {
-                  const index = globalIndex++;
-                  const state: StageState = solved.has(stage.id) ? "solved" : "current";
-                  return (
-                    <StagePanel
-                      key={stage.id}
-                      stage={stage}
-                      index={index}
-                      total={stages.length}
-                      state={state}
-                      accent={accent}
-                      onSolved={() => solveStage(stage.id)}
-                      expanded={expandedStages.includes(stage.id)}
-                      onToggleExpanded={() =>
-                        setExpandedStages((current) =>
-                          current.includes(stage.id)
-                            ? current.filter((id) => id !== stage.id)
-                            : [...current, stage.id],
-                        )
-                      }
-                    />
-                  );
-                })}
+                {/* Right column: this gate's questions. */}
+                <div className="space-y-4">
+                  {gate.stages.map((stage) => {
+                    const index = globalIndex++;
+                    const state: StageState = solved.has(stage.id) ? "solved" : "current";
+                    return (
+                      <StagePanel
+                        key={stage.id}
+                        stage={stage}
+                        index={index}
+                        total={stages.length}
+                        state={state}
+                        accent={accent}
+                        onSolved={() => solveStage(stage.id)}
+                        expanded={expandedStages.includes(stage.id)}
+                        onToggleExpanded={() =>
+                          setExpandedStages((current) =>
+                            current.includes(stage.id)
+                              ? current.filter((id) => id !== stage.id)
+                              : [...current, stage.id],
+                          )
+                        }
+                      />
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
 
           {allSolved ? (
-            <section className="relative overflow-hidden rounded-xl border border-navy-15 bg-white pt-1">
+            <section className="relative mx-auto max-w-3xl overflow-hidden rounded-xl border border-navy-15 bg-white pt-1">
               <span
                 aria-hidden
                 className="absolute inset-x-0 top-0 h-1 bg-navy"

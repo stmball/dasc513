@@ -17,26 +17,26 @@ export const transparencySession: Session = {
   },
   brief: [
     "You are advising **Brackenmoor NHS Foundation Trust**. Eight weeks ago a coroner issued a Regulation 28 *Prevention of Future Deaths* report after a patient died of septic shock on an acute medical ward. SENTINEL, Meridian's deterioration score, had been running throughout the admission and scored her between 0.63 and 0.78 in the fourteen hours before the arrest.",
-    "Meridian's account manager has told the Trust, in writing, that 'SENTINEL is fully explainable — we supply SHAP values for every prediction.' Before the Trust replies to the coroner, or to the family's solicitor, you need to know whether that sentence is true, and what it would take to make it true.",
-    "Ten locks stand between you and the override code that releases your advice, opening in **three gates**. Gate A — Meridian's own engineering wiki, obtained under disclosure — is open now. Gate B, a public investigation of the same claim, and Gate C, the Trust's regulatory archive, stay sealed until every lock ahead of them is cleared. Each lock needs evidence, not intuition.",
+    "Meridian's account manager has told the Trust, in writing, that 'SENTINEL is fully explainable: we supply SHAP values for every prediction.' Before the Trust replies to the coroner, or to the family's solicitor, you need to know whether that sentence is true, and what it would take to make it true.",
+    "Ten questions stand between you and the override code that releases your advice, opening in **three stages**. Stage A, Meridian's own engineering wiki obtained under disclosure, is open now. Stage B, a public investigation of the same claim, and Stage C, the Trust's regulatory archive, stay sealed until every question ahead of them is cleared. Each question needs evidence, not intuition.",
   ],
   learningOutcomes: [
     "Separate transparency, interpretability and explainability, and say which artefact evidences which.",
     "Distinguish inherent interpretability from post-hoc explainability, and explain how model selection fixes which one you can have.",
-    "Choose between the xAI toolkit — feature importance, PDP, ICE, ALE, SHAP, LIME, counterfactuals, surrogate models, and the imaging methods — according to the question being asked.",
+    "Choose between the xAI toolkit: feature importance, PDP, ICE, ALE, SHAP, LIME, counterfactuals, surrogate models, and the imaging methods, according to the question being asked.",
     "Audit a model card against what a clinical safety case and a regulator actually require.",
     "Explain how the regulatory landscape (MHRA, UK GDPR Article 22, the ICO/Turing explanation types) interacts with all three concepts.",
   ],
-  gates: [
+  stages: [
     {
       id: "transparency-gate-a",
-      title: "Gate A — The Wiki",
+      title: "Stage A — The Wiki",
       format: "wiki",
       chrome: "Meridian Engineering Wiki",
       teaser:
         "Meridian's own engineers keep a wiki. Somebody left the account manager's script on a very different page from the architecture decision log.",
       intro: [
-        "Obtained under the disclosure order: Meridian's internal engineering wiki. Nobody wrote this for a customer, a coroner or a regulator — it's where the people who built SENTINEL talk to each other.",
+        "Obtained under the disclosure order: Meridian's internal engineering wiki. Nobody wrote this for a customer, a coroner or a regulator; it's where the people who built SENTINEL talk to each other.",
       ],
       evidence: [
         {
@@ -187,10 +187,10 @@ export const transparencySession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "transparency-a1",
-          title: "Lock 1 — Three words that are not synonyms",
+          title: "Question 1 — Three words that are not synonyms",
           minutes: 12,
           scenario: [
             "Before you touch anything Meridian has told the Trust, read how Meridian's own engineers describe these three ideas to each other, unpolished, on their internal wiki.",
@@ -211,15 +211,15 @@ export const transparencySession: Session = {
             answer: 0,
           },
           debrief: [
-            "**Explainability, and only explainability.** SHAP is a post-hoc account fitted around a model that remains, in itself, unreadable. It leaves the architecture exactly as opaque as it was and discloses nothing about provenance, governance or evaluation — the things transparency is about — and nothing about the model's own structure, which is what interpretability would require.",
+            "**Explainability, and only explainability.** SHAP is a post-hoc account fitted around a model that remains, in itself, unreadable. It leaves the architecture exactly as opaque as it was and discloses nothing about provenance, governance or evaluation, the things transparency is about, and nothing about the model's own structure, which is what interpretability would require.",
             "Notice who wrote this page and why: Meridian's own ML platform team, telling its own engineers not to conflate the three words in external material, 'because a reader — including a regulator — is entitled to hold us to whichever one we actually said.' Keep that house style note in mind. You are about to watch it get ignored.",
-            "Also hold on to the prediction/inference distinction from the same page. SENTINEL was built, tuned and validated purely as a *prediction* task — the objective function rewards discrimination, never explanatory correctness. Any 'why' a clinician gets out of it is bolted on afterwards, by a different piece of software, answering a question the model was never asked to answer.",
+            "Also hold on to the prediction/inference distinction from the same page. SENTINEL was built, tuned and validated purely as a *prediction* task: the objective function rewards discrimination, never explanatory correctness. Any 'why' a clinician gets out of it is bolted on afterwards, by a different piece of software, answering a question the model was never asked to answer.",
           ],
           fragment: "0",
         },
         {
           id: "transparency-a2",
-          title: "Lock 2 — Which category, and what follows",
+          title: "Question 2 — Which category, and what follows",
           minutes: 12,
           scenario: [
             "The licensing team keeps its own page on where Meridian's products sit on the disclosure spectrum. Read it alongside the glossary before you decide what 'commercially confidential' is actually a statement about.",
@@ -239,15 +239,15 @@ export const transparencySession: Session = {
             answer: 0,
           },
           debrief: [
-            "**Proprietary — and the table shows exactly what that does and doesn't mean.** No row is published except the card itself, and even the architecture required a disclosure order to surface, which the table's footnote flags as leaving the customer with no independent path to verification at all.",
+            "**Proprietary, and the table shows exactly what that does and doesn't mean.** No row is published except the card itself, and even the architecture required a disclosure order to surface, which the table's footnote flags as leaving the customer with no independent path to verification at all.",
             "Compulsion is not publication: getting the architecture note by legal order is not the same as Meridian choosing to be open-weight, any more than a defendant's testimony makes them a co-author of the prosecution's case. The category stays proprietary.",
-            "The wiki page's own distinction is the one to carry forward: 'commercially confidential' legitimately covers weights, training code and training data — the licence agreement permits withholding those. It does not, on the vendor's own internal accounting, extend to the model card's qualitative sections, the bias and limitations statement, or the intended-use statement. Those cost nothing to complete and are expected regardless of category. Lock 8 in the archive is where you find out exactly how little of that was actually done.",
+            "The wiki page's own distinction is the one to carry forward: 'commercially confidential' legitimately covers weights, training code and training data, and the licence agreement permits withholding those. It does not, on the vendor's own internal accounting, extend to the model card's qualitative sections, the bias and limitations statement, or the intended-use statement. Those cost nothing to complete and are expected regardless of category. Question 8 in the archive is where you find out exactly how little of that was actually done.",
           ],
           fragment: "P",
         },
         {
           id: "transparency-a3",
-          title: "Lock 3 — The decision nobody revisited",
+          title: "Question 3 — The decision nobody revisited",
           minutes: 10,
           scenario: [
             "One more wiki page: the architecture decision record from when SENTINEL's model type was chosen, and the engineering note on what actually went into it.",
@@ -269,8 +269,8 @@ export const transparencySession: Session = {
             answer: 1,
           },
           debrief: [
-            "**Interpretability was traded away by a decision with no attached comparison, for a model nobody then checked.** The decision record's own rationale — 'AUROC gain justifies the loss of interpretability' — cites no number, no clinical safety reviewer, and no sensitivity analysis. Options 1 to 3 (GOFAI rules, a statistical model in the tradition of QRISK3/NEWS2/CURB-65, or even a shallow decision tree) would each have stayed interpretable, and inference — some account of *why* — would have come along for free with any of them. Option 4 buys neither.",
-            "Feature selection is a separate failure stacked on top. 'All available channels were included; the model is expected to learn which matter' is a legitimate engineering shortcut and an unexamined clinical one: it is how 38 channels describing the *care process* — how often a patient was observed, which device recorded it — ended up inside a physiological early-warning score, unflagged, because nobody was positioned to notice. You'll meet exactly which channels those are, and what they turn out to be doing, in the next gate.",
+            "**Interpretability was traded away by a decision with no attached comparison, for a model nobody then checked.** The decision record's own rationale, 'AUROC gain justifies the loss of interpretability', cites no number, no clinical safety reviewer, and no sensitivity analysis. Options 1 to 3 (GOFAI rules, a statistical model in the tradition of QRISK3/NEWS2/CURB-65, or even a shallow decision tree) would each have stayed interpretable, and inference, some account of *why*, would have come along for free with any of them. Option 4 buys neither.",
+            "Feature selection is a separate failure stacked on top. 'All available channels were included; the model is expected to learn which matter' is a legitimate engineering shortcut and an unexamined clinical one: it is how 38 channels describing the *care process* (how often a patient was observed, which device recorded it) ended up inside a physiological early-warning score, unflagged, because nobody was positioned to notice. You'll meet exactly which channels those are, and what they turn out to be doing, in the next stage.",
             "And note the prediction/inference point again: this was, throughout, a forecast, not an explanation. Option 4 was the only one of the four that could not answer 'why' without borrowing an entirely separate piece of software to do it after the fact.",
           ],
           fragment: "3",
@@ -279,13 +279,13 @@ export const transparencySession: Session = {
     },
     {
       id: "transparency-gate-b",
-      title: "Gate B — The Blog",
+      title: "Stage B — The Blog",
       format: "blog",
       chrome: "The Second Opinion — independent patient-safety reporting",
       teaser:
         "A patient-safety blogger got hold of the coroner's report, then got hold of the SHAP values Meridian said would explain everything. The comments underneath are worse than the post.",
       intro: [
-        "Gate A is done. While you were reading Meridian's own wiki, somebody else had already published. **The Second Opinion** ran a piece on SENTINEL two weeks ago, built on the same disclosure order that gave you the wiki, plus something you don't have yet: the model's own explanations, tested.",
+        "Stage A is done. While you were reading Meridian's own wiki, somebody else had already published. **The Second Opinion** ran a piece on SENTINEL two weeks ago, built on the same disclosure order that gave you the wiki, plus something you don't have yet: the model's own explanations, tested.",
       ],
       evidence: [
         {
@@ -449,13 +449,13 @@ export const transparencySession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "transparency-b1",
-          title: "Lock 4 — The score that reads the ward",
+          title: "Question 4 — The score that reads the ward",
           minutes: 14,
           scenario: [
-            "Meridian's line to the Trust was: 'SENTINEL is fully explainable — we supply SHAP values for every prediction.' The blog tested that line the only way that actually tests it: by reading what the values say.",
+            "Meridian's line to the Trust was: 'SENTINEL is fully explainable: we supply SHAP values for every prediction.' The blog tested that line the only way that actually tests it: by reading what the values say.",
             "Read the coroner's report, the vendor's reply, and the global SHAP ranking together with the comment thread underneath.",
           ],
           objective: "Interpret what the top-ranked SHAP attribution actually reveals, and how far that gets you toward the vendor's claim.",
@@ -473,20 +473,20 @@ export const transparencySession: Session = {
             answer: 1,
           },
           debrief: [
-            "**The model is reading the ward, not only the patient.** Observation frequency rises because a human being is already worried. SENTINEL has learned to detect that worry and re-present it as an independent machine judgement — which is why an alert that agrees with you feels uncanny, and why it adds much less information than its AUROC implies.",
-            "This is the pneumonia result all over again. Caruana et al. (2015) found that their most accurate model had learned that **asthma reduced the risk of death from pneumonia** — because asthmatic patients were sent straight to intensive care and therefore did better. A rules-based model made the same finding legible; reproducing it in the accurate model was what stopped a trial that was about to go ahead. `recording_device_id` at rank six is the same phenomenon with the mask off: a machine on the high-dependency bay identifies where the patient is, and where the patient is encodes how sick staff already think they are.",
-            "**This is exactly what an explanation is for — and exactly how far it goes.** The AUROC could not have told you this; only opening the box did. But be precise about what it revealed: it told you what the model is *leaning on*, not that observation frequency causes deterioration. Explanations identify association, never causation, and the anonymous engineer in the comments is right that this is a known failure mode in deterioration models generally — the question is whether Meridian checked for it before deployment, which nothing in your dossier so far says they did.",
-            "**Note which artefact answered this.** A *global* SHAP summary over 20,000 admissions — features ranked by mean |SHAP| across a population — is far more stable than a single local explanation, which is why it's the right tool for an investigative question like this one. A *force plot* would give the local version, what pushed one specific patient's score; a SHAP *dependence* plot would show how the contribution of `obs_count_last_4h` varies with its value, resembling a PDP but plotting SHAP contribution rather than partial dependence.",
-            "Does this answer Meridian's claim? Partially. It shows a SHAP value can, in aggregate, surface something real and important. It does not yet tell you whether a *local* explanation — the kind a family or a single clinician would actually be handed — is trustworthy at all. That's next.",
+            "**The model is reading the ward, not only the patient.** Observation frequency rises because a human being is already worried. SENTINEL has learned to detect that worry and re-present it as an independent machine judgement, which is why an alert that agrees with you feels uncanny, and why it adds much less information than its AUROC implies.",
+            "This is the pneumonia result all over again. Caruana et al. (2015) found that their most accurate model had learned that **asthma reduced the risk of death from pneumonia**, because asthmatic patients were sent straight to intensive care and therefore did better. A rules-based model made the same finding legible; reproducing it in the accurate model was what stopped a trial that was about to go ahead. `recording_device_id` at rank six is the same phenomenon with the mask off: a machine on the high-dependency bay identifies where the patient is, and where the patient is encodes how sick staff already think they are.",
+            "**This is exactly what an explanation is for, and exactly how far it goes.** The AUROC could not have told you this; only opening the box did. But be precise about what it revealed: it told you what the model is *leaning on*, not that observation frequency causes deterioration. Explanations identify association, never causation, and the anonymous engineer in the comments is right that this is a known failure mode in deterioration models generally. The question is whether Meridian checked for it before deployment, which nothing in your dossier so far says they did.",
+            "**Note which artefact answered this.** A *global* SHAP summary over 20,000 admissions, features ranked by mean |SHAP| across a population, is far more stable than a single local explanation, which is why it's the right tool for an investigative question like this one. A *force plot* would give the local version, what pushed one specific patient's score; a SHAP *dependence* plot would show how the contribution of `obs_count_last_4h` varies with its value, resembling a PDP but plotting SHAP contribution rather than partial dependence.",
+            "Does this answer Meridian's claim? Partially. It shows a SHAP value can, in aggregate, surface something real and important. It does not yet tell you whether a *local* explanation, the kind a family or a single clinician would actually be handed, is trustworthy at all. That's next.",
           ],
           fragment: "N",
         },
         {
           id: "transparency-b2",
-          title: "Lock 5 — Ask twice, get two answers",
+          title: "Question 5 — Ask twice, get two answers",
           minutes: 12,
           scenario: [
-            "If the SHAP summary is the population-level version of Meridian's promise, the family's solicitor asked for the individual version: an explanation of one prediction, for one patient. Readers of the blog reproduced it — twice, changing nothing but the random seed.",
+            "If the SHAP summary is the population-level version of Meridian's promise, the family's solicitor asked for the individual version: an explanation of one prediction, for one patient. Readers of the blog reproduced it twice, changing nothing but the random seed.",
           ],
           objective: "Determine what it means that two explanations of the identical prediction gave two different top features.",
           evidenceIds: ["blog-lime-followup", "wiki-xai-methods"],
@@ -503,18 +503,18 @@ export const transparencySession: Session = {
             answer: 1,
           },
           debrief: [
-            "**The explanation has variance because it is a second model.** LIME generates hundreds of synthetic samples around this one patient, asks the black box what it thinks of them, and fits a simple local surrogate whose coefficients become 'the explanation'. Change the random draw and you change the surrogate — and here, both draws reproduce SENTINEL with R² under 0.5, meaning neither surrogate is even a good approximation of what the real model did at this point.",
-            "That has a hard consequence for exactly the situation this Trust is in. If Meridian switches on a local explanation display and hands it to a family, they see one ranking and are told it is *the* reason. Re-run it and the reason changes. An explanation presented as *the* cause, when re-running it would produce a different answer, is not transparency — it's the appearance of transparency, and arguably worse than no explanation at all, because it doesn't announce itself as unreliable.",
-            "**Contrast this with Gate B's first lock.** The global SHAP summary aggregated over 20,000 admissions was stable enough to reveal something real about the care process. This single-patient LIME run is the opposite case: local, unstable, and unable to reproduce the model it claims to explain. Global and local are not two views of the same reliability — they are different questions with different error properties, and SHAP (grounded in Shapley values, consistent by construction) is generally more stable than LIME for both, which is part of why it has become the default explanation method in healthcare while LIME remains a faster, rougher tool best suited to rapid iteration rather than an answer handed to a bereaved family.",
+            "**The explanation has variance because it is a second model.** LIME generates hundreds of synthetic samples around this one patient, asks the black box what it thinks of them, and fits a simple local surrogate whose coefficients become 'the explanation'. Change the random draw and you change the surrogate: here, both draws reproduce SENTINEL with R² under 0.5, meaning neither surrogate is even a good approximation of what the real model did at this point.",
+            "That has a hard consequence for exactly the situation this Trust is in. If Meridian switches on a local explanation display and hands it to a family, they see one ranking and are told it is *the* reason. Re-run it and the reason changes. An explanation presented as *the* cause, when re-running it would produce a different answer, is not transparency; it's the appearance of transparency, and arguably worse than no explanation at all, because it doesn't announce itself as unreliable.",
+            "**Contrast this with Stage B's first question.** The global SHAP summary aggregated over 20,000 admissions was stable enough to reveal something real about the care process. This single-patient LIME run is the opposite case: local, unstable, and unable to reproduce the model it claims to explain. Global and local are not two views of the same reliability; they are different questions with different error properties, and SHAP (grounded in Shapley values, consistent by construction) is generally more stable than LIME for both, which is part of why it has become the default explanation method in healthcare while LIME remains a faster, rougher tool best suited to rapid iteration rather than an answer handed to a bereaved family.",
           ],
           fragment: "S",
         },
         {
           id: "transparency-b3",
-          title: "Lock 6 — The imaging playbook",
+          title: "Question 6 — The imaging playbook",
           minutes: 12,
           scenario: [
-            "One more thread the blog pulled on: Meridian's chest radiograph triage tool uses the same vocabulary — 'explainable', 'transparent AI' — for a completely different family of methods. Read the aside before you decide whether the vocabulary means what the marketing implies.",
+            "One more thread the blog pulled on: Meridian's chest radiograph triage tool uses the same vocabulary ('explainable', 'transparent AI') for a completely different family of methods. Read the aside before you decide whether the vocabulary means what the marketing implies.",
           ],
           objective: "Separate what's true from what's overstated about Meridian's imaging explainability claims.",
           evidenceIds: ["blog-imaging-aside", "wiki-xai-methods"],
@@ -534,10 +534,10 @@ export const transparencySession: Session = {
             answers: [0, 1, 3, 5],
           },
           debrief: [
-            "**Four true, three overstated.** Saliency and Grad-CAM are correctly described: saliency is pixel-level and noisy; Grad-CAM pools the final convolutional layers into something coarser and generally more readable. Attention maps genuinely have an edge — the attention weights are part of the model's own computation, not reconstructed by a second technique afterwards.",
-            "**Occlusion sensitivity is the expensive one, not the cheap one.** It re-runs the model once per occluded region, which is far more computationally costly than a gradient-based method that needs only a single backward pass. The passage says this directly, and it's an easy statement to misread quickly. Being expensive is not the same as being *reliable*, either — nothing in the passage claims occlusion's heat maps beat Grad-CAM's on reliability, only that they cost more to produce.",
-            "**'Shows why, not just where' is the same trap as Lock 4, in image form.** A heat map shows where the model attended — it does not show why that region mattered, and different methods routinely disagree with each other on the same image, which is one of the four statements you should have kept. A visually convincing heat map is not automatically a reliable one; image-based explanations are, if anything, unusually good at inspiring more confidence than they've earned, not less.",
-            "**And imaging complexity buys no extra trust.** More parameters and a harder input space is a reason explanations are *needed* more, not a reason to believe them *more*. The caveats from the tabular case — association not causation, method disagreement, an approximation with its own error — apply here too, 'only more persuasively', as Meridian's own technical marketing document puts it.",
+            "**Four true, three overstated.** Saliency and Grad-CAM are correctly described: saliency is pixel-level and noisy; Grad-CAM pools the final convolutional layers into something coarser and generally more readable. Attention maps genuinely have an edge, because the attention weights are part of the model's own computation, not reconstructed by a second technique afterwards.",
+            "**Occlusion sensitivity is the expensive one, not the cheap one.** It re-runs the model once per occluded region, which is far more computationally costly than a gradient-based method that needs only a single backward pass. The passage says this directly, and it's an easy statement to misread quickly. Being expensive is not the same as being *reliable*, either: nothing in the passage claims occlusion's heat maps beat Grad-CAM's on reliability, only that they cost more to produce.",
+            "**'Shows why, not just where' is the same trap as Question 4, in image form.** A heat map shows where the model attended; it does not show why that region mattered, and different methods routinely disagree with each other on the same image, which is one of the four statements you should have kept. A visually convincing heat map is not automatically a reliable one; image-based explanations are, if anything, unusually good at inspiring more confidence than they've earned, not less.",
+            "**And imaging complexity buys no extra trust.** More parameters and a harder input space is a reason explanations are *needed* more, not a reason to believe them *more*. The caveats from the tabular case (association not causation, method disagreement, an approximation with its own error) apply here too, 'only more persuasively', as Meridian's own technical marketing document puts it.",
           ],
           fragment: "0",
         },
@@ -545,13 +545,13 @@ export const transparencySession: Session = {
     },
     {
       id: "transparency-gate-c",
-      title: "Gate C — The Archive",
+      title: "Stage C — The Archive",
       format: "archive",
       chrome: "Trust regulatory & clinical safety archive",
       teaser:
         "Everything filed on the record: the card Meridian sent, the interview the Trust conducted, and the letter the family's solicitor is still waiting on.",
       intro: [
-        "Gate B told you what SENTINEL's own explanations say and don't say. The archive is where you find out what the Trust was formally told, what it is formally owed, and what your advice has to actually promise.",
+        "Stage B told you what SENTINEL's own explanations say and don't say. The archive is where you find out what the Trust was formally told, what it is formally owed, and what your advice has to actually promise.",
       ],
       evidence: [
         {
@@ -746,13 +746,13 @@ export const transparencySession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "transparency-c1",
-          title: "Lock 7 — Name the technique",
+          title: "Question 7 — Name the technique",
           minutes: 14,
           scenario: [
-            "Before you can audit any of Meridian's explanation claims with precision, you need to be exact about which technique answers which question — global or local, what the model may use versus what it does use, and which family of method fits a tabular score versus a radiograph.",
+            "Before you can audit any of Meridian's explanation claims with precision, you need to be exact about which technique answers which question: global or local, what the model may use versus what it does use, and which family of method fits a tabular score versus a radiograph.",
             "Pull together everything the wiki and the blog gave you on the xAI toolkit, and sort it properly.",
           ],
           objective: "Classify each technique correctly by scope and by the question it actually answers.",
@@ -774,20 +774,20 @@ export const transparencySession: Session = {
             answers: [1, 2, 4, 6],
           },
           debrief: [
-            "**Global vs local is the axis this whole toolkit sorts along, and it's easy to get backwards.** SHAP summary plots are global — ranked across a population, exactly like the aggregate you read on the blog. Force plots are the local version, for one patient. Confusing the two, as one of the false statements did, is precisely the mistake that would let someone hand a family a summary plot and call it 'their explanation', or hand a clinician a force plot and call it 'how the model behaves'.",
-            "**Feature selection vs feature importance is the second axis, and it matters because they can point in opposite directions.** Selection decides what the model is *allowed* to see — forward selection, reverse elimination, LASSO, or a clinician's judgement. Importance describes what it *actually* leans on once fitted. A feature can be selected and turn out unimportant; a feature nobody selected — because, as in Gate A, nobody selected anything at all — can turn out to dominate, which is exactly what happened with `obs_count_last_4h`.",
-            "**PDP, ICE and ALE are a family, not a single method.** PDP averages over everything else to give one curve; ICE keeps the individual patient lines the average hides; ALE stays within intervals where real data exists rather than extrapolating, and handles correlated features better than either. That refusal to extrapolate is exactly backwards from the false option above: ALE is the *more* cautious of the two at the edges of the data, not the more adventurous one — it's the PDP that will happily average over combinations of variables no real patient has. The imaging methods — Grad-CAM and occlusion sensitivity — are local in the same sense force plots are: each explains one image.",
-            "**Surrogate models explain the model, not the data — and only as well as they reproduce it.** A simple model fitted to imitate a black box tells you about the black box's behaviour, filtered through how faithfully the surrogate copies it; it is not a shortcut to ground truth, and nothing makes it more trustworthy than SHAP or LIME by default.",
-            "**And different methods can, and routinely do, disagree** — that's stated as a limitation that applies to the whole toolkit, tabular and imaging alike, and it's the reason auditing an explainability claim means checking more than one method before trusting any of them.",
+            "**Global vs local is the axis this whole toolkit sorts along, and it's easy to get backwards.** SHAP summary plots are global, ranked across a population, exactly like the aggregate you read on the blog. Force plots are the local version, for one patient. Confusing the two, as one of the false statements did, is precisely the mistake that would let someone hand a family a summary plot and call it 'their explanation', or hand a clinician a force plot and call it 'how the model behaves'.",
+            "**Feature selection vs feature importance is the second axis, and it matters because they can point in opposite directions.** Selection decides what the model is *allowed* to see: forward selection, reverse elimination, LASSO, or a clinician's judgement. Importance describes what it *actually* leans on once fitted. A feature can be selected and turn out unimportant; a feature nobody selected (because, as in Stage A, nobody selected anything at all) can turn out to dominate, which is exactly what happened with `obs_count_last_4h`.",
+            "**PDP, ICE and ALE are a family, not a single method.** PDP averages over everything else to give one curve; ICE keeps the individual patient lines the average hides; ALE stays within intervals where real data exists rather than extrapolating, and handles correlated features better than either. That refusal to extrapolate is exactly backwards from the false option above: ALE is the *more* cautious of the two at the edges of the data, not the more adventurous one; it's the PDP that will happily average over combinations of variables no real patient has. The imaging methods, Grad-CAM and occlusion sensitivity, are local in the same sense force plots are: each explains one image.",
+            "**Surrogate models explain the model, not the data, and only as well as they reproduce it.** A simple model fitted to imitate a black box tells you about the black box's behaviour, filtered through how faithfully the surrogate copies it; it is not a shortcut to ground truth, and nothing makes it more trustworthy than SHAP or LIME by default.",
+            "**And different methods can, and routinely do, disagree.** That's stated as a limitation that applies to the whole toolkit, tabular and imaging alike, and it's the reason auditing an explainability claim means checking more than one method before trusting any of them.",
           ],
           fragment: "U",
         },
         {
           id: "transparency-c2",
-          title: "Lock 8 — The card that isn't",
+          title: "Question 8 — The card that isn't",
           minutes: 16,
           scenario: [
-            "Meridian attached a model card. Model cards exist precisely so that the transparency questions can be answered without disclosing weights — they are the standard artefact for exactly the situation the Trust is in, recording training, evaluation, safety challenges, external assessment and example outputs.",
+            "Meridian attached a model card. Model cards exist precisely so that the transparency questions can be answered without disclosing weights: they are the standard artefact for exactly the situation the Trust is in, recording training, evaluation, safety challenges, external assessment and example outputs.",
             "Read the card against the wiki architecture page and the formal transcript, and work out what the card leaves out.",
           ],
           objective: "Identify every material omission from the model card that bears on the coroner's questions.",
@@ -810,17 +810,17 @@ export const transparencySession: Session = {
           },
           debrief: [
             "The parameter count is one distractor. Knowing that SENTINEL has 41 million parameters tells a ward sister nothing she can act on; it is the kind of disclosure that feels like transparency while conveying nothing. Transparency is not a volume of detail, it is **the specific information a particular audience needs to make a particular decision**.",
-            "Two more distractors trade on sounding technical. AUROC is computed from predicted scores and actual outcomes across the whole evaluation set — it needs no subgroup labels at all, so the pooled 0.82 figure is a real number; the *absence of a subgroup breakdown* is the separate, genuine omission, not a reason to doubt the headline figure itself. And the model card's publication date changes nothing about whether an omission is material: the coroner's questions could be asked of any deterioration score at any time, and the four missing sections were knowable — and, per the wiki ticket raised at the v1.6 release too, already flagged internally — well before this admission.",
-            "Everything else on the list is material. Note especially what is happening with 'users should exercise clinical judgement'. That sentence appears in almost every clinical AI model card, and in this configuration it is doing a particular job: it transfers accountability to the clinician while withholding intended use, threshold, action guidance and local performance — the four things that judgement would need. The nurse's evidence, now on the formal record in this archive rather than paraphrased in a comment thread, is the other half of this: a 20-minute module, no escalation path, no button for disagreement.",
-            "Remember what a model card is and is not. It is written by the vendor, it is not peer reviewed, and its completeness is entirely at the author's discretion — so a card is evidence of what a supplier is willing to say, and a *short* card is itself a finding. The MHRA expects a manufacturer to state the development population, the known bias and the limitations; this card states none of them.",
-            "The wiki page you read in Gate A adds one more defect the card conceals: **no feature selection was performed at all**. 'All available channels were included; the model is expected to learn which matter' is a defensible engineering choice and an undisclosed clinical one, because it is how 38 care-process channels ended up in a physiological early-warning score — the very channels Gate B's SHAP analysis found sitting at the top of the ranking. That's not a coincidence you needed a second dossier to find; it was buried in this card from the start.",
-            "**Transparency is cheap and it is the part nobody does.** None of these omissions requires disclosing a single weight. Meridian could have answered three of the coroner's four questions with a properly completed card and lost no commercial position whatsoever. The MHRA file in this archive shows exactly how far that goes: a bias-and-limitations section that admits, in writing, that no subgroup evaluation was ever done — filed with the regulator, and never repeated to the ward.",
+            "Two more distractors trade on sounding technical. AUROC is computed from predicted scores and actual outcomes across the whole evaluation set, so it needs no subgroup labels at all, and the pooled 0.82 figure is a real number; the *absence of a subgroup breakdown* is the separate, genuine omission, not a reason to doubt the headline figure itself. And the model card's publication date changes nothing about whether an omission is material: the coroner's questions could be asked of any deterioration score at any time, and the four missing sections were knowable, and (per the wiki ticket raised at the v1.6 release too) already flagged internally, well before this admission.",
+            "Everything else on the list is material. Note especially what is happening with 'users should exercise clinical judgement'. That sentence appears in almost every clinical AI model card, and in this configuration it is doing a particular job: it transfers accountability to the clinician while withholding intended use, threshold, action guidance and local performance, the four things that judgement would need. The nurse's evidence, now on the formal record in this archive rather than paraphrased in a comment thread, is the other half of this: a 20-minute module, no escalation path, no button for disagreement.",
+            "Remember what a model card is and is not. It is written by the vendor, it is not peer reviewed, and its completeness is entirely at the author's discretion, so a card is evidence of what a supplier is willing to say, and a *short* card is itself a finding. The MHRA expects a manufacturer to state the development population, the known bias and the limitations; this card states none of them.",
+            "The wiki page you read in Stage A adds one more defect the card conceals: **no feature selection was performed at all**. 'All available channels were included; the model is expected to learn which matter' is a defensible engineering choice and an undisclosed clinical one, because it is how 38 care-process channels ended up in a physiological early-warning score, the very channels Stage B's SHAP analysis found sitting at the top of the ranking. That's not a coincidence you needed a second dossier to find; it was buried in this card from the start.",
+            "**Transparency is cheap and it is the part nobody does.** None of these omissions requires disclosing a single weight. Meridian could have answered three of the coroner's four questions with a properly completed card and lost no commercial position whatsoever. The MHRA file in this archive shows exactly how far that goes: a bias-and-limitations section that admits, in writing, that no subgroup evaluation was ever done, filed with the regulator, and never repeated to the ward.",
           ],
           fragment: "R",
         },
         {
           id: "transparency-c3",
-          title: "Lock 9 — What does the family get?",
+          title: "Question 9 — What does the family get?",
           minutes: 14,
           scenario: [
             "The family's solicitor asked for 'meaningful information about the logic involved'. Meridian's lawyers say Article 22 doesn't apply because a nurse was always present. Read the correspondence against the regulatory extract and the formal transcript, and test that defence properly.",
@@ -839,17 +839,17 @@ export const transparencySession: Session = {
             answer: 1,
           },
           debrief: [
-            "**A rubber stamp is not a human in the loop.** The ICO's test is substantive: authority, competence, information, and the practical ability to exercise all three. The formal transcript in this archive gives you the evidence: a number with no rationale, no threshold, no action guidance, no button to disagree, and twenty minutes of e-learning — on a bad night, half the bay orange. 'A human was present' is a defence about the org chart, not about the decision, and Meridian's legal letter never engages with whether that presence was meaningful.",
-            "Option D gets the regulatory landscape backwards in the other direction. A UKCA mark does not displace data protection law, and the MHRA's own file — the bias-and-limitations section you just read — points the same way as the ICO: transparency about development, bias and limitations, with post-market surveillance continuing after the mark is granted. Both regulators are asking the Trust for things it does not have.",
-            "**Now map the coroner's four questions onto what you actually have.** Question 1 ('on what information was the score of 0.71 based') is partly answered by the global SHAP ranking from Gate B, and partly a transparency question about the input channels that only the wiki answered. Question 2 ('why did it rise') is the only one a per-prediction explanation even attempts — and Gate B showed you that the local version of that attempt is not reliable enough to put in front of a family. Question 3 ('who is accountable, what were staff told it obliged them to do') is pure transparency and organisational design — no attribution method answers it, and the transcript shows nobody had told the nurse. Question 4 ('what evidence of adequate performance on patients like the deceased') is transparency again: the subgroup evaluation the MHRA file admits was never done.",
-            "Even where Article 22 does bite, most of what's owed is not a per-prediction artefact. Of the ICO/Turing six explanation types — **rationale**, **responsibility**, **data**, **fairness**, **safety and performance**, **impact** — only rationale is produced at prediction time. The other five are discharged through documentation and governance: the model card that was two paragraphs long, the subgroup evaluation that was never run, and the named clinical safety contact that does not exist.",
-            "**So the remedy is not a better attribution method.** It is: a completed model card with intended use and out-of-scope use; local subgroup evaluation answering the coroner's fourth question; a stated threshold with explicit action guidance at each level; a named accountable owner; a mechanism for staff to record disagreement and for that record to reach someone; the care-process channels either removed or disclosed with their fragility stated; and a serious argument, backed by the number in the final lock, about whether an interpretable model should simply replace SENTINEL.",
+            "**A rubber stamp is not a human in the loop.** The ICO's test is substantive: authority, competence, information, and the practical ability to exercise all three. The formal transcript in this archive gives you the evidence: a number with no rationale, no threshold, no action guidance, no button to disagree, and twenty minutes of e-learning, on a bad night, half the bay orange. 'A human was present' is a defence about the org chart, not about the decision, and Meridian's legal letter never engages with whether that presence was meaningful.",
+            "Option D gets the regulatory landscape backwards in the other direction. A UKCA mark does not displace data protection law, and the MHRA's own file, the bias-and-limitations section you just read, points the same way as the ICO: transparency about development, bias and limitations, with post-market surveillance continuing after the mark is granted. Both regulators are asking the Trust for things it does not have.",
+            "**Now map the coroner's four questions onto what you actually have.** The first ('on what information was the score of 0.71 based') is partly answered by the global SHAP ranking from Stage B, and partly a transparency question about the input channels that only the wiki answered. The second ('why did it rise') is the only one a per-prediction explanation even attempts, and Stage B showed you that the local version of that attempt is not reliable enough to put in front of a family. The third ('who is accountable, what were staff told it obliged them to do') is pure transparency and organisational design: no attribution method answers it, and the transcript shows nobody had told the nurse. The fourth ('what evidence of adequate performance on patients like the deceased') is transparency again: the subgroup evaluation the MHRA file admits was never done.",
+            "Even where Article 22 does bite, most of what's owed is not a per-prediction artefact. Of the ICO/Turing six explanation types, **rationale**, **responsibility**, **data**, **fairness**, **safety and performance**, **impact**, only rationale is produced at prediction time. The other five are discharged through documentation and governance: the model card that was two paragraphs long, the subgroup evaluation that was never run, and the named clinical safety contact that does not exist.",
+            "**So the remedy is not a better attribution method.** It is: a completed model card with intended use and out-of-scope use; local subgroup evaluation answering the coroner's fourth question; a stated threshold with explicit action guidance at each level; a named accountable owner; a mechanism for staff to record disagreement and for that record to reach someone; the care-process channels either removed or disclosed with their fragility stated; and a serious argument, backed by the number in the final question, about whether an interpretable model should simply replace SENTINEL.",
           ],
           fragment: "C",
         },
         {
           id: "transparency-c4",
-          title: "Lock 10 — Pricing the black box",
+          title: "Question 10 — Pricing the black box",
           minutes: 14,
           scenario: [
             "One question the whole debate usually skips: what is the black box actually buying? Your team commissioned a benchmark on the Trust's own data before writing a single recommendation.",
@@ -866,11 +866,11 @@ export const transparencySession: Session = {
             placeholder: "e.g. 10",
           },
           debrief: [
-            "**Twelve points of AUROC, total, and unevenly spent.** SENTINEL leads the explainable boosting machine by one point (0.82 vs 0.81), the sparse logistic regression by three (0.82 vs 0.79), and NEWS2 — a paper addition sum, already validated, already trusted — by eight (0.82 vs 0.74). Add the three gaps and the entire 41-million-parameter, commercially-confidential apparatus behind an unanswerable coroner's letter is buying twelve points of AUROC spread across three very different offers, the cheapest of which the benchmark's own footnote says is inside the confidence interval and so not reliably a gain at all. The accuracy–interpretability trade-off is real on high-dimensional data such as images and free text; on structured ward observations it is frequently *assumed* rather than *measured*, and when it is measured it is often close to zero (Rudin 2019, *Nature Machine Intelligence*). The architecture decision record you read in Gate A never ran this table before making the trade.",
-            "**Look at what the interpretable alternatives buy back.** A sparse logistic regression gives eleven coefficients and their odds ratios — `log(p/(1−p)) = β₀ + β₁·Age + β₂·Temperature`, with each β reading directly as an odds ratio via e^β, and a forest plot displaying them with 95% confidence intervals so the whole picture is visible at a glance. The explainable boosting machine gives one readable shape function per variable. Both score full marks on interpretability, explainability and clinical trust, where SENTINEL scores one or two — and even NEWS2, an addition sum on a paper chart, already validated and already trusted, sits within eight points of AUROC of a 41-million-parameter transformer ensemble.",
-            "**Feature selection is what makes a model like that possible in the first place.** With thousands of candidate variables, including everything invites overfitting and multiple-comparison problems: **forward selection** adds predictors one at a time, keeping the most discriminatory; **reverse elimination** strips out the least significant; **LASSO** penalises complexity until some coefficients are driven exactly to zero at fitting time; and clinical selection — asking a clinician what belongs — remains a legitimate and often superior method. This is the step Gate A showed SENTINEL skipped entirely.",
-            "**Rules-based systems (GOFAI) and validated scores sit at the most explainable end of the spectrum.** Encoding existing clinical rules as if-then logic is completely explainable because the designer knows exactly why it decides what it decides. QRISK3, NEWS2 and CURB-65 are explainable by construction, published, and already trusted in practice — which is precisely why the benchmark includes NEWS2 as a baseline, not a curiosity.",
-            "**What your advice can honestly promise.** Not that SENTINEL can be made fair or fully explainable by better tooling — a better attribution method was never going to fix a card with no intended-use statement, an MHRA file that admits no subgroup evaluation was done, or a decision record that traded interpretability for an unmeasured gain. What you can promise is a costed choice: complete the transparency artefacts that cost nothing to write, treat any local explanation as provisional at best, and put this benchmark in front of the board before the next contract renewal, so that whichever model the Trust runs, the trade-off was measured rather than assumed.",
+            "**Twelve points of AUROC, total, and unevenly spent.** SENTINEL leads the explainable boosting machine by one point (0.82 vs 0.81), the sparse logistic regression by three (0.82 vs 0.79), and NEWS2, a paper addition sum, already validated, already trusted, by eight (0.82 vs 0.74). Add the three gaps and the entire 41-million-parameter, commercially-confidential apparatus behind an unanswerable coroner's letter is buying twelve points of AUROC spread across three very different offers, the cheapest of which the benchmark's own footnote says is inside the confidence interval and so not reliably a gain at all. The accuracy–interpretability trade-off is real on high-dimensional data such as images and free text; on structured ward observations it is frequently *assumed* rather than *measured*, and when it is measured it is often close to zero (Rudin 2019, *Nature Machine Intelligence*). The architecture decision record you read in Stage A never ran this table before making the trade.",
+            "**Look at what the interpretable alternatives buy back.** A sparse logistic regression gives eleven coefficients and their odds ratios, `log(p/(1−p)) = β₀ + β₁·Age + β₂·Temperature`, with each β reading directly as an odds ratio via e^β, and a forest plot displaying them with 95% confidence intervals so the whole picture is visible at a glance. The explainable boosting machine gives one readable shape function per variable. Both score full marks on interpretability, explainability and clinical trust, where SENTINEL scores one or two, and even NEWS2, an addition sum on a paper chart, already validated and already trusted, sits within eight points of AUROC of a 41-million-parameter transformer ensemble.",
+            "**Feature selection is what makes a model like that possible in the first place.** With thousands of candidate variables, including everything invites overfitting and multiple-comparison problems: **forward selection** adds predictors one at a time, keeping the most discriminatory; **reverse elimination** strips out the least significant; **LASSO** penalises complexity until some coefficients are driven exactly to zero at fitting time; and clinical selection, asking a clinician what belongs, remains a legitimate and often superior method. This is the step Stage A showed SENTINEL skipped entirely.",
+            "**Rules-based systems (GOFAI) and validated scores sit at the most explainable end of the spectrum.** Encoding existing clinical rules as if-then logic is completely explainable because the designer knows exactly why it decides what it decides. QRISK3, NEWS2 and CURB-65 are explainable by construction, published, and already trusted in practice, which is precisely why the benchmark includes NEWS2 as a baseline, not a curiosity.",
+            "**What your advice can honestly promise.** Not that SENTINEL can be made fair or fully explainable by better tooling: a better attribution method was never going to fix a card with no intended-use statement, an MHRA file that admits no subgroup evaluation was done, or a decision record that traded interpretability for an unmeasured gain. What you can promise is a costed choice: complete the transparency artefacts that cost nothing to write, treat any local explanation as provisional at best, and put this benchmark in front of the board before the next contract renewal, so that whichever model the Trust runs, the trade-off was measured rather than assumed.",
           ],
           fragment: "3",
         },
@@ -880,9 +880,9 @@ export const transparencySession: Session = {
   finalCode: "0P3NS0URC3",
   finale: {
     prompt:
-      "Assemble the ten fragments in lock order — Gate A, then Gate B, then Gate C — and enter the override code to release your advice to the Trust.",
+      "Assemble the ten fragments in question order, Stage A, then Stage B, then Stage C, and enter the override code to release your advice to the Trust.",
     debrief: [
-      "**Advice released.** Meridian's claim was true and irrelevant: SENTINEL is explainable, in the narrow sense that a second model can be fitted around it, and that fact answers a quarter of the coroner's letter at best. What the Trust needed was transparency it was never given even though it costs nothing, interpretability it never asked for at the point the model type was chosen, and an explanation stable enough to put in front of a bereaved family — which the one on offer is not. And a benchmark nobody ran until you did says the interpretable alternative would have cost a single point of AUROC, inside the margin of error.",
+      "**Advice released.** Meridian's claim was true and irrelevant: SENTINEL is explainable, in the narrow sense that a second model can be fitted around it, and that fact answers a quarter of the coroner's letter at best. What the Trust needed was transparency it was never given even though it costs nothing, interpretability it never asked for at the point the model type was chosen, and an explanation stable enough to put in front of a bereaved family, which the one on offer is not. And a benchmark nobody ran until you did says the interpretable alternative would have cost a single point of AUROC, inside the margin of error.",
       "Carry one sentence into the next tutorial: the artefact that gets built is the one that sounds most technical, and the one that was needed is usually the one that is merely tedious to write down.",
     ],
   },

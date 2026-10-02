@@ -130,7 +130,7 @@ export function ChallengeForm({
               : "cursor-not-allowed bg-navy-30"
           }`}
         >
-          Try the lock
+          Submit answer
         </button>
         {wrong ? (
           // Errors carry a navy bar and bold navy type. No warning colour

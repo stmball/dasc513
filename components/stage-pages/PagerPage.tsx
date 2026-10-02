@@ -7,7 +7,7 @@ import { BackLink } from "./BackLink";
 import type { FormatPageProps } from "./types";
 
 /** Avatar accent colours for the conversation list — NHS-blue adjacent but
- * deliberately not the exact brand navy, and not the palette any other gate
+ * deliberately not the exact brand navy, and not the palette any other stage
  * page uses for its own avatars. */
 const AVATAR_COLORS = [
   "bg-[#005EB8]",
@@ -36,7 +36,7 @@ function truncate(text: string, max: number): string {
   return text.length > max ? `${text.slice(0, max)}…` : text;
 }
 
-/** Splits a gate's `chrome` string ("App name — tagline") the same way
+/** Splits a stage's `chrome` string ("App name — tagline") the same way
  * `BlogPage` does, so the app bar can show a real product name plus a
  * subtitle rather than the whole string run together. */
 function parseChrome(chrome: string): { name: string; tagline?: string } {
@@ -52,12 +52,12 @@ function parseChrome(chrome: string): { name: string; tagline?: string } {
  * platform rather than a relabelled workspace chat. Every item here is a
  * real conversation of real messages, the same convention `ChatPage` keeps:
  * nothing sits in the list as a pinned document instead of a thread. */
-export function PagerPage({ session, gate, opened, onOpen }: FormatPageProps) {
-  const firstId = gate.evidence[0]?.id ?? null;
+export function PagerPage({ session, stage, opened, onOpen }: FormatPageProps) {
+  const firstId = stage.evidence[0]?.id ?? null;
   const [selectedId, setSelectedId] = useState<string | null>(firstId);
   const [tableOpen, setTableOpen] = useState(false);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
-  const { name, tagline } = parseChrome(gate.chrome);
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
+  const { name, tagline } = parseChrome(stage.chrome);
 
   useEffect(() => {
     if (firstId) onOpen(firstId);
@@ -116,7 +116,7 @@ export function PagerPage({ session, gate, opened, onOpen }: FormatPageProps) {
               </div>
             </div>
             <ul>
-              {gate.evidence.map((item) => {
+              {stage.evidence.map((item) => {
                 const isSelected = selectedId === item.id;
                 const isUnread = !opened.has(item.id);
                 const { opener, snippet } = preview(item.body);

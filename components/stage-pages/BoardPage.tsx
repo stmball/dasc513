@@ -139,16 +139,16 @@ const OTHER_BOARDS = ["Off Duty / Social", "Facilities & Car Parking", "IT Helpd
  * gradient masthead, a dense bordered thread-index table (Topics / Replies /
  * Views / Last Post) and a classic profile-panel-plus-post thread view —
  * deliberately not the DASC513 navy/coral/teal brand, deliberately not any
- * of the other gate pages' palettes, and carrying no NHS visual branding:
+ * of the other stage pages' palettes, and carrying no NHS visual branding:
  * just the default look of the forum software itself, the way a trust's own
  * internal IT department might once have stood one up.
  */
-export function BoardPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function BoardPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
-  const totalPosts = gate.evidence.reduce((acc, item) => acc + 1 + replyCountOf(item), 0);
-  const totalMembers = 60 + (hashId(gate.id) % 240);
+  const totalPosts = stage.evidence.reduce((acc, item) => acc + 1 + replyCountOf(item), 0);
+  const totalMembers = 60 + (hashId(stage.id) % 240);
 
   function select(id: string) {
     setSelectedId(id);
@@ -164,8 +164,8 @@ export function BoardPage({ session, gate, opened, onOpen }: FormatPageProps) {
           <>
             <div className="px-4 py-5 text-white sm:px-6" style={{ background: MASTHEAD_GRADIENT }}>
               <div className="mx-auto w-full max-w-5xl">
-                <h1 className="text-xl font-bold">{gate.chrome.split(" — ")[0]}</h1>
-                <p className="text-[11px] text-white/80">{gate.chrome.split(" — ")[1] ?? "Internal message board"}</p>
+                <h1 className="text-xl font-bold">{stage.chrome.split(" — ")[0]}</h1>
+                <p className="text-[11px] text-white/80">{stage.chrome.split(" — ")[1] ?? "Internal message board"}</p>
               </div>
             </div>
             <div className="border-b border-[#A9B8C2] bg-[#E8EEF7] px-4 py-1.5 text-[11px] text-[#5b6b78] sm:px-6">
@@ -212,7 +212,7 @@ export function BoardPage({ session, gate, opened, onOpen }: FormatPageProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {gate.evidence.map((item) => (
+                  {stage.evidence.map((item) => (
                     <ThreadRow key={item.id} item={item} isUnread={!opened.has(item.id)} onSelect={select} />
                   ))}
                 </tbody>
@@ -221,7 +221,7 @@ export function BoardPage({ session, gate, opened, onOpen }: FormatPageProps) {
             <p className="mt-3 text-center text-[11px] text-[#5b6b78]">
               Who is online: 3 registered users browsing this forum (nobody you&rsquo;d recognise)
               <br />
-              Board statistics: {gate.evidence.length} topics · {totalPosts} posts · {totalMembers} members
+              Board statistics: {stage.evidence.length} topics · {totalPosts} posts · {totalMembers} members
             </p>
           </div>
         }

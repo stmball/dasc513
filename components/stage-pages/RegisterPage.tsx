@@ -8,7 +8,7 @@ import { BackLink } from "./BackLink";
 import type { FormatPageProps } from "./types";
 
 /** The workstream every item without an explicit `folder` falls into — keeps
- * the page working for a gate whose content hasn't been organised into
+ * the page working for a stage whose content hasn't been organised into
  * workstreams yet, rather than silently dropping items. */
 const UNFILED = "General";
 
@@ -36,7 +36,7 @@ const STATUSES = ["Open", "Under review", "Closed"] as const;
 
 /** Deterministic, cosmetic case metadata — the same trick `ArchivePage`'s
  * `referenceOf`/`estimateSize` use, so every case reads as a filed, tracked
- * record without any of it being real data a lock could be asked about. */
+ * record without any of it being real data a question could be asked about. */
 function caseRef(item: EvidenceItem): string {
   return `SI-${2000 + (hashId(item.id) % 24)}-${((hashId(item.id) >>> 3) % 900) + 100}`;
 }
@@ -53,7 +53,7 @@ function folderOf(item: EvidenceItem): string {
 
 /** A case file cover sheet: reference, severity and status above the fold,
  * then the same `DocumentHeader`/`DocumentBody`/`DocumentTable` every other
- * gate uses, dropped in untouched. */
+ * stage uses, dropped in untouched. */
 function CaseFile({ item }: { item: EvidenceItem }) {
   const ref = caseRef(item);
   const severity = severityOf(item);
@@ -129,25 +129,25 @@ function CaseRow({
  * burgundy case-management system, cases filed by workstream and tagged
  * with a severity and a status, rather than `ArchivePage`'s Finder-icon
  * folders — deliberately not the DASC513 navy/coral/teal brand, and
- * deliberately not any of the other gate pages' palettes, so the formal
+ * deliberately not any of the other stage pages' palettes, so the formal
  * audit trail reads as a real patient-safety register rather than a themed
  * file browser.
  */
-export function RegisterPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function RegisterPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   const workstreams = useMemo(() => {
-    const names = Array.from(new Set(gate.evidence.map(folderOf)));
+    const names = Array.from(new Set(stage.evidence.map(folderOf)));
     return names.sort((a, b) => (a === UNFILED ? 1 : b === UNFILED ? -1 : a.localeCompare(b)));
-  }, [gate.evidence]);
+  }, [stage.evidence]);
 
   function openCase(id: string) {
     setSelectedId(id);
     onOpen(id);
   }
 
-  const openCount = gate.evidence.filter((item) => statusOf(item) !== "Closed").length;
+  const openCount = stage.evidence.filter((item) => statusOf(item) !== "Closed").length;
 
   return (
     <>
@@ -161,7 +161,7 @@ export function RegisterPage({ session, gate, opened, onOpen }: FormatPageProps)
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                   {session.subject.company} · Assurance &amp; Governance
                 </p>
-                <h1 className="mt-1 text-2xl font-bold text-slate-900">{gate.chrome}</h1>
+                <h1 className="mt-1 text-2xl font-bold text-slate-900">{stage.chrome}</h1>
               </div>
               <span className="shrink-0 rounded-full bg-[#7f1d1d] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                 {openCount} open
@@ -172,7 +172,7 @@ export function RegisterPage({ session, gate, opened, onOpen }: FormatPageProps)
         grid={
           <div className="space-y-6">
             {workstreams.map((name) => {
-              const items = gate.evidence.filter((item) => folderOf(item) === name);
+              const items = stage.evidence.filter((item) => folderOf(item) === name);
               return (
                 <div key={name} className="overflow-hidden rounded-sm border border-slate-300 bg-white">
                   <p className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold uppercase tracking-wide text-slate-600">

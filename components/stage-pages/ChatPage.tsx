@@ -11,11 +11,11 @@ import type { FormatPageProps } from "./types";
  * DASC513 navy/coral/teal brand, so it reads as an actual chat client.
  * Every item here is a real channel of real messages — nothing sits in the
  * sidebar as a pinned document instead of a conversation. */
-export function ChatPage({ session, gate, opened, onOpen }: FormatPageProps) {
-  const firstId = gate.evidence[0]?.id ?? null;
+export function ChatPage({ session, stage, opened, onOpen }: FormatPageProps) {
+  const firstId = stage.evidence[0]?.id ?? null;
   const [selectedId, setSelectedId] = useState<string | null>(firstId);
   const [tableOpen, setTableOpen] = useState(false);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   useEffect(() => {
     if (firstId) onOpen(firstId);
@@ -58,7 +58,7 @@ export function ChatPage({ session, gate, opened, onOpen }: FormatPageProps) {
               Channels
             </p>
             <ul>
-              {gate.evidence.map((item) => {
+              {stage.evidence.map((item) => {
                 const isSelected = selectedId === item.id;
                 const isUnread = !opened.has(item.id);
                 return (

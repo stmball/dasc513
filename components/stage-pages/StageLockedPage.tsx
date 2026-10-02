@@ -1,17 +1,17 @@
 import Link from "next/link";
-import type { Gate, Session } from "@/lib/types";
+import type { Stage, Session } from "@/lib/types";
 import { accents } from "@/lib/accents";
-import { FORMAT_LABEL } from "@/lib/gateFormat";
+import { FORMAT_LABEL } from "@/lib/stageFormat";
 import { Inline } from "../Inline";
 
-export function GateLockedPage({
+export function StageLockedPage({
   session,
-  gate,
-  previousGateTitle,
+  stage,
+  previousStageTitle,
 }: {
   session: Session;
-  gate: Gate;
-  previousGateTitle?: string;
+  stage: Stage;
+  previousStageTitle?: string;
 }) {
   const accent = accents[session.accent];
   return (
@@ -39,19 +39,19 @@ export function GateLockedPage({
         </svg>
       </span>
       <p className="mt-5 text-xs font-semibold text-white-70 label">
-        Locked · {FORMAT_LABEL[gate.format]}
+        Locked · {FORMAT_LABEL[stage.format]}
       </p>
       <h1 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
-        {gate.title}
+        {stage.title}
       </h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white-70">
-        {previousGateTitle ? (
+        {previousStageTitle ? (
           <>
-            This opens once every lock in <Inline text={`**${previousGateTitle}**`} /> is
+            This opens once every question in <Inline text={`**${previousStageTitle}**`} /> is
             solved.
           </>
         ) : (
-          "This gate isn't open yet."
+          "This stage isn't open yet."
         )}
       </p>
       <Link

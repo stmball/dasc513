@@ -18,7 +18,7 @@ export const biasSession: Session = {
   brief: [
     "You are the independent assurance team commissioned by the **Mersey & Dee Integrated Care Board**. Nine months ago the ICB switched on CARDEA, a risk score built by Meridian Health Analytics, to triage referrals into its rapid-access chest pain clinic. Patients scoring above 0.30 are fast-tracked; everyone else joins the routine queue.",
     "Last month a consultant cardiologist wrote to the ICB to say that, anecdotally, the patients arriving late and sick are not a random sample of the population. The ICB has given you three things: an inbox, a channel, and a document room — and two hours before the contract renewal meeting.",
-    "Ten locks stand between you and the override code that releases your findings, opening in **three gates**. Gate A — your inbox — is open now. Gate B and Gate C stay sealed until you have cleared every lock ahead of them. Each lock needs **evidence**, not intuition: the dossier will not accept an answer until your group has read the documents it depends on.",
+    "Ten questions stand between you and the override code that releases your findings, opening in **three stages**. Stage A — your inbox — is open now. Stage B and Stage C stay sealed until you have cleared every question ahead of them. Each question needs **evidence**, not intuition: the dossier will not accept an answer until your group has read the documents it depends on.",
   ],
   learningOutcomes: [
     "Describe the sources of bias — data (sampling, measurement), algorithmic (model, optimisation) and societal (historical, structural) — and identify each in a real system.",
@@ -27,10 +27,10 @@ export const biasSession: Session = {
     "Critically evaluate pre-processing (SMOTE, ADASYN, Near-Miss, Tomek links), in-processing (regression adjustment, adversarial training) and post-processing (threshold adjustment, Platt scaling) mitigations.",
     "Explain why calibration within groups and equalised odds cannot generally be satisfied together, and defend a choice.",
   ],
-  gates: [
+  stages: [
     {
       id: "bias-gate-a",
-      title: "Gate A — The Inbox",
+      title: "Stage A — The Inbox",
       format: "inbox",
       chrome: "ICB Assurance Inbox",
       teaser:
@@ -380,10 +380,10 @@ export const biasSession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "bias-a1",
-          title: "Lock 1 — Who was this model built for?",
+          title: "Question 1 — Who was this model built for?",
           minutes: 12,
           scenario: [
             "Before you test Meridian's 'CARDEA is blind to race and income' line, establish something simpler: the model learned about cardiovascular risk from one population and is now scoring a different one.",
@@ -410,7 +410,7 @@ export const biasSession: Session = {
         },
         {
           id: "bias-a2",
-          title: "Lock 2 — Internal marks, external stakes",
+          title: "Question 2 — Internal marks, external stakes",
           minutes: 12,
           scenario: [
             "Hargreaves' reply leans entirely on one number: AUC 0.81. Before you let that number reassure anyone, work out exactly what it was measured on.",
@@ -440,7 +440,7 @@ export const biasSession: Session = {
         },
         {
           id: "bias-a3",
-          title: "Lock 3 — The corner that got cut",
+          title: "Question 3 — The corner that got cut",
           minutes: 10,
           scenario: [
             "One step in the original plan would have caught the mismatch you just quantified before a single patient was scored. It didn't happen. The delivery team's own forwarded memo says why.",
@@ -451,7 +451,7 @@ export const biasSession: Session = {
           challenge: {
             type: "single",
             prompt:
-              "Why could the ICB's chosen alternative — 'monitor performance post-deployment via the standard quarterly dashboard' — never have caught the 28-point gap you quantified in Lock 1?",
+              "Why could the ICB's chosen alternative — 'monitor performance post-deployment via the standard quarterly dashboard' — never have caught the 28-point gap you quantified in Question 1?",
             options: [
               "Local revalidation was descoped to hit the go-live date, and the dashboard that replaced it reports only AUC, calibration-in-the-large and referral volume — none of it broken down by patient characteristic, so a subgroup gap like the IMD mismatch would never surface in it.",
               "Local revalidation was completed on schedule, but its results were held back from the board pack that went to the renewal meeting.",
@@ -462,7 +462,7 @@ export const biasSession: Session = {
             answer: 0,
           },
           debrief: [
-            "**Local revalidation — scoped, then traded away for a date.** This was the one step that would have caught Lock 1 and Lock 2 before go-live: re-checking CARDEA's performance on an actual Mersey & Dee sample rather than trusting a split of the original training cohort. It was in the statement of work. It was removed to hit April.",
+            "**Local revalidation — scoped, then traded away for a date.** This was the one step that would have caught Question 1 and Question 2 before go-live: re-checking CARDEA's performance on an actual Mersey & Dee sample rather than trusting a split of the original training cohort. It was in the statement of work. It was removed to hit April.",
             "In its place: 'monitor performance post-deployment via the standard quarterly dashboard' — which reports AUC, calibration-in-the-large and volume, with **no breakdown by patient characteristic**. Not by IMD decile, not by anything — the memo is explicit that the three figures it names are the whole of what gets reported. A monitoring regime that cannot see a subgroup cannot detect a subgroup harm — the dashboard was never a substitute for the step it replaced, it just looked like one on paper. Keep that dashboard in mind — you're about to find out what it missed, and where the people who found it put their findings.",
           ],
           fragment: "4",
@@ -471,13 +471,13 @@ export const biasSession: Session = {
     },
     {
       id: "bias-gate-b",
-      title: "Gate B — The Channel",
+      title: "Stage B — The Channel",
       format: "chat",
       chrome: "#cardea-release",
       teaser:
         "Someone already ran the subgroup numbers, fourteen months ago. It never left these channels.",
       intro: [
-        "Gate A is done. The board pack Hargreaves promised Ashworth references 'internal engineering discussion' about subgroup performance — this is that discussion, pulled from Meridian's messaging platform under the disclosure order.",
+        "Stage A is done. The board pack Hargreaves promised Ashworth references 'internal engineering discussion' about subgroup performance — this is that discussion, pulled from Meridian's messaging platform under the disclosure order.",
       ],
       evidence: [
         {
@@ -733,10 +733,10 @@ export const biasSession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "bias-b1",
-          title: "Lock 4 — Where does it fail, and for whom?",
+          title: "Question 4 — Where does it fail, and for whom?",
           minutes: 14,
           scenario: [
             "Meridian reports one number: AUC 0.81. Your team has re-run the evaluation on their raw validation predictions, broken down by the ethnicity and sex recorded in the GP record, at the threshold actually deployed.",
@@ -762,7 +762,7 @@ export const biasSession: Session = {
         },
         {
           id: "bias-b2",
-          title: "Lock 5 — Is it real, or is it noise?",
+          title: "Question 5 — Is it real, or is it noise?",
           minutes: 12,
           scenario: [
             "Hargreaves' first move is the classic one: small n. 2,900 South Asian women is a real sample, but is it real enough to hang a finding on? The channel answers this before you finish asking it.",
@@ -791,7 +791,7 @@ export const biasSession: Session = {
         },
         {
           id: "bias-b3",
-          title: "Lock 6 — Which number goes in the board pack?",
+          title: "Question 6 — Which number goes in the board pack?",
           minutes: 12,
           scenario: [
             "Iqbal drops three more numbers into the thread: DPD, EqOdds, and a gentler mean-pairwise EOD. Before you decide which belongs in your report, be precise about what each one is actually telling you.",
@@ -818,7 +818,7 @@ export const biasSession: Session = {
           debrief: [
             "**Worst-case (0.27) vs mean-pairwise (≈0.09) are not two estimates of the same thing — they answer different questions.** Worst-case is the safeguarding number: it tells you about the single most affected subgroup, here South Asian women. Mean-pairwise is the summary number: it tells you, on average, how far apart a random pair of subgroups is. Worst-case can never be *smaller* than mean-pairwise, because it's literally one of the fifteen pairwise values the mean is averaging — a board pack that leads with the mean, as Hargreaves is angling for, systematically buries the worst-affected group inside an average.",
             "**DPD (0.10) vs EOD (0.27) is the argument Hargreaves and Oyelaran are actually having.** DPD conditions on nothing, so it genuinely can be explained away by prevalence differences — Hargreaves has a point about DPD. EOD conditions on Y=1, computed only among patients who already had the event, so prevalence cannot explain it away — Oyelaran's rebuttal stands. EqOdds here equals EOD exactly, because the FPR gap (0.08) is smaller than the TPR gap (0.27), and EqOdds always takes the larger of the two — but 'takes the larger of the two' is not the same as 'the smaller one doesn't count'. A different pair of subgroups, or a different threshold, could easily flip which of FPR or TPR is driving EqOdds, so dropping FPR from the report because it isn't the driver *today* throws away the number you'd need to notice if that changed. And the worst-case-vs-mean-pairwise inequality that holds for EOD holds for any metric computed the same way across the same six strata — it's a property of min/max versus averaging, not something specific to EOD, so it applies to EqOdds too.",
-            "The false statement about calibration is the whole of your final lock in the archive, so hold onto why it's false: overall calibration is a weighted average across subgroups, and a weighted average can look perfect while individual subgroups are badly wrong in offsetting directions. The meeting is now over. The channel history goes into the archive as an exhibit, and so do you.",
+            "The false statement about calibration is the whole of your final question in the archive, so hold onto why it's false: overall calibration is a weighted average across subgroups, and a weighted average can look perfect while individual subgroups are badly wrong in offsetting directions. The meeting is now over. The channel history goes into the archive as an exhibit, and so do you.",
           ],
           fragment: "B",
         },
@@ -826,7 +826,7 @@ export const biasSession: Session = {
     },
     {
       id: "bias-gate-c",
-      title: "Gate C — The Archive",
+      title: "Stage C — The Archive",
       format: "archive",
       chrome: "Meridian document room — assurance archive",
       teaser:
@@ -1041,10 +1041,10 @@ export const biasSession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "bias-c1",
-          title: "Lock 7 — Name the bias",
+          title: "Question 7 — Name the bias",
           minutes: 14,
           scenario: [
             "Everything you've read so far is a symptom. Before you can recommend a fix, file each symptom under the right cause using the taxonomy in the archive.",
@@ -1077,7 +1077,7 @@ export const biasSession: Session = {
         },
         {
           id: "bias-c2",
-          title: "Lock 8 — Why does it fail?",
+          title: "Question 8 — Why does it fail?",
           minutes: 16,
           scenario: [
             "You can now demonstrate a disparity and file it correctly. The renewal meeting will ask the harder question: where did it come from? Meridian will say the model never sees ethnicity, and they are telling the truth about the feature list.",
@@ -1088,32 +1088,32 @@ export const biasSession: Session = {
           challenge: {
             type: "single",
             prompt:
-              "Which design decision is the principal source of the disparity you measured in Gate B, and what kind of bias is it?",
+              "Which design decision is the principal source of the disparity you measured in Stage B, and what kind of bias is it?",
             options: [
               "**Optimisation bias.** The training set contains more negatives than positives and the model was fitted on accuracy, so it has learned to ignore the minority class.",
               "**Measurement bias in the label.** The outcome was defined as 'a cardiology referral that was accepted and attended', which measures who obtained access to care rather than who had cardiovascular disease.",
               "**Model bias.** Ethnicity was omitted from the feature set, so the model has no way to correct for it and overfits the majority group.",
               "**Sampling bias.** The fast-track threshold was set at 0.30 rather than being tuned separately for each practice's case mix.",
-              "**Sampling bias, not measurement bias.** The development cohort under-represents deprived and minority patients (Gate A, Lock 1); that under-representation, not the outcome label, is the principal source of the disparity you measured in Gate B.",
+              "**Sampling bias, not measurement bias.** The development cohort under-represents deprived and minority patients (Stage A, Question 1); that under-representation, not the outcome label, is the principal source of the disparity you measured in Stage B.",
             ],
             answer: 1,
           },
           debrief: [
             "**Measurement bias in the label — the model is predicting the wrong thing.** The target was never 'will this patient have a cardiovascular event'. It was 'will this patient's referral be accepted and attended'. Those two quantities come apart precisely where access to care is unequal. A patient who needed cardiology and never got through the door is recorded in the training data as a negative — as a person who was *right* not to fast-track. The model then reproduces the historic access pattern with an AUC attached to it.",
             "**Where the label came from is societal bias.** Referral acceptance rates differ by deprivation and ethnicity because of structural factors — GP capacity in high-IMD areas, interpreter availability, shift work, transport — and historical ones, including documented under-referral and lower trust in research participation. This is the structure of Obermeyer et al. (2019, *Science*), where a widely deployed US risk tool used healthcare **cost** as a proxy for healthcare **need** and, because less was historically spent on Black patients, systematically under-triaged them at equal levels of illness — and it is the same shape as the under-diagnosis Seyyed-Kalantari et al. found in chest radiograph models.",
-            "**The proxies compound it.** The press release says CARDEA is blind to postcode-derived disadvantage; `imd_decile` is literally input number eight. `gp_practice_id` is target-encoded, so a practice serving a deprived population carries its own historic low referral-acceptance rate into every prediction it makes. `missed_appointments_2y` encodes shift work, caring responsibilities and bus routes. `smoking_status_recorded` is a missingness indicator: it fires on whether the *system* recorded something, not on whether the *patient* smokes — and Gate A showed recording completeness falls from 98% to 71% between cohort and deployment. Removing a protected characteristic from a feature list does not remove it from the data; it only removes your ability to measure what it is doing.",
-            "And the Equality Impact Assessment answered 'no adverse impact anticipated' at question 5 by referring back to question 4: we do not use race as an input. That inference is the exact fallacy this lock exists to break.",
-            "**Why measurement, and not sampling, is the *principal* source.** Sampling bias is real — you quantified it at Gate A, Lock 1 — but sampling bias alone predicts a *noisier* model for under-represented groups, not a *systematically optimistic* one. A model trained on too few South Asian and Black patients would be expected to perform inconsistently on them in both directions. What the validation table actually shows is a one-directional pattern: lower TPR, meaning real cases missed, concentrated in exactly the groups whose historic access to care is worse. That directionality is the fingerprint of the label, not the sample size — a mislabelled target teaches the model to reproduce a real, one-way pattern of under-referral, which under-representation on its own cannot do. The two compound each other, but if you had to fix only one to remove the pattern in the table, the label is the one that would move it.",
+            "**The proxies compound it.** The press release says CARDEA is blind to postcode-derived disadvantage; `imd_decile` is literally input number eight. `gp_practice_id` is target-encoded, so a practice serving a deprived population carries its own historic low referral-acceptance rate into every prediction it makes. `missed_appointments_2y` encodes shift work, caring responsibilities and bus routes. `smoking_status_recorded` is a missingness indicator: it fires on whether the *system* recorded something, not on whether the *patient* smokes — and Stage A showed recording completeness falls from 98% to 71% between cohort and deployment. Removing a protected characteristic from a feature list does not remove it from the data; it only removes your ability to measure what it is doing.",
+            "And the Equality Impact Assessment answered 'no adverse impact anticipated' at question 5 by referring back to question 4: we do not use race as an input. That inference is the exact fallacy Question 8 exists to break.",
+            "**Why measurement, and not sampling, is the *principal* source.** Sampling bias is real — you quantified it at Stage A, Question 1 — but sampling bias alone predicts a *noisier* model for under-represented groups, not a *systematically optimistic* one. A model trained on too few South Asian and Black patients would be expected to perform inconsistently on them in both directions. What the validation table actually shows is a one-directional pattern: lower TPR, meaning real cases missed, concentrated in exactly the groups whose historic access to care is worse. That directionality is the fingerprint of the label, not the sample size — a mislabelled target teaches the model to reproduce a real, one-way pattern of under-referral, which under-representation on its own cannot do. The two compound each other, but if you had to fix only one to remove the pattern in the table, the label is the one that would move it.",
           ],
           fragment: "3",
         },
         {
           id: "bias-c3",
-          title: "Lock 9 — What would you actually change?",
+          title: "Question 9 — What would you actually change?",
           minutes: 14,
           scenario: [
             "Meridian's governance group has put four proposals on the table, one from each stage of the pipeline: rebalance the data, change the fitting, adjust the outputs, or redefine the problem.",
-            "They are not equivalent, they are not equally cheap, and only one of them touches the cause you identified at Lock 8. The ICB will ask you to endorse one; before you can, be precise about what each can and cannot do.",
+            "They are not equivalent, they are not equally cheap, and only one of them touches the cause you identified at Question 8. The ICB will ask you to endorse one; before you can, be precise about what each can and cannot do.",
           ],
           objective: "Select every statement about the four proposals that is true.",
           evidenceIds: ["mitigation-proposals", "bias-taxonomy"],
@@ -1138,14 +1138,14 @@ export const biasSession: Session = {
             "**Pre-processing (A)** changes the data. Random oversampling duplicates minority points; **SMOTE** synthesises new ones by interpolating between a minority point and its neighbours; **ADASYN** extends this by generating more synthetic points where the local density makes classification hard, near the decision boundary. Undersampling goes the other way — random undersampling throws away good information, so **Near-Miss** (keep majority points closest to the minority class) and **Tomek links** (delete the majority member of any nearest-neighbour pair that straddles the boundary) target the points that matter most. Both undersample the **majority** class, by construction — the minority points are what the whole technique exists to protect, so the claim that they'd shrink the South Asian and Black African/Caribbean subgroups further has the direction backwards. All of it can correct representation, which is a genuine problem here. None of it can correct a mistaken target: a perfectly balanced sample of a biased label is a biased label. And note the two standard cautions — synthetic points are made-up data with their own biases, sometimes *reducing* minority performance; and interpolation is undefined for categorical variables such as ethnicity, which is awkward when ethnicity is the axis of the disparity.",
             "**In-processing (B)** changes how the model is fitted. **Regression adjustment** — including confounders as covariates — blocks backdoor paths but assumes linearity and additivity and can double the parameter count, inviting overfitting. **Adversarial training** pits the risk model against an adversary trying to recover the group from the representation, minimising `L_total = L_class + λ·L_adversary`. It genuinely removes group signal from the latent space, at the cost of compute, convergence stability and a new hyperparameter. Both leave the target untouched.",
             "**Post-processing (C)** changes the decision rule after the score exists. Group-specific thresholds are the standard construction for equalising TPR (Hardt, Price & Srebro 2016), and they work — this is the threshold-adjustment exercise from the lecture. The price is paid twice: other metrics move (equalise TPR and the FPRs and accuracies diverge), and the score is no longer calibrated within groups, which is why **Platt scaling** — refitting `P(y=1|x) = 1/(1 + exp(A·f(x) + B))` on observed outcomes — is bolted on to make the numbers mean something again. The legal position is genuinely unsettled: the Equality Act 2010 permits *positive action* in narrow circumstances but not *positive discrimination*, and applying a different clinical threshold by ethnicity is precisely the case lawyers argue about. 'Legal have been asked and have not replied' is not a finding you can build a recommendation on.",
-            "**Problem reformulation (D)** changes what is being predicted and adds the external validation that was descoped at go-live (Gate A, Lock 3). It is the only one aimed at the cause, and it costs six to nine months, a data sharing agreement and a new clinical safety case. The honest recommendation is usually a combination: D as the remedy, with a documented interim measure — and an interim measure is not the same as doing nothing while D is built.",
+            "**Problem reformulation (D)** changes what is being predicted and adds the external validation that was descoped at go-live (Stage A, Question 3). It is the only one aimed at the cause, and it costs six to nine months, a data sharing agreement and a new clinical safety case. The honest recommendation is usually a combination: D as the remedy, with a documented interim measure — and an interim measure is not the same as doing nothing while D is built.",
             "The last true statement is the one teams forget. Every one of these is a hypothesis about the deployment population. The only evidence that a mitigation worked is subgroup monitoring after release — exactly the capability the quarterly dashboard doesn't have.",
           ],
           fragment: "4",
         },
         {
           id: "bias-c4",
-          title: "Lock 10 — What can you promise the ICB?",
+          title: "Question 10 — What can you promise the ICB?",
           minutes: 14,
           scenario: [
             "The renewal meeting wants a clean sentence: 'make it fair'. Your statistician has left a note explaining why that sentence cannot be delivered as written.",
@@ -1166,8 +1166,8 @@ export const biasSession: Session = {
             answer: 1,
           },
           debrief: [
-            "**There is no 'just make it fair'.** The metrics you computed in Gate B are not three views of one quantity; they are three different goals, and they compete. Driving DPD to zero means fast-tracking the same proportion of every group regardless of who is ill. Driving EOD to zero means finding the same proportion of the truly ill in every group. And beyond the lecture's metrics sits the property clinicians actually assume when they read a risk score — calibration within groups.",
-            "When base rates genuinely differ and the classifier is imperfect, calibration within groups and equalised odds are mathematically incompatible (Kleinberg, Mullainathan & Raghavan 2016; Chouldechova 2017). The observed event rates in the validation table range from 0.09 to 0.17, so the condition holds. You saw the mechanism at Lock 9: equalise the TPRs by moving thresholds and the FPRs, the accuracies and the meaning of the score all move with them.",
+            "**There is no 'just make it fair'.** The metrics you computed in Stage B are not three views of one quantity; they are three different goals, and they compete. Driving DPD to zero means fast-tracking the same proportion of every group regardless of who is ill. Driving EOD to zero means finding the same proportion of the truly ill in every group. And beyond the lecture's metrics sits the property clinicians actually assume when they read a risk score — calibration within groups.",
+            "When base rates genuinely differ and the classifier is imperfect, calibration within groups and equalised odds are mathematically incompatible (Kleinberg, Mullainathan & Raghavan 2016; Chouldechova 2017). The observed event rates in the validation table range from 0.09 to 0.17, so the condition holds. You saw the mechanism at Question 9: equalise the TPRs by moving thresholds and the FPRs, the accuracies and the meaning of the score all move with them.",
             "Adversarial training is a real technique for reducing how much group information survives in the representation, but it doesn't repeal the impossibility result — it can shrink the gap, not guarantee it to zero on a fixed timeline, and it says nothing about calibration, which trades off against equalised odds regardless of which in-processing technique produced the score. Promising parity on a deadline from a single technique is the same overclaim as promising fairness from a feature list, just dressed in more technical language.",
             "What a competent audit delivers is therefore not a fairness guarantee but a **defended choice**: which criterion is being optimised, who bears the residual error, who decided, and how it will be monitored. Here the harm that matters is a missed fast-track for a patient who goes on to have an event — an asymmetric, potentially fatal harm — which argues for prioritising equal opportunity (EOD → 0) and accepting the calibration cost, with the trade-off stated in the open rather than buried. And 'monitored' means externally: on Mersey & Dee patients, broken down by subgroup, quarterly.",
             "That phrase — *stated in the open* — is the whole of this tutorial. Every failure in this dossier was documented somewhere. Section 7 of the datasheet knew. Ticket MHA-2291 knew. Oyelaran knew at 09:41, with a metric and a p-value. The organisation's problem was never a shortage of knowledge; it was that knowledge and decision-making sat in different rooms — an inbox, a channel and an archive that never spoke to each other — and the deck had the subgroup slide taken out of it.",
@@ -1180,7 +1180,7 @@ export const biasSession: Session = {
   finalCode: "H34RTBR34K",
   finale: {
     prompt:
-      "Assemble the ten fragments in lock order — Gate A, then Gate B, then Gate C — and enter the override code to release your findings.",
+      "Assemble the ten fragments in question order — Stage A, then Stage B, then Stage C — and enter the override code to release your findings.",
     debrief: [
       "**Audit released.** You can now state, with evidence: CARDEA was developed on a working-age, affluent, overwhelmingly White British cohort, internally validated on a split of that same cohort and never externally validated on the population it scores; its worst-case Equal Opportunity Distance is 0.27, so it misses 43% of the true cases among South Asian women against 16% among White British men, and a KS test says that is not noise; the cause is measurement bias in the outcome label, which records access to care rather than disease, amplified by deprivation proxies the vendor publicly denies using; the disparity was known internally before launch and removed from a board deck; and no monitoring in place could have found it.",
       "Take the four themes of this module together. Bias is the one that most often hides inside a number everybody agrees is good.",

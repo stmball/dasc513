@@ -8,7 +8,7 @@ import { BackLink } from "./BackLink";
 import type { FormatPageProps } from "./types";
 
 /** The agenda item every paper without an explicit `folder` falls under —
- * keeps the page working for a gate whose content hasn't been organised
+ * keeps the page working for a stage whose content hasn't been organised
  * into agenda items yet, rather than silently dropping items. */
 const UNFILED = "Business arising";
 
@@ -60,7 +60,7 @@ function paperRef(item: EvidenceItem): string {
 }
 
 /** The appendix letter a paper is filed as within its agenda item — stable
- * because it's just the item's position in the gate's own evidence array. */
+ * because it's just the item's position in the stage's own evidence array. */
 function appendixLetter(index: number): string {
   return String.fromCharCode(65 + (index % 26));
 }
@@ -76,7 +76,7 @@ function estimatePages(item: EvidenceItem): number {
 
 /** A committee paper's cover sheet: reference, classification and purpose
  * above the fold, then the same `DocumentHeader`/`DocumentBody`/`DocumentTable`
- * every other gate uses, dropped in untouched. */
+ * every other stage uses, dropped in untouched. */
 function PaperCover({ item, letter }: { item: EvidenceItem; letter: string }) {
   const ref = paperRef(item);
   const pages = estimatePages(item);
@@ -111,26 +111,26 @@ type Location = "root" | { folder: string };
  * A ModGov-shaped committee papers portal: an olive-and-cream masthead, a
  * numbered agenda rather than a file browser, and papers that open as
  * lettered appendices under each item — deliberately not the DASC513
- * navy/coral/teal brand, and deliberately not any of the other gate pages'
+ * navy/coral/teal brand, and deliberately not any of the other stage pages'
  * palettes, so this reads as the dry, official system a real committee
  * actually files its papers in.
  */
-export function PapersPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function PapersPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   const folderOf = (item: EvidenceItem) => item.folder ?? UNFILED;
 
   const agendaItems = useMemo(() => {
-    const names = Array.from(new Set(gate.evidence.map(folderOf)));
+    const names = Array.from(new Set(stage.evidence.map(folderOf)));
     return names.sort((a, b) => itemNumber(a) - itemNumber(b) || a.localeCompare(b));
-  }, [gate.evidence]);
+  }, [stage.evidence]);
 
   const [location, setLocation] = useState<Location>("root");
   const currentFolderName = typeof location === "object" ? location.folder : null;
 
   const papersInView =
-    location === "root" ? [] : gate.evidence.filter((item) => folderOf(item) === currentFolderName);
+    location === "root" ? [] : stage.evidence.filter((item) => folderOf(item) === currentFolderName);
 
   function openPaper(id: string) {
     setSelectedId(id);
@@ -150,7 +150,7 @@ export function PapersPage({ session, gate, opened, onOpen }: FormatPageProps) {
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6b6650]">
                 {session.subject.company} · Papers Portal
               </p>
-              <h1 className="mt-1 font-serif text-2xl font-bold text-[#2a2a22]">{gate.chrome}</h1>
+              <h1 className="mt-1 font-serif text-2xl font-bold text-[#2a2a22]">{stage.chrome}</h1>
               <p className="mt-2 text-sm text-[#55503e]">{breadcrumbTail}</p>
             </div>
           </div>
@@ -167,7 +167,7 @@ export function PapersPage({ session, gate, opened, onOpen }: FormatPageProps) {
               </div>
             ))}
             {agendaItems.map((name) => {
-              const count = gate.evidence.filter((item) => folderOf(item) === name).length;
+              const count = stage.evidence.filter((item) => folderOf(item) === name).length;
               return (
                 <button
                   key={name}

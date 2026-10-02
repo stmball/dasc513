@@ -9,7 +9,7 @@ import { BackLink } from "./BackLink";
 import type { FormatPageProps } from "./types";
 
 /** The whole page opts out of Poppins (see DocumentChrome/ArchivePage notes
- * elsewhere on why the gate pages break house style) in favour of the
+ * elsewhere on why the stage pages break house style) in favour of the
  * browser's native UI font — `system-ui` resolves to San Francisco on
  * macOS, Segoe UI on Windows — so the "OS file browser" illusion is backed
  * by an actually-native typeface, not a decorative choice pretending to be
@@ -17,7 +17,7 @@ import type { FormatPageProps } from "./types";
 const SYSTEM_FONT = "font-[system-ui]";
 
 /** The folder every item without an explicit `folder` falls into — keeps
- * the page working for a gate whose content hasn't been organised into
+ * the page working for a stage whose content hasn't been organised into
  * folders yet, rather than silently dropping items. */
 const UNFILED = "Unfiled";
 
@@ -355,7 +355,7 @@ function Perforation({ orientation }: { orientation: "top" | "sides" }) {
  * its own kind would really have been produced with — so a group is looking
  * at a photographed document, not an HTML card with a label on it.
  * `DocumentHeader` and friends still render the actual content, untouched,
- * exactly as every other gate uses them.
+ * exactly as every other stage uses them.
  */
 function RecordSheet({ item }: { item: EvidenceItem }) {
   const ref = referenceOf(item);
@@ -483,20 +483,20 @@ type Location = "root" | "all" | { folder: string };
  * operating system's own file browser rather than a themed panel inside
  * the teaching tool.
  */
-export function ArchivePage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   const folderOf = (item: EvidenceItem) => item.folder ?? UNFILED;
 
   const folders = useMemo(() => {
-    const names = new Set(gate.evidence.map(folderOf));
-    // Every item fell back to UNFILED: this gate hasn't been organised into
+    const names = new Set(stage.evidence.map(folderOf));
+    // Every item fell back to UNFILED: this stage hasn't been organised into
     // folders, so behave like the old flat file list rather than show a
     // single pointless "Unfiled" folder.
     if (names.size === 1 && names.has(UNFILED)) return [];
     return Array.from(names).sort((a, b) => (a === UNFILED ? 1 : b === UNFILED ? -1 : a.localeCompare(b)));
-  }, [gate.evidence]);
+  }, [stage.evidence]);
 
   const hasFolders = folders.length > 0;
 
@@ -508,11 +508,11 @@ export function ArchivePage({ session, gate, opened, onOpen }: FormatPageProps) 
     location === "root"
       ? []
       : location === "all"
-        ? gate.evidence
-        : gate.evidence.filter((item) => folderOf(item) === currentFolderName);
+        ? stage.evidence
+        : stage.evidence.filter((item) => folderOf(item) === currentFolderName);
 
   const related = selected
-    ? gate.evidence.filter((item) => item.kind === selected.kind && item.id !== selected.id).slice(0, 5)
+    ? stage.evidence.filter((item) => item.kind === selected.kind && item.id !== selected.id).slice(0, 5)
     : [];
 
   function openFile(id: string) {
@@ -541,7 +541,7 @@ export function ArchivePage({ session, gate, opened, onOpen }: FormatPageProps) 
             <div className="flex items-center gap-3 border-b border-slate-300 bg-[#ececec] px-4 py-2">
               <TrafficLights />
               <p className="flex-1 truncate text-center text-[13px] font-semibold text-slate-700">
-                {gate.chrome}
+                {stage.chrome}
               </p>
               <span aria-hidden className="w-[54px]" />
             </div>
@@ -580,7 +580,7 @@ export function ArchivePage({ session, gate, opened, onOpen }: FormatPageProps) 
               <button type="button" onClick={() => setLocation("all")} className={sidebarButtonClass(location === "all")}>
                 <SidebarFolderIcon active={location === "all"} />
                 All files
-                <span className="ml-auto text-[11px] opacity-70">{gate.evidence.length}</span>
+                <span className="ml-auto text-[11px] opacity-70">{stage.evidence.length}</span>
               </button>
               {hasFolders ? (
                 <>
@@ -588,7 +588,7 @@ export function ArchivePage({ session, gate, opened, onOpen }: FormatPageProps) 
                     Folders
                   </p>
                   {folders.map((name) => {
-                    const count = gate.evidence.filter((item) => folderOf(item) === name).length;
+                    const count = stage.evidence.filter((item) => folderOf(item) === name).length;
                     const active = currentFolderName === name;
                     return (
                       <button
@@ -610,7 +610,7 @@ export function ArchivePage({ session, gate, opened, onOpen }: FormatPageProps) 
               {location === "root" ? (
                 <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 lg:grid-cols-5">
                   {folders.map((name) => {
-                    const count = gate.evidence.filter((item) => folderOf(item) === name).length;
+                    const count = stage.evidence.filter((item) => folderOf(item) === name).length;
                     return (
                       <button
                         key={name}

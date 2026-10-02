@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { EvidenceItem, EvidenceKind, Gate } from "@/lib/types";
+import type { EvidenceItem, EvidenceKind, Stage } from "@/lib/types";
 import { DocumentBody, DocumentTable } from "../document/DocumentChrome";
 import { ListDetailShell } from "./ListDetailShell";
 import { BackLink } from "./BackLink";
@@ -24,8 +24,8 @@ const SECTION_LABEL: Record<EvidenceKind, string> = {
   forum: "Discussion",
 };
 
-/** Groups a gate's evidence into sidebar chapters, in the order each
- * chapter is first encountered — so a gate dominated by engineering pages
+/** Groups a stage's evidence into sidebar chapters, in the order each
+ * chapter is first encountered — so a stage dominated by engineering pages
  * leads with engineering chapters, the way a real docs toctree reflects
  * whoever actually wrote the most pages. */
 function groupBySection(evidence: EvidenceItem[]): [string, EvidenceItem[]][] {
@@ -45,7 +45,7 @@ function groupBySection(evidence: EvidenceItem[]): [string, EvidenceItem[]][] {
 /** One docs page: a Sphinx-style breadcrumb, a plain title and byline (no
  * avatars, no likes — a docs site reports who last touched a page as a
  * build artefact, not a social feed), the kind-specific body, and the
- * signature RTD previous/next pager chaining every page in the gate into
+ * signature RTD previous/next pager chaining every page in the stage into
  * one book. `DocumentHeader`'s own kind-chrome (a memo letterhead, a code
  * terminal, a dashed ticket stub…) is deliberately not used here: dropped
  * onto a docs page it reads as a different app entirely, so only the
@@ -128,14 +128,14 @@ function DocsPage({
 /** The docs homepage: project title, the blurb every real docs site opens
  * with, and the toctree itself rendered as a chaptered contents list —
  * the thing a plain "pick a page on the left" placeholder never gave a
- * group landing on this gate cold. */
+ * group landing on this stage cold. */
 function DocsHome({
-  gate,
+  stage,
   sections,
   opened,
   onNavigate,
 }: {
-  gate: Gate;
+  stage: Stage;
   sections: [string, EvidenceItem[]][];
   opened: Set<string>;
   onNavigate: (id: string) => void;
@@ -143,7 +143,7 @@ function DocsHome({
   return (
     <article className="mx-auto max-w-3xl px-6 py-10 sm:px-10">
       <p className="text-xs font-semibold uppercase tracking-wide text-[#2980B9]">Documentation</p>
-      <h1 className="mt-2 text-[32px] font-bold leading-tight text-slate-900">{gate.chrome}</h1>
+      <h1 className="mt-2 text-[32px] font-bold leading-tight text-slate-900">{stage.chrome}</h1>
       <p className="mt-4 text-sm leading-relaxed text-slate-600">
         Internal engineering space — architecture notes, decision records, open tickets, and whatever
         else needed a home. Nothing on this page was written for a customer, so expect shorthand, not
@@ -184,10 +184,10 @@ function DocsHome({
  * chained together with a previous/next pager and a project homepage —
  * deliberately not the DASC513 navy/coral/teal brand, so it reads as an
  * actual hosted documentation site. */
-export function WikiPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function WikiPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
-  const sections = groupBySection(gate.evidence);
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
+  const sections = groupBySection(stage.evidence);
   const flat = sections.flatMap(([, items]) => items);
   const selectedIndex = selected ? flat.findIndex((item) => item.id === selected.id) : -1;
   const selectedSection = selected ? sections.find(([, items]) => items.includes(selected))?.[0] ?? "" : "";
@@ -210,7 +210,7 @@ export function WikiPage({ session, gate, opened, onOpen }: FormatPageProps) {
             >
               ⌘
             </span>
-            <h1 className="text-sm font-bold text-slate-900">{gate.chrome}</h1>
+            <h1 className="text-sm font-bold text-slate-900">{stage.chrome}</h1>
           </header>
         }
         railWidthClassName="md:w-64"
@@ -218,7 +218,7 @@ export function WikiPage({ session, gate, opened, onOpen }: FormatPageProps) {
         rail={
           <nav className="flex h-full flex-col text-sm">
             <div className="bg-[#2980B9] px-4 py-4">
-              <p className="text-sm font-bold text-white">{gate.chrome}</p>
+              <p className="text-sm font-bold text-white">{stage.chrome}</p>
               <input
                 type="text"
                 disabled
@@ -272,13 +272,13 @@ export function WikiPage({ session, gate, opened, onOpen }: FormatPageProps) {
             <DocsPage
               item={selected}
               section={selectedSection}
-              projectName={gate.chrome}
+              projectName={stage.chrome}
               prev={selectedIndex > 0 ? flat[selectedIndex - 1] : null}
               next={selectedIndex >= 0 && selectedIndex < flat.length - 1 ? flat[selectedIndex + 1] : null}
               onNavigate={select}
             />
           ) : (
-            <DocsHome gate={gate} sections={sections} opened={opened} onNavigate={select} />
+            <DocsHome stage={stage} sections={sections} opened={opened} onNavigate={select} />
           )
         }
         hasSelection={Boolean(selected)}

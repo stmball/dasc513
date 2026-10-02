@@ -18,9 +18,9 @@ function snippet(item: EvidenceItem): string {
 /** A modern SaaS marketing site: an indigo/violet gradient hero, big rounded
  * CTA buttons, a clean white feature grid — deliberately not the DASC513
  * navy/coral/teal brand, so it reads as an actual product site. */
-export function BrochurePage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function BrochurePage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   function select(id: string) {
     setSelectedId(id);
@@ -35,7 +35,7 @@ export function BrochurePage({ session, gate, opened, onOpen }: FormatPageProps)
         headerBar={
           <>
             <nav className="flex items-center justify-between gap-4 border-b border-slate-100 bg-white px-4 py-4 sm:px-6">
-              <span className="text-sm font-bold text-indigo-700">{gate.chrome}</span>
+              <span className="text-sm font-bold text-indigo-700">{stage.chrome}</span>
               <span className="hidden gap-6 text-xs font-semibold text-slate-500 sm:flex">
                 {NAV_LINKS.map((link) => (
                   <span key={link} className="cursor-default">
@@ -46,11 +46,11 @@ export function BrochurePage({ session, gate, opened, onOpen }: FormatPageProps)
             </nav>
             <div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 px-4 py-16 text-center sm:px-6">
               <h1 className="mx-auto max-w-2xl text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-                <Inline text={gate.teaser} />
+                <Inline text={stage.teaser} />
               </h1>
-              {gate.intro[0] ? (
+              {stage.intro[0] ? (
                 <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/80">
-                  <Inline text={gate.intro[0]} />
+                  <Inline text={stage.intro[0]} />
                 </p>
               ) : null}
               <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -66,7 +66,7 @@ export function BrochurePage({ session, gate, opened, onOpen }: FormatPageProps)
         }
         grid={
           <div className="grid gap-4 sm:grid-cols-2">
-            {gate.evidence.map((item, index) => {
+            {stage.evidence.map((item, index) => {
               const isUnread = !opened.has(item.id);
               return (
                 <button

@@ -30,10 +30,10 @@ function truncate(text: string, max: number): string {
 /** A Gmail-shaped inbox: white chrome, a blue/red accent, coloured avatar
  * circles per sender, a light-blue selected-row tint — deliberately not the
  * DASC513 navy/coral/teal brand, so it reads as an actual mail client. */
-export function InboxPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function InboxPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const unread = gate.evidence.filter((item) => !opened.has(item.id)).length;
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const unread = stage.evidence.filter((item) => !opened.has(item.id)).length;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   function select(id: string) {
     setSelectedId(id);
@@ -55,7 +55,7 @@ export function InboxPage({ session, gate, opened, onOpen }: FormatPageProps) {
                 M
               </span>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-slate-800">{gate.chrome}</p>
+                <p className="truncate text-sm font-semibold text-slate-800">{stage.chrome}</p>
                 <p className="truncate text-[11px] text-slate-500">{session.subject.company}</p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export function InboxPage({ session, gate, opened, onOpen }: FormatPageProps) {
           <nav className="p-3 text-sm">
             <p className="flex items-center justify-between rounded-full bg-[#d3e3fd] px-3 py-2 font-semibold text-[#0b57d0]">
               Inbox
-              <span className="text-xs">{gate.evidence.length}</span>
+              <span className="text-xs">{stage.evidence.length}</span>
             </p>
             <ul className="mt-2 space-y-0.5">
               {DECORATIVE_FOLDERS.map((folder) => (
@@ -88,7 +88,7 @@ export function InboxPage({ session, gate, opened, onOpen }: FormatPageProps) {
         listClassName="border-r border-slate-200"
         list={
           <ul>
-            {gate.evidence.map((item) => {
+            {stage.evidence.map((item) => {
               const isUnread = !opened.has(item.id);
               const isSelected = selectedId === item.id;
               const preview = emailPreview(item);

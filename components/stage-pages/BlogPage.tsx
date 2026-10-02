@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { EvidenceItem, Gate } from "@/lib/types";
+import type { EvidenceItem, Stage } from "@/lib/types";
 import { DocumentBody, DocumentTable, hashId } from "../document/DocumentChrome";
 import { GridDetailShell } from "./GridDetailShell";
 import { BackLink } from "./BackLink";
@@ -42,10 +42,10 @@ function replyCount(item: EvidenceItem): number {
   return Math.max(item.body.length - 1, 0);
 }
 
-/** Splits a gate's `chrome` string ("Site name — tagline") into its parts;
+/** Splits a stage's `chrome` string ("Site name — tagline") into its parts;
  * falls back to the whole string as the name if there's no dash. The
  * tagline is the one piece of masthead copy that's actually in-world (a real
- * site's own self-description) — unlike `gate.teaser`, which is written for
+ * site's own self-description) — unlike `stage.teaser`, which is written for
  * the player, not by the blog, and so never appears inside the page itself. */
 function parseChrome(chrome: string): { name: string; tagline?: string } {
   const i = chrome.indexOf(" — ");
@@ -114,11 +114,11 @@ function PostPreview({
 }
 
 function Sidebar({
-  gate,
+  stage,
   opened,
   onSelect,
 }: {
-  gate: Gate;
+  stage: Stage;
   opened: Set<string>;
   onSelect: (id: string) => void;
 }) {
@@ -145,10 +145,10 @@ function Sidebar({
       </div>
       <div className="rounded border border-stone-300 bg-white p-5">
         <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">
-          Archive · {gate.evidence.length} posts
+          Archive · {stage.evidence.length} posts
         </p>
         <ol className="mt-2 space-y-2.5">
-          {gate.evidence.map((item, index) => {
+          {stage.evidence.map((item, index) => {
             const isUnread = !opened.has(item.id);
             return (
               <li key={item.id}>
@@ -211,11 +211,11 @@ function Article({ item }: { item: EvidenceItem }) {
  * decorative category links would just be furniture that doesn't go
  * anywhere — the posts and the (functioning) archive list in the rail are
  * the only navigation the page needs. */
-export function BlogPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function BlogPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
-  const [featured, ...rest] = gate.evidence;
-  const { name, tagline } = parseChrome(gate.chrome);
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
+  const [featured, ...rest] = stage.evidence;
+  const { name, tagline } = parseChrome(stage.chrome);
 
   function select(id: string) {
     setSelectedId(id);
@@ -266,14 +266,14 @@ export function BlogPage({ session, gate, opened, onOpen }: FormatPageProps) {
                 </>
               ) : null}
             </div>
-            <Sidebar gate={gate} opened={opened} onSelect={select} />
+            <Sidebar stage={stage} opened={opened} onSelect={select} />
           </div>
         }
         detail={
           selected ? (
             <div className="grid gap-10 lg:grid-cols-[1fr_280px]">
               <Article item={selected} />
-              <Sidebar gate={gate} opened={opened} onSelect={select} />
+              <Sidebar stage={stage} opened={opened} onSelect={select} />
             </div>
           ) : null
         }
@@ -282,7 +282,7 @@ export function BlogPage({ session, gate, opened, onOpen }: FormatPageProps) {
         backLabel="← Back to the front page"
       />
       <footer className="border-t border-stone-300 bg-[#faf7f2] px-4 py-6 text-center text-[11px] text-stone-400 sm:px-6">
-        {name} · {gate.evidence.length} pieces published so far
+        {name} · {stage.evidence.length} pieces published so far
       </footer>
       <BackLink slug={session.slug} />
     </>

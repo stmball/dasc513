@@ -35,13 +35,13 @@ export default function Home() {
       <section className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 lg:py-20">
         <div className="max-w-2xl space-y-4 text-base leading-relaxed text-navy-70">
           <p>
-            Every tutorial is an escape room. Five locks stand between you and
-            the override code that releases your findings, and each lock asks a
-            single question. You cannot answer it until you have opened the
-            evidence it depends on — a datasheet, a chat transcript, a
+            Every tutorial is an escape room. Five questions stand between you
+            and the override code that releases your findings, and each one
+            asks a single question. You cannot answer it until you have opened
+            the evidence it depends on — a datasheet, a chat transcript, a
             coroner&rsquo;s letter, a table of numbers somebody hoped you would
-            not add up. Solving a lock yields one character of the code and,
-            usually, another document.
+            not add up. Solving a question yields one character of the code
+            and, usually, another document.
           </p>
           <p>
             This is independent, self-paced work. Read each document the way
@@ -50,8 +50,8 @@ export default function Home() {
             the brief. Where a question admits more than one defensible
             answer, work out your reasoning before you commit to one; the
             reasoning is what you should be able to stand behind, not the
-            character the lock happens to accept. Your progress is kept in
-            this browser, so you can leave and come back.
+            character the question happens to accept. Your progress is kept
+            in this browser, so you can leave and come back.
           </p>
         </div>
 

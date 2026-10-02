@@ -17,7 +17,7 @@ export const footprintSession: Session = {
   },
   brief: [
     "You sit on Brackenmoor NHS Foundation Trust's **Information Governance and Digital Investment Committee**. VITAL-LM's contract renews in six weeks, and Meridian is also pitching a five-trust expansion. The board paper in front of you — and the marketing site behind it — promises a return of nearly £900,000 a year, 'zero privacy risk because the data is de-identified', and an environmental impact that is 'negligible'.",
-    "Ten locks stand between you and the override code that files your committee's determination, opening in **three gates**. Gate A — Meridian's own marketing microsite — is open now. Gate B and Gate C stay sealed until every lock ahead of them is cleared. Each lock needs **evidence**, not intuition: the dossier will not accept an answer until your group has read the documents it depends on.",
+    "Ten questions stand between you and the override code that files your committee's determination, opening in **three stages**. Stage A — Meridian's own marketing microsite — is open now. Stage B and Stage C stay sealed until every question ahead of them is cleared. Each question needs **evidence**, not intuition: the dossier will not accept an answer until your group has read the documents it depends on.",
     "Three claims, three disciplines, one afternoon. Each is defensible in principle and each, in this dossier, is wrong in a different and instructive way. Bring a calculator.",
   ],
   learningOutcomes: [
@@ -27,10 +27,10 @@ export const footprintSession: Session = {
     "Account for what drives the compute cost of a model — size, data, iterations, hyperparameter search — and evaluate early stopping, transfer learning, quantisation, pruning, distillation and cascades.",
     "Estimate the operational carbon of a deployed model, compare it honestly against training, and separate cashable savings from time released to care.",
   ],
-  gates: [
+  stages: [
     {
       id: "footprint-gate-a",
-      title: "Gate A — The Brochure",
+      title: "Stage A — The Brochure",
       format: "brochure",
       chrome: "meridian-health.co.uk/vital-lm",
       teaser:
@@ -198,10 +198,10 @@ export const footprintSession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "footprint-a1",
-          title: "Lock 1 — 'De-identified' is a claim, not a property",
+          title: "Question 1 — 'De-identified' is a claim, not a property",
           minutes: 12,
           scenario: [
             "The privacy page says there is no privacy risk because the extract is de-identified, and publishes ten sample rows 'so you can check our working'. Take it at its word.",
@@ -227,7 +227,7 @@ export const footprintSession: Session = {
         },
         {
           id: "footprint-a2",
-          title: "Lock 2 — Check the working",
+          title: "Question 2 — Check the working",
           minutes: 12,
           scenario: [
             "Before you argue with Meridian's £900,000 headline, check whether it's even arithmetically honest. Unusually for a vendor, they've published the four inputs behind it.",
@@ -252,7 +252,7 @@ export const footprintSession: Session = {
         },
         {
           id: "footprint-a3",
-          title: "Lock 3 — Read the small print of the big claims",
+          title: "Question 3 — Read the small print of the big claims",
           minutes: 10,
           scenario: [
             "You've now checked one claim carefully. Before you leave the microsite, audit the rest of it the same way — line by line, against what the pages actually say rather than what they imply.",
@@ -281,7 +281,7 @@ export const footprintSession: Session = {
             answers: [0, 1, 2, 3],
           },
           debrief: [
-            "**Four true statements, and they fall into three families of the same mistake.** A category error: sending every trust's records to one place and training one model there is **centralised learning**, whatever the page calls it — you'll see the vendor make exactly this move again in the service desk tickets ahead. A missing measurement: 'zero privacy risk' and 'negligible environmental impact' are adjectives, not numbers, on a site that is otherwise happy to publish its arithmetic, as you just found in Lock 2. And a claim that contradicts its own procedure: a page that says free text passes through unchanged cannot, on the next line, claim the result is de-identified.",
+            "**Four true statements, and they fall into three families of the same mistake.** A category error: sending every trust's records to one place and training one model there is **centralised learning**, whatever the page calls it — you'll see the vendor make exactly this move again in the service desk tickets ahead. A missing measurement: 'zero privacy risk' and 'negligible environmental impact' are adjectives, not numbers, on a site that is otherwise happy to publish its arithmetic, as you just found in Question 2. And a claim that contradicts its own procedure: a page that says free text passes through unchanged cannot, on the next line, claim the result is de-identified.",
             "The four false statements are worth remembering for what they get *nearly* right. Meridian does publish its savings formula — the failure there was in what the formula measures, not whether it exists. 'Federated' and 'distribute' are not synonyms, and the federation page's own FAQ answer concedes as much once you read past the first sentence. A validation figure over 1.1 million notes says nothing about performance on Brackenmoor's population specifically, for the same reason an AUC computed on one cohort says nothing about a different one. And the absence of the word 'ethnicity' from a privacy page doesn't rule out an extraction attack that exposes exactly the patients least protected by being one of many — hold that thought for the committee papers.",
             "Three claims, three disciplines, one marketing site. The service desk and the committee papers exist to find out what each one is actually hiding.",
           ],
@@ -291,13 +291,13 @@ export const footprintSession: Session = {
     },
     {
       id: "footprint-gate-b",
-      title: "Gate B — The Service Desk",
+      title: "Stage B — The Service Desk",
       format: "tickets",
       chrome: "Brackenmoor NHS FT — IG & Digital Engineering Service Desk",
       teaser:
         "Someone inside the Trust already spotted the tell in Meridian's pitch. It's sitting in a ticket queue nobody escalated.",
       intro: [
-        "Gate A is done. What follows is the correspondence the marketing site doesn't show you: the Trust's own Data Protection Officer and data engineering team raising the questions the site's FAQ doesn't answer, logged and answered the way a real NHS trust actually tracks this kind of thing — as tickets, not as a tidy email chain.",
+        "Stage A is done. What follows is the correspondence the marketing site doesn't show you: the Trust's own Data Protection Officer and data engineering team raising the questions the site's FAQ doesn't answer, logged and answered the way a real NHS trust actually tracks this kind of thing — as tickets, not as a tidy email chain.",
       ],
       evidence: [
         {
@@ -452,10 +452,10 @@ export const footprintSession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "footprint-b1",
-          title: "Lock 4 — Move the model, not the data",
+          title: "Question 4 — Move the model, not the data",
           minutes: 14,
           scenario: [
             "Meridian wants five trusts' records in one place. There are three alternatives that do not require that, and they are not interchangeable — one of them is not a privacy technique at all.",
@@ -482,17 +482,17 @@ export const footprintSession: Session = {
           debrief: [
             "**Centralised** moves the data. **Distributed** splits the data across workers the host already owns — it is a speed technique and buys no privacy whatsoever, which is exactly the confusion Meridian's federation pitch is trading on. **Federated** moves the *model* and returns only updates. **Split** cuts the network in half, keeping the encoder local and sending a low-dimensional representation to the host. Split learning leaks less than centralisation and is emphatically *not* fully private: a learned representation carries information, and the briefing says so in terms.",
             "**The weighting decision is a fairness decision in disguise.** Unweighted federated averaging gives Trust E a full 20% of every aggregate update on the strength of 3,400 admissions — updates computed from very little data, and correspondingly noisy. Weighted averaging drops it to 3,400/1,611,400 ≈ **0.21%**, which is statistically defensible and hands the model to Brackenmoor, whose 1.02 million records are 63% of the federation. Either way someone is over- or under-represented, and the rare presentations that only Trust E sees are exactly what the model is worst at. This is the sampling bias problem again, arriving through an aggregation rule instead of a sampling frame.",
-            "**Global versus local resolves some of it.** A global model has breadth; a local model has specificity; a global model **fine-tuned locally** usually beats both, and personalised federated learning makes the compromise explicit with a weighting α between f_local and f_global. The committee's real question is not 'federated or not' but 'what does each trust actually deploy at the end' — and Meridian's own reply about Trust E's weighting is about to become Lock 6's evidence.",
+            "**Global versus local resolves some of it.** A global model has breadth; a local model has specificity; a global model **fine-tuned locally** usually beats both, and personalised federated learning makes the compromise explicit with a weighting α between f_local and f_global. The committee's real question is not 'federated or not' but 'what does each trust actually deploy at the end' — and Meridian's own reply about Trust E's weighting is about to become Question 6's evidence.",
             "**Federation is not free and it does work.** Dayan et al. (2021) built a COVID-19 outcome model across 20 centres with incompatible systems and beat locally trained models at all but one. Pati et al. (2022) used 71 centres — most with fewer than 100 cases — to reach n = 6,314 and improve rare-tumour delineation by 33%; without federation that model could not have been trained at all. Against that: agreements with every participant, heterogeneous data to harmonise, and a network bill that becomes the training bottleneck if participants are far apart. 'No data is shared' does not mean 'no agreement is needed' — it means the agreement is about models and updates instead of records.",
           ],
           fragment: "T",
         },
         {
           id: "footprint-b2",
-          title: "Lock 5 — What are we actually paying for?",
+          title: "Question 5 — What are we actually paying for?",
           minutes: 12,
           scenario: [
-            "Okonkwo's ticket isn't asking whether VITAL-LM is worth what it costs — that's Lock 2's question, coming back with real numbers instead of a marketing formula. He's asking what the Trust is actually being billed for.",
+            "Okonkwo's ticket isn't asking whether VITAL-LM is worth what it costs — that's what Question 2 already asked, coming back with real numbers instead of a marketing formula. He's asking what the Trust is actually being billed for.",
             "The account manager's reply confirms there's a mix of full sweeps and lighter updates, but doesn't say how much of each. The ticket's own table does.",
           ],
           objective: "Work out how much of the year's compute spend bought a hyperparameter search rather than a model anyone actually deployed.",
@@ -516,7 +516,7 @@ export const footprintSession: Session = {
         },
         {
           id: "footprint-b3",
-          title: "Lock 6 — Say what you're actually proposing",
+          title: "Question 6 — Say what you're actually proposing",
           minutes: 12,
           scenario: [
             "Okafor's reply to Sanchez is friendly, prompt, and answers the wrong question twice. Read it the way you'd read any vendor's defence of a claim — for what it confirms, not what it reassures.",
@@ -532,7 +532,7 @@ export const footprintSession: Session = {
           },
           debrief: [
             "**Centralised learning — confirmed by the vendor, in writing, in the same email that calls it 'federated'.** 'Every participating trust extracts its records to our secure analytics environment. There, we train a single combined model' is the architectures briefing's definition of centralised learning almost word for word. What gets *distributed* afterwards is the finished model — which is also, not coincidentally, closer to the shape of **distributed learning**'s output than federated learning's method. Okafor's line — 'we appreciate \"federated\" is being used loosely here' — is Meridian conceding the point while declining to change the marketing.",
-            "This matters because the two architectures do not carry the same risk. Federated learning would mean patient records never leave a trust's own environment; centralised learning means five trusts' worth of re-identifiable narrative — the free text Lock 1 showed passes through unredacted — sitting in one store outside anyone's secure environment, with a breach radius five times the size of the one you already found unsettling at k = 1.",
+            "This matters because the two architectures do not carry the same risk. Federated learning would mean patient records never leave a trust's own environment; centralised learning means five trusts' worth of re-identifiable narrative — the free text Question 1 showed passes through unredacted — sitting in one store outside anyone's secure environment, with a breach radius five times the size of the one you already found unsettling at k = 1.",
             "Notice too that Okafor's answer on weighting is a promise about a *future* federation, not a description of what's actually proposed today — which is centralisation, where weighting doesn't even apply, because there's only one pooled dataset. You now have everything the committee needs to reject the expansion as proposed. The committee papers are where you find out what the *current*, single-trust deployment has already done with the data it already has.",
           ],
           fragment: "R",
@@ -541,7 +541,7 @@ export const footprintSession: Session = {
     },
     {
       id: "footprint-gate-c",
-      title: "Gate C — The Committee Papers",
+      title: "Stage C — The Committee Papers",
       format: "papers",
       chrome: "IG & Digital Investment Committee — Papers Portal",
       teaser:
@@ -806,10 +806,10 @@ export const footprintSession: Session = {
           ],
         },
       ],
-      stages: [
+      questions: [
         {
           id: "footprint-c1",
-          title: "Lock 7 — The model remembers",
+          title: "Question 7 — The model remembers",
           minutes: 14,
           scenario: [
             "Federation, if the Trust insists on it as a condition of any expansion, keeps the records in place. It does not, on its own, stop a model learning them by heart — and the model in front of you was trained the old way, on Brackenmoor's data alone, months before the expansion was ever pitched.",
@@ -830,8 +830,8 @@ export const footprintSession: Session = {
           },
           debrief: [
             "**Blocklists are denylists, and denylists enumerate the attacks you have already thought of.** Attempt 17 was refused and attempt 18 got the same data by asking for a 'worked training example'. The information was never removed; only one phrasing of the question was. Meridian's 'we consider the matter closed' is the position of an organisation treating a property of the model as a property of the prompt.",
-            "Memorisation is a well-documented property of models trained on unique, rarely-repeated sequences, and the risk concentrates precisely on the *outlier* records: the rare diagnosis, the unusual name, the distinctive narrative. Which is to say, the patients least protected by being one of many. That is the same population that failed the k-anonymity test in Lock 1, and the same population Trust E uniquely holds in the proposed expansion.",
-            "**Why federation is not the answer here.** Option D is a genuinely good idea and it is the wrong lock. Federated learning controls the *location* of the raw data; it does nothing about what the aggregated model has memorised, and the weight updates sent back to the host are themselves derived from those records and can leak them. This is exactly why the standard architecture is **federation plus differential privacy**: train locally, add calibrated noise to the updates, then aggregate. Federation bounds where the data goes; DP bounds what the updates say.",
+            "Memorisation is a well-documented property of models trained on unique, rarely-repeated sequences, and the risk concentrates precisely on the *outlier* records: the rare diagnosis, the unusual name, the distinctive narrative. Which is to say, the patients least protected by being one of many. That is the same population that failed the k-anonymity test in Question 1, and the same population Trust E uniquely holds in the proposed expansion.",
+            "**Why federation is not the answer here.** Option D is a genuinely good idea solving the wrong problem. Federated learning controls the *location* of the raw data; it does nothing about what the aggregated model has memorised, and the weight updates sent back to the host are themselves derived from those records and can leak them. This is exactly why the standard architecture is **federation plus differential privacy**: train locally, add calibrated noise to the updates, then aggregate. Federation bounds where the data goes; DP bounds what the updates say.",
             "**Differential privacy acts at the root.** A mechanism is ε-private when changing one record changes the probability of any output by at most a factor of e^ε — so no individual's presence can materially determine what the model says. For a neural network this means clipping and perturbing gradients during training rather than perturbing a released table. It costs utility, in a quantity you choose and state: small ε, strong privacy, weaker precision. The DPIA's 'privacy-enhancing technologies considered' section is blank, which is why the committee is having this conversation retrospectively rather than at design time.",
             "**And then read clause 9 again.** 9.1 lets Meridian use models derived from Brackenmoor's data in products sold to third parties. 9.3 obliges deletion of the *data* and says nothing about the *models*. If the model is personal data — as memorisation like this suggests once demonstrated — then the Trust has given away, irrevocably, something it did not have the right to give, to an organisation with no obligation to remediate it. Deleting a database is easy. Deleting a memory is what makes this different from every data-sharing problem that came before it.",
           ],
@@ -839,7 +839,7 @@ export const footprintSession: Session = {
         },
         {
           id: "footprint-c2",
-          title: "Lock 8 — Name the technique",
+          title: "Question 8 — Name the technique",
           minutes: 16,
           scenario: [
             "Cost, privacy and environment all point back to the same toolbox: the ways an organisation can make a model smaller, cheaper or faster without necessarily making it worse. The briefing in front of you names seven of them. Before the committee can evaluate any specific proposal from Meridian, get the toolbox itself straight — what each technique actually does, and what it doesn't.",
@@ -863,8 +863,8 @@ export const footprintSession: Session = {
             answers: [0, 1, 2, 4, 7],
           },
           debrief: [
-            "**Five true, three false — and the false ones share a pattern: each assumes a technique's usual trade-off is a law of nature.** Quantisation, pruning and distillation are the standard shrink-the-model toolkit: lower precision, fewer weights, a small model taught to imitate a large one — each cutting cost with a typically modest, not automatic, loss of performance. Transfer learning is usually the single largest saving available for a neural network, precisely as Lock 5's Q4 retrain demonstrated in GPU-hours rather than theory. Small language models compound all of this: cheap to train, dramatically cheaper to run, and light enough for a secure data environment where GPU time is scarce.",
-            "**Cascades are not a discount on quality — Lock 9 is about to prove it with a real number.** Chaining a cheap model that escalates only its uncertain cases to an expensive one lets each tier specialise in what it's actually good at; that can beat any single model on cost *and* accuracy simultaneously, which is exactly why it doesn't belong in the same category as 'a cheaper, worse option'.",
+            "**Five true, three false — and the false ones share a pattern: each assumes a technique's usual trade-off is a law of nature.** Quantisation, pruning and distillation are the standard shrink-the-model toolkit: lower precision, fewer weights, a small model taught to imitate a large one — each cutting cost with a typically modest, not automatic, loss of performance. Transfer learning is usually the single largest saving available for a neural network, precisely as Question 5's Q4 retrain demonstrated in GPU-hours rather than theory. Small language models compound all of this: cheap to train, dramatically cheaper to run, and light enough for a secure data environment where GPU time is scarce.",
+            "**Cascades are not a discount on quality — Question 9 is about to prove it with a real number.** Chaining a cheap model that escalates only its uncertain cases to an expensive one lets each tier specialise in what it's actually good at; that can beat any single model on cost *and* accuracy simultaneously, which is exactly why it doesn't belong in the same category as 'a cheaper, worse option'.",
             "**Early stopping is judged on a proxy, not on the truth.** Halting once loss or validation performance plateaus is standard and usually correct — but 'usually correct' is not 'guaranteed correct', and grokking is the demonstration that it can be actively harmful: a large, late jump in generalisation that a plateau-triggered stop would never see coming. You already flagged this in Okonkwo's Q2 retrain.",
             "**And differential privacy is not in this toolbox at all.** It perturbs gradients to bound what any single record can do to the final weights — a privacy control, paid for in extra iterations and reduced precision, not a cost-cutting one. Conflating the two is exactly the mistake that would let a committee wave through 'we made it more private and more efficient' as a single, unverified sentence. The rest of the committee papers have both bills waiting: what the current model actually costs to run, and what training it once actually cost the planet.",
           ],
@@ -872,7 +872,7 @@ export const footprintSession: Session = {
         },
         {
           id: "footprint-c3",
-          title: "Lock 9 — What are we optimising for?",
+          title: "Question 9 — What are we optimising for?",
           minutes: 14,
           scenario: [
             "Every privacy control you have recommended costs compute: federation sends models back and forth, differential privacy needs more iterations to reach the same utility. The committee now has to decide what the Trust is actually optimising — raw accuracy, least-worst accuracy, privacy, or cost.",
@@ -889,9 +889,9 @@ export const footprintSession: Session = {
             placeholder: "e.g. 1.5",
           },
           debrief: [
-            "**0.734 Wh against 3.2 Wh as deployed — a 77% reduction, at no loss of quality.** The cascade matches option 1's 88% acceptable-draft rate, because the cheap model handles the cases it is good at and escalates the rest. This is Lock 8's classification proved with a real number: cascades are the clearest demonstration that efficiency and accuracy are not always opposed.",
+            "**0.734 Wh against 3.2 Wh as deployed — a 77% reduction, at no loss of quality.** The cascade matches option 1's 88% acceptable-draft rate, because the cheap model handles the cases it is good at and escalates the rest. This is Question 8's classification proved with a real number: cascades are the clearest demonstration that efficiency and accuracy are not always opposed.",
             "**The other options are the rest of the toolkit, priced.** Option 2 is quantisation and pruning — storing the same 7 billion weights at 4-bit precision and dropping the low-magnitude ones. It costs two points of acceptable-draft rate for a 66% energy reduction and forty GPU-hours. Option 3 is distillation into a small language model, then transfer learning to fine-tune it on Brackenmoor's own notes: 350 million parameters, a twentieth of the energy, and still 81% acceptable. Cheap enough to run inside a secure data environment on CPU, which is exactly the constraint that matters when GPU time is scarce or expensive.",
-            "**Training is not where the money is.** The original fine-tune was 4,200 GPU-hours, paid once. At 41,000 calls a day, option 1's 3.2 Wh is paid roughly fifteen million times a year. Most models cost more to fit than to run per call — but inference compounds, and any serious costing has to multiply by volume before comparing. This is the arithmetic Lock 10 makes concrete.",
+            "**Training is not where the money is.** The original fine-tune was 4,200 GPU-hours, paid once. At 41,000 calls a day, option 1's 3.2 Wh is paid roughly fifteen million times a year. Most models cost more to fit than to run per call — but inference compounds, and any serious costing has to multiply by volume before comparing. This is the arithmetic Question 10 makes concrete.",
             "**Now the other bill.** Finance's restatement says the microsite's £878,000 is **time released to care**: genuine value, genuinely non-cashable, because the junior doctor rota is set by training requirements and no post disappears. Count only the money that moves — £310k of coding income against £420k licence, £180k implementation and £96k of mandatory clinical verification — and the year-one cash position is **minus £386,000**. Automation that must be supervised does not remove the labour, it changes its character, from writing to checking, which is precisely the task humans do badly when the machine is usually right.",
             "Time released is not nothing, and the honest business case says so: *this costs £386,000 a year and buys back 27,000 clinician-hours and £310,000 of coding income; here is why that is worth it.* That case might well win. The one on the microsite wins by arithmetic that will not survive the first person who reads it carefully — and it never asked whether the same benefit was available for a fifth of the energy.",
           ],
@@ -899,7 +899,7 @@ export const footprintSession: Session = {
         },
         {
           id: "footprint-c4",
-          title: "Lock 10 — 'Negligible'",
+          title: "Question 10 — 'Negligible'",
           minutes: 14,
           scenario: [
             "The microsite says the environmental impact is negligible because training happened once, at the supplier's expense. Meridian had never been asked for compute telemetry and had to assemble it.",
@@ -917,11 +917,11 @@ export const footprintSession: Session = {
           },
           debrief: [
             "**About 13.6 tonnes CO₂e per year, against 0.48 tonnes for the one-off fine-tuning run. Inference outweighs training roughly twenty-eight to one in the first year alone, and every year after that.**",
-            "This is the correction the public conversation most needs. Training runs are the headline because they are discrete, large and reportable — GPT-4 is estimated at $78.4M and 42.4 GWh, roughly ten thousand households' annual electricity — and that framing has trained everyone to look at the wrong number for a deployed clinical tool. Deployment is continuous, unreported, and grows with adoption. The microsite's reasoning — 'training was completed once, by us, so your trust bears no ongoing environmental cost' — gets the arithmetic exactly backwards, and the shape of the error is familiar from Lock 1: a conclusion asserted where a measurement belonged.",
-            "**Two technical levers, both free of any change to the model's quality.** The cascade from Lock 9 cuts 3.2 Wh to 0.734 Wh, taking the annual figure from 13.6 tonnes to roughly **3.1 tonnes**. And **carbon-aware scheduling** moves elastic work — retraining, batch coding runs, evaluation sweeps — to hours or regions where the grid is cleaner. The telemetry shows intensity ranging from 0.04 to 0.48 kg CO₂e per kWh across the year: more than a factor of ten, available for the price of a scheduler. Neither lever requires touching the data, the architecture or the clinical safety case.",
+            "This is the correction the public conversation most needs. Training runs are the headline because they are discrete, large and reportable — GPT-4 is estimated at $78.4M and 42.4 GWh, roughly ten thousand households' annual electricity — and that framing has trained everyone to look at the wrong number for a deployed clinical tool. Deployment is continuous, unreported, and grows with adoption. The microsite's reasoning — 'training was completed once, by us, so your trust bears no ongoing environmental cost' — gets the arithmetic exactly backwards, and the shape of the error is familiar from Question 1: a conclusion asserted where a measurement belonged.",
+            "**Two technical levers, both free of any change to the model's quality.** The cascade from Question 9 cuts 3.2 Wh to 0.734 Wh, taking the annual figure from 13.6 tonnes to roughly **3.1 tonnes**. And **carbon-aware scheduling** moves elastic work — retraining, batch coding runs, evaluation sweeps — to hours or regions where the grid is cleaner. The telemetry shows intensity ranging from 0.04 to 0.48 kg CO₂e per kWh across the year: more than a factor of ten, available for the price of a scheduler. Neither lever requires touching the data, the architecture or the clinical safety case.",
             "The same telemetry gives roughly 116,000 litres of cooling water withdrawal a year at 1.8 L/kWh — a figure that matters far more where the data centre sits in a water-stressed region, which is a question nobody asked because the contract does not require the supplier to say where it is.",
             "**Now be honest about the magnitude.** 13.6 tonnes is roughly fifteen return economy flights to New York. Against a Trust whose total footprint runs to tens of thousands of tonnes it is small, and a committee that shouted about it would deserve to be ignored. The finding is not 'this model is an environmental catastrophe'. The finding is that a supplier to an NHS with a **statutory** net zero duty under the Health and Care Act 2022 was never asked for a carbon reduction plan, reports no emissions, discloses no inference volume, bears no cost from usage growth, sits behind a per-seat licence that makes the one number driving the footprint invisible to the only party paying for it — and had a 77% reduction available on a shelf that nobody asked for.",
-            "Three claims, three disciplines, three gates. Each was a number-shaped sentence with no number behind it, on a brochure, in a ticket queue, and in a set of committee papers that had never been asked the question before you asked it.",
+            "Three claims, three disciplines, three stages. Each was a number-shaped sentence with no number behind it, on a brochure, in a ticket queue, and in a set of committee papers that had never been asked the question before you asked it.",
           ],
           fragment: "5",
         },
@@ -931,7 +931,7 @@ export const footprintSession: Session = {
   finalCode: "F00TPR1NT5",
   finale: {
     prompt:
-      "Assemble the ten fragments in lock order — Gate A, then Gate B, then Gate C — and enter the override code to file your committee's determination.",
+      "Assemble the ten fragments in question order — Stage A, then Stage B, then Stage C — and enter the override code to file your committee's determination.",
     debrief: [
       "**Determination filed.** The marketing site's 'zero privacy risk' extract is k = 1 re-identifiable and passes free text through untouched; the 'federated' five-trust expansion is centralised learning by the vendor's own description, proposed for a dataset already shown to be re-identifiable; the deployed model has already memorised patients from a single trust's data and the vendor's response was a block list; a year of billed compute was two-thirds hyperparameter search and one cheap transfer-learning adaptation nobody had explained; the deployed model's cascade option matches full accuracy at 23% of the energy per call, unused; and the 'negligible' environmental impact is roughly twenty-eight times the one-off training run in the first year alone, with a 77% cut sitting unused on the shelf.",
       "Privacy, economics and environment sit in one tutorial because they fail the same way. All three are quantitative questions that got answered with adjectives — on a brochure, in a ticket queue, and in a set of committee papers that had never been asked the question before you asked it.",

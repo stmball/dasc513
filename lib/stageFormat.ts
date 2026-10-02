@@ -1,6 +1,6 @@
-import type { GateFormat } from "./types";
+import type { StageFormat } from "./types";
 
-export const FORMAT_LABEL: Record<GateFormat, string> = {
+export const FORMAT_LABEL: Record<StageFormat, string> = {
   inbox: "Inbox",
   chat: "Chat channel",
   wiki: "Wiki",
@@ -11,7 +11,7 @@ export const FORMAT_LABEL: Record<GateFormat, string> = {
   papers: "Papers portal",
 };
 
-export const FORMAT_LAUNCH_LABEL: Record<GateFormat, string> = {
+export const FORMAT_LAUNCH_LABEL: Record<StageFormat, string> = {
   inbox: "Open the inbox",
   chat: "Open the channel",
   wiki: "Open the wiki",

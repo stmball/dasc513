@@ -8,7 +8,7 @@ import { BackLink } from "./BackLink";
 import type { FormatPageProps } from "./types";
 
 /** Queue every ticket without an explicit `queue` falls into — keeps the
- * page working for a gate whose content hasn't been organised into queues
+ * page working for a stage whose content hasn't been organised into queues
  * yet, rather than silently dropping items. */
 const UNQUEUED = "Unassigned";
 
@@ -56,24 +56,24 @@ function truncate(text: string, max: number): string {
  * A ServiceNow/Freshservice-shaped service desk: a dark charcoal header and
  * rail, amber/rust status chips, monospace ticket references — deliberately
  * not the DASC513 navy/coral/teal brand, and deliberately not any of the
- * other gate pages' palettes, so this reads as its own enterprise ITSM tool.
+ * other stage pages' palettes, so this reads as its own enterprise ITSM tool.
  */
-export function TicketsPage({ session, gate, opened, onOpen }: FormatPageProps) {
+export function TicketsPage({ session, stage, opened, onOpen }: FormatPageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activeQueue, setActiveQueue] = useState<string | "all">("all");
-  const selected = gate.evidence.find((item) => item.id === selectedId) ?? null;
+  const selected = stage.evidence.find((item) => item.id === selectedId) ?? null;
 
   const queueOf = (item: EvidenceItem) => item.queue ?? UNQUEUED;
 
   const queues = useMemo(() => {
-    const names = Array.from(new Set(gate.evidence.map(queueOf)));
+    const names = Array.from(new Set(stage.evidence.map(queueOf)));
     return names.sort((a, b) => (a === UNQUEUED ? 1 : b === UNQUEUED ? -1 : a.localeCompare(b)));
-  }, [gate.evidence]);
+  }, [stage.evidence]);
 
   const visible =
-    activeQueue === "all" ? gate.evidence : gate.evidence.filter((item) => queueOf(item) === activeQueue);
+    activeQueue === "all" ? stage.evidence : stage.evidence.filter((item) => queueOf(item) === activeQueue);
 
-  const open = gate.evidence.filter((item) => statusOf(item) !== "Closed" && statusOf(item) !== "Resolved").length;
+  const open = stage.evidence.filter((item) => statusOf(item) !== "Closed" && statusOf(item) !== "Resolved").length;
 
   function select(id: string) {
     setSelectedId(id);
@@ -101,7 +101,7 @@ export function TicketsPage({ session, gate, opened, onOpen }: FormatPageProps) 
                 ⚙
               </span>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-white">{gate.chrome}</p>
+                <p className="truncate text-sm font-semibold text-white">{stage.chrome}</p>
                 <p className="truncate text-[11px] text-slate-400">{session.subject.company}</p>
               </div>
             </div>
@@ -119,14 +119,14 @@ export function TicketsPage({ session, gate, opened, onOpen }: FormatPageProps) 
               className={railButtonClass(activeQueue === "all")}
             >
               All tickets
-              <span className="ml-auto text-[11px] opacity-70">{gate.evidence.length}</span>
+              <span className="ml-auto text-[11px] opacity-70">{stage.evidence.length}</span>
             </button>
             <p className="px-2.5 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
               Queues
             </p>
             <ul className="space-y-0.5">
               {queues.map((name) => {
-                const count = gate.evidence.filter((item) => queueOf(item) === name).length;
+                const count = stage.evidence.filter((item) => queueOf(item) === name).length;
                 return (
                   <li key={name}>
                     <button

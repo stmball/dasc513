@@ -139,11 +139,11 @@ components/
   gate-pages/
     GateExperience.tsx        Client dispatcher on each gate route: checks unlock state, picks a format page
     GateLockedPage.tsx        Full-page "not open yet" state for a gate visited before it unlocks
-    ListDetailShell.tsx       Shared app shape: rail + list + persistent reading pane (Inbox/Chat/Wiki/Tickets)
-    GridDetailShell.tsx       Shared site shape: full-width grid ↔ full-width article (Blog/Brochure/Archive/Papers)
+    ListDetailShell.tsx       Shared app shape: rail + list + persistent reading pane (Inbox/Chat/Wiki/Tickets/Pager)
+    GridDetailShell.tsx       Shared site shape: full-width grid ↔ full-width article (Blog/Brochure/Archive/Papers/Board/Register)
     InboxPage.tsx / ChatPage.tsx / WikiPage.tsx / BlogPage.tsx / BrochurePage.tsx / ArchivePage.tsx
-    / TicketsPage.tsx / PapersPage.tsx
-                               The eight full-page immersive formats
+    / TicketsPage.tsx / PapersPage.tsx / PagerPage.tsx / BoardPage.tsx / RegisterPage.tsx
+                               The eleven full-page immersive formats
     BackLink.tsx               Small fixed "back to your desk" link on every gate page
 lib/
   types.ts                  Session / Gate / GateFormat / Stage / EvidenceItem / Challenge
@@ -207,7 +207,8 @@ Conventions worth keeping:
   can't gain a fifth channel for this — fold the banter into the existing
   four channels' transcripts instead, at real-Slack-channel density).
 - A gate's `format` picks which full page it renders as (`inbox | chat | wiki
-  | blog | brochure | archive | tickets | papers`); an evidence item's `kind` separately picks
+  | blog | brochure | archive | tickets | papers | pager | board |
+  register`); an evidence item's `kind` separately picks
   its own reading-pane chrome inside `components/document/DocumentChrome.tsx`
   (`memo | email | dataset | report | policy | transcript | code | ticket |
   press | forum`) — the two are independent, so an inbox gate can still mix a
@@ -226,15 +227,16 @@ Conventions worth keeping:
   back-and-forth about a booking), not one-shot notices.
 - `EvidenceItem.folder` (`archive`- and `papers`-gate only) is what the page
   groups its items into — a folder in an `archive` gate, an agenda-item label
-  in a `papers` gate. Give every item in such a gate a `folder` string, real
-  and decoy alike, so the page shows real groupings (e.g. "Assurance case",
-  "Facilities & Estates", "HR & Training" for an archive; "Item 6 — VITAL-LM
-  data protection assurance" for a papers gate) that a group opens into,
-  rather than one flat pile. Decoys should mostly cluster into their own
-  thematic groupings away from the case file, the way a real shared drive (or
-  a real committee agenda) keeps admin clutter separate from the actual
-  investigation — that separation is itself part of what makes a grouping
-  "obviously not relevant" without a lock ever saying so.
+  in a `papers` gate, or a workstream for a `register` gate. Give every item
+  in such a gate a `folder` string, real and decoy alike, so the page shows
+  real groupings (e.g. "Assurance case", "Facilities & Estates", "HR &
+  Training" for an archive or a register; "Item 6 — VITAL-LM data protection
+  assurance" for a papers gate) that a group opens into, rather than one flat
+  pile. Decoys should mostly cluster into their own thematic groupings away
+  from the case file, the way a real shared drive (or a real committee
+  agenda, or a real risk register) keeps admin clutter separate from the
+  actual investigation — that separation is itself part of what makes a
+  grouping "obviously not relevant" without a lock ever saying so.
 - `EvidenceItem.queue` and `.status` (`tickets`-gate only) are what the
   service-desk page files a ticket under and the lifecycle badge it shows
   (`"Open" | "Pending" | "Resolved" | "Closed"`, free text). Give every ticket
@@ -264,6 +266,21 @@ Conventions worth keeping:
   an attachment rather than pasting the whole spreadsheet into the channel.
   If content doesn't fit any channel as a plausible message, it belongs in a
   different gate (the archive, the blog) instead of being wedged in here.
+- `pager`, `board` and `register` are the uncertainty session's own pair
+  of earlier-gate media plus its final formal-record gate — built so that
+  session doesn't repeat a format any of the other three already use. `pager`
+  (`PagerPage.tsx`) is a secure clinical messaging app: a flat list of 1:1 and
+  group conversations rather than `chat`'s team channels, still every item
+  `kind: "transcript"`. `board` (`BoardPage.tsx`) is an early-2000s internal
+  message board (a steel-blue phpBB/vBulletin-style skin, no NHS branding): a
+  bordered thread-index table (Topics/Replies/Views/Last Post) rather than
+  `blog`'s river of posts, opening into a classic profile-panel-plus-post
+  thread view that still renders with the same `DocumentBody`/`DocumentTable`.
+  `register` (`RegisterPage.tsx`) is a clinical risk-and-incident register:
+  cases listed by workstream with a severity and a status, rather than
+  `archive`'s Finder-
+  style folders — severity and status are decorative only (derived from the
+  item's id), never real data a lock asks about.
 - Accents are `coral | teal` — the two brand accents. Tailwind cannot see
   interpolated class names, so each is written out in full in `lib/accents.ts`.
   See *House style* below before touching anything visual.
@@ -273,19 +290,24 @@ Conventions worth keeping:
 The site follows Samuel's PowerPoint template. The palette is fixed and the
 rules are strict; `app/globals.css` carries the tokens and the reasoning.
 
-**Exception: the eight gate pages** (`components/gate-pages/{Inbox,Chat,Wiki,
-Blog,Brochure,Archive,Tickets,Papers}Page.tsx`) are exempt by design. They're
-meant to look like a real inbox, a real chat app, a real wiki, a real blog, a
-real marketing site, a real document-management system, a real service-desk
-tool and a real local-government committee papers system, not like the
-DASC513 brand wearing a costume — so each has its own unmixed palette
-(Gmail-ish blue/red, Slack's dark aubergine, Confluence blue, an editorial
-cream/stone blog, an indigo/violet SaaS gradient, a neutral slate records
-system, a charcoal/amber ITSM console, an olive-and-cream govtech portal) and
-none of them touch navy/coral/teal. `components/document/DocumentChrome.tsx`
-(the per-`EvidenceKind` reading-pane content shared by all eight) is neutral
-slate/white for the same reason — it has to look plausible inside any of the
-eight skins, not branded like the teaching tool around it. Everything else in
+**Exception: the eleven gate pages** (`components/gate-pages/{Inbox,Chat,Wiki,
+Blog,Brochure,Archive,Tickets,Papers,Pager,Board,Register}Page.tsx`) are
+exempt by design. They're meant to look like a real inbox, a real chat app, a
+real wiki, a real blog, a real marketing site, a real document-management
+system, a real service-desk tool, a real local-government committee papers
+system, a real secure clinical messaging app, a real early-2000s internal
+message board and a real clinical risk register, not like the DASC513 brand
+wearing a costume — so each has its own unmixed palette (Gmail-ish blue/red,
+Slack's dark aubergine, Confluence blue, an editorial cream/stone blog, an
+indigo/violet SaaS gradient, a neutral slate records system, a charcoal/amber
+ITSM console, an olive-and-cream govtech portal, NHS-blue secure messaging, a
+steel-blue phpBB/vBulletin-style message board (no NHS branding — just the
+default look of the forum software itself), a white-and-burgundy clinical-governance
+register) and none of them touch navy/coral/teal. `components/document/
+DocumentChrome.tsx` (the per-`EvidenceKind` reading-pane content shared by
+all eleven) is neutral slate/white for the same reason — it has to look
+plausible inside any of the eleven skins, not branded like the teaching tool
+around it. Everything else in
 the app — the control room (`SessionRunner.tsx`), `GateTeaser`,
 `GateLockedPage`, the landing page — keeps the real house style below, since
 those are the DASC513 tool's own UI, not a fake app a group is visiting.
@@ -332,13 +354,14 @@ the script imports with explicit `.ts` extensions and `tsconfig.json` sets
 
 - All four rooms run the three-gate, ten-lock model (see *How a room works*).
   Gate themes: bias = inbox → chat → archive; transparency = wiki → blog →
-  archive; footprint = brochure → tickets → papers; uncertainty = chat → blog
-  → archive. All four still cover their full Week 9–12 curriculum list from
-  *Alignment with the lectures* — the ten-lock expansion added depth (a
-  dedicated taxonomy/classification lock in every Gate C) rather than
-  dropping anything.
+  archive; footprint = brochure → tickets → papers; uncertainty = pager →
+  board → register — its own trio, built so the session doesn't repeat a
+  format any of the other three sessions already use. All four still cover
+  their full Week 9–12 curriculum list from *Alignment with the lectures* —
+  the ten-lock expansion added depth (a dedicated taxonomy/classification
+  lock in every Gate C) rather than dropping anything.
 - Gate pages, cross-tab progress sync, and the locked-gate guard have been
-  spot-checked in a real browser across all eight formats; the app has not
+  spot-checked in a real browser across all eleven formats; the app has not
   been playtested as a live two-hour session end to end.
 - No per-group persistence beyond `localStorage`. If tutors need to see group
   progress, that is a new feature, not a tweak.

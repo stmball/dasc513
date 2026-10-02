@@ -14,6 +14,9 @@ import { BrochurePage } from "./BrochurePage";
 import { ArchivePage } from "./ArchivePage";
 import { TicketsPage } from "./TicketsPage";
 import { PapersPage } from "./PapersPage";
+import { PagerPage } from "./PagerPage";
+import { BoardPage } from "./BoardPage";
+import { RegisterPage } from "./RegisterPage";
 import type { FormatPageProps } from "./types";
 
 export function GateExperience({ session, gate }: { session: Session; gate: Gate }) {
@@ -62,5 +65,11 @@ export function GateExperience({ session, gate }: { session: Session; gate: Gate
       return <TicketsPage {...props} />;
     case "papers":
       return <PapersPage {...props} />;
+    case "pager":
+      return <PagerPage {...props} />;
+    case "board":
+      return <BoardPage {...props} />;
+    case "register":
+      return <RegisterPage {...props} />;
   }
 }

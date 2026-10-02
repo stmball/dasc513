@@ -60,12 +60,26 @@ export interface EvidenceItem {
    */
   thread?: EmailMessage[];
   /**
-   * Archive-gate only: the folder this document is filed under (e.g.
-   * "Assurance case", "Facilities & Estates"). Ignored by every other gate
-   * format. Give every item in an `archive`-format gate a folder — a gate
-   * where nothing sets it falls back to the old flat file list.
+   * `archive`- and `papers`-gate only: the grouping this document is filed
+   * under — a folder name for an archive ("Assurance case", "Facilities &
+   * Estates"), or an agenda-item label for a papers gate ("Item 6 — VITAL-LM
+   * data protection and sustainability assurance"). Ignored by every other
+   * gate format. Give every item in an `archive`- or `papers`-format gate one
+   * — a gate where nothing sets it falls back to the old flat file list.
    */
   folder?: string;
+  /**
+   * `tickets`-gate only: the service-desk queue this ticket sits in (e.g.
+   * "Information Governance", "IT Service Desk"). Ignored by every other
+   * gate format. Give every item in a `tickets`-format gate a queue.
+   */
+  queue?: string;
+  /**
+   * `tickets`-gate only: the lifecycle badge shown on the ticket row and in
+   * its header (e.g. "Open", "Pending", "Resolved", "Closed"). Ignored by
+   * every other gate format. Purely cosmetic — not read by any lock.
+   */
+  status?: string;
 }
 
 export type Challenge =
@@ -117,11 +131,20 @@ export interface Stage {
 }
 
 /**
- * The in-world medium a gate's evidence is presented through. `archive` is
- * the plain filed-documents treatment every session's final gate uses;
- * the others are lighter, more informal media that come before it.
+ * The in-world medium a gate's evidence is presented through. `archive` and
+ * `papers` are the two formal filed-documents treatments a session's final
+ * gate can use; the others are lighter, more informal media that come
+ * before it.
  */
-export type GateFormat = "inbox" | "chat" | "wiki" | "blog" | "brochure" | "archive";
+export type GateFormat =
+  | "inbox"
+  | "chat"
+  | "wiki"
+  | "blog"
+  | "brochure"
+  | "archive"
+  | "tickets"
+  | "papers";
 
 export interface Gate {
   id: string;

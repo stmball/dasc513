@@ -5,7 +5,7 @@ import { useCallback, useSyncExternalStore } from "react";
 export interface SessionProgress {
   /** Evidence ids the group has opened. */
   opened: string[];
-  /** Stage ids solved, in order. */
+  /** Question ids solved, in order. */
   solved: string[];
   /** Whether the final override code has been entered. */
   escaped: boolean;

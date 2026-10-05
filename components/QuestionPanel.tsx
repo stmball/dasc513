@@ -1,14 +1,14 @@
 "use client";
 
-import type { Stage } from "@/lib/types";
+import type { Question } from "@/lib/types";
 import type { AccentStyle } from "@/lib/accents";
 import { Inline } from "./Inline";
 import { ChallengeForm } from "./ChallengeForm";
 
-export type StageState = "current" | "solved";
+export type QuestionState = "current" | "solved";
 
-export function StagePanel({
-  stage,
+export function QuestionPanel({
+  question,
   index,
   total,
   state,
@@ -17,10 +17,10 @@ export function StagePanel({
   expanded,
   onToggleExpanded,
 }: {
-  stage: Stage;
+  question: Question;
   index: number;
   total: number;
-  state: StageState;
+  state: QuestionState;
   accent: AccentStyle;
   onSolved: () => void;
   expanded: boolean;
@@ -38,10 +38,10 @@ export function StagePanel({
             </span>
             <div className="min-w-0">
               <p className="text-[11px] font-semibold text-navy-55 label">
-                Lock {index + 1} — open
+                Question {index + 1}
               </p>
               <h3 className="mt-0.5 truncate text-sm font-semibold">
-                {stage.title.replace(/^Lock \d+ — /, "")}
+                {question.title}
               </h3>
             </div>
           </div>
@@ -49,7 +49,7 @@ export function StagePanel({
             <span
               className={`flex h-8 w-8 items-center justify-center rounded text-sm font-bold text-white ${accent.fill}`}
             >
-              {stage.fragment}
+              {question.fragment}
             </span>
             <button
               type="button"
@@ -78,21 +78,21 @@ export function StagePanel({
               {index + 1}
             </span>
             <p className="text-[11px] font-semibold text-navy-55 label">
-              Lock {index + 1} of {total}
+              Question {index + 1} of {total}
             </p>
           </div>
           <p className="text-[11px] font-semibold text-navy-55 label">
-            ≈ {stage.minutes} min
+            ≈ {question.minutes} min
           </p>
         </div>
-        <h2 className="mt-4 text-2xl font-bold">{stage.title}</h2>
+        <h2 className="mt-4 text-2xl font-bold">{question.title}</h2>
         {/* Title underline: always navy. */}
         <span aria-hidden className="mt-3 block h-px w-full bg-navy-15" />
       </header>
 
       <div className="space-y-5 px-5 pb-5 sm:px-6">
         <div className="space-y-3 text-sm leading-relaxed text-navy-90">
-          {stage.scenario.map((paragraph, i) => (
+          {question.scenario.map((paragraph, i) => (
             <p key={i}>
               <Inline text={paragraph} />
             </p>
@@ -106,13 +106,13 @@ export function StagePanel({
             Objective
           </p>
           <p className="mt-1 text-sm font-semibold">
-            <Inline text={stage.objective} />
+            <Inline text={question.objective} />
           </p>
         </div>
 
         {state === "current" ? (
           <ChallengeForm
-            challenge={stage.challenge}
+            challenge={question.challenge}
             accent={accent}
             onSolved={onSolved}
           />
@@ -122,7 +122,7 @@ export function StagePanel({
           <div className="rounded-lg border border-navy-15 bg-navy-04 px-4 py-4">
             <div className="flex items-center justify-between gap-3">
               <p className="text-[11px] font-semibold text-navy-55 label">
-                Lock open — debrief
+                Debrief
               </p>
               <span className="flex items-center gap-2">
                 <span className="text-[11px] font-semibold text-navy-55 label">
@@ -131,12 +131,12 @@ export function StagePanel({
                 <span
                   className={`flex h-8 w-8 items-center justify-center rounded text-sm font-bold text-white ${accent.fill}`}
                 >
-                  {stage.fragment}
+                  {question.fragment}
                 </span>
               </span>
             </div>
             <div className="mt-3 space-y-3 text-sm leading-relaxed text-navy-90">
-              {stage.debrief.map((paragraph, i) => (
+              {question.debrief.map((paragraph, i) => (
                 <p key={i}>
                   <Inline text={paragraph} />
                 </p>
@@ -147,7 +147,7 @@ export function StagePanel({
               onClick={onToggleExpanded}
               className="mt-4 text-xs font-semibold underline underline-offset-4 hover:no-underline"
             >
-              Collapse this lock
+              Collapse this question
             </button>
           </div>
         ) : null}

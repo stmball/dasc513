@@ -1,6 +1,6 @@
-import type { GateFormat } from "./types";
+import type { StageFormat } from "./types";
 
-export const FORMAT_LABEL: Record<GateFormat, string> = {
+export const FORMAT_LABEL: Record<StageFormat, string> = {
   inbox: "Inbox",
   chat: "Chat channel",
   wiki: "Wiki",
@@ -9,9 +9,12 @@ export const FORMAT_LABEL: Record<GateFormat, string> = {
   archive: "Archive",
   tickets: "Service desk",
   papers: "Papers portal",
+  pager: "Secure messages",
+  board: "Message board",
+  register: "Risk register",
 };
 
-export const FORMAT_LAUNCH_LABEL: Record<GateFormat, string> = {
+export const FORMAT_LAUNCH_LABEL: Record<StageFormat, string> = {
   inbox: "Open the inbox",
   chat: "Open the channel",
   wiki: "Open the wiki",
@@ -20,4 +23,7 @@ export const FORMAT_LAUNCH_LABEL: Record<GateFormat, string> = {
   archive: "Open the archive",
   tickets: "Open the service desk",
   papers: "Open the papers portal",
+  pager: "Open the messages",
+  board: "Open the board",
+  register: "Open the register",
 };

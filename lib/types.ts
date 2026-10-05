@@ -1,12 +1,13 @@
 /**
  * Shared types for the DASC513 escape-room tutorials.
  *
- * A Session is one two-hour tutorial, built from three Gates that unlock in
- * sequence (3 locks, then 3, then 4 — ten locks total). Each Gate is a
- * themed pocket of evidence (an inbox, a chat channel, a wiki, a blog, a
- * marketing microsite, or the formal archive) plus the locks that draw on
- * it. A gate's evidence and locks are hidden — only a title, format and
- * one-line teaser show — until every lock in the previous gate is solved.
+ * A Session is one two-hour tutorial, built from three Stages that unlock in
+ * sequence (3 questions, then 3, then 4 — ten questions total). Each Stage is
+ * a themed pocket of evidence (an inbox, a chat channel, a wiki, a blog, a
+ * marketing microsite, or the formal archive) plus the questions that draw on
+ * it. A stage's evidence and questions are hidden — only a title, format and
+ * one-line teaser show — until every question in the previous stage is
+ * solved.
  */
 
 export type EvidenceKind =
@@ -60,24 +61,26 @@ export interface EvidenceItem {
    */
   thread?: EmailMessage[];
   /**
-   * `archive`- and `papers`-gate only: the grouping this document is filed
-   * under — a folder name for an archive ("Assurance case", "Facilities &
-   * Estates"), or an agenda-item label for a papers gate ("Item 6 — VITAL-LM
-   * data protection and sustainability assurance"). Ignored by every other
-   * gate format. Give every item in an `archive`- or `papers`-format gate one
-   * — a gate where nothing sets it falls back to the old flat file list.
+   * `archive`-, `papers`- and `register`-stage only: the grouping this
+   * document is filed under — a folder name for an archive ("Assurance
+   * case", "Facilities & Estates"), an agenda-item label for a papers stage
+   * ("Item 6 — VITAL-LM data protection and sustainability assurance"), or a
+   * workstream for a register ("HORIZON assurance", "IT & Security").
+   * Ignored by every other stage format. Give every item in an `archive`-,
+   * `papers`- or `register`-format stage one — a stage where nothing sets it
+   * falls back to the old flat file list.
    */
   folder?: string;
   /**
-   * `tickets`-gate only: the service-desk queue this ticket sits in (e.g.
+   * `tickets`-stage only: the service-desk queue this ticket sits in (e.g.
    * "Information Governance", "IT Service Desk"). Ignored by every other
-   * gate format. Give every item in a `tickets`-format gate a queue.
+   * stage format. Give every item in a `tickets`-format stage a queue.
    */
   queue?: string;
   /**
-   * `tickets`-gate only: the lifecycle badge shown on the ticket row and in
+   * `tickets`-stage only: the lifecycle badge shown on the ticket row and in
    * its header (e.g. "Open", "Pending", "Resolved", "Closed"). Ignored by
-   * every other gate format. Purely cosmetic — not read by any lock.
+   * every other stage format. Purely cosmetic — not read by any question.
    */
   status?: string;
 }
@@ -107,36 +110,38 @@ export type Challenge =
   | {
       type: "text";
       prompt: string;
-      /** Any of these (case/punctuation-insensitive) unlocks the stage. */
+      /** Any of these (case/punctuation-insensitive) unlocks the question. */
       accept: string[];
       placeholder?: string;
     };
 
-export interface Stage {
+export interface Question {
   id: string;
   title: string;
   /** Rough time budget, used to show pacing against the two-hour session. */
   minutes: number;
-  /** Narrative set-up shown when the stage opens. */
+  /** Narrative set-up shown when the question opens. */
   scenario: string[];
   /** The one-line question the group has to answer. */
   objective: string;
-  /** Evidence this lock's answer draws on; not enforced by the UI. */
+  /** Evidence this question's answer draws on; not enforced by the UI. */
   evidenceIds: string[];
   challenge: Challenge;
-  /** Shown once the stage is solved: the teaching point. */
+  /** Shown once the question is solved: the teaching point. */
   debrief: string[];
   /** Character added to the session's final override code. */
   fragment: string;
 }
 
 /**
- * The in-world medium a gate's evidence is presented through. `archive` and
- * `papers` are the two formal filed-documents treatments a session's final
- * gate can use; the others are lighter, more informal media that come
- * before it.
+ * The in-world medium a stage's evidence is presented through. `archive`,
+ * `papers` and `register` are the formal filed-documents treatments a
+ * session's final stage can use; the others are lighter, more informal media
+ * that come before it. `pager` (a secure clinical messaging app) and
+ * `board` (an early-2000s internal message board) are the uncertainty
+ * session's own pair of earlier-stage media, distinct from `chat` and `blog`.
  */
-export type GateFormat =
+export type StageFormat =
   | "inbox"
   | "chat"
   | "wiki"
@@ -144,23 +149,26 @@ export type GateFormat =
   | "brochure"
   | "archive"
   | "tickets"
-  | "papers";
+  | "papers"
+  | "pager"
+  | "board"
+  | "register";
 
-export interface Gate {
+export interface Stage {
   id: string;
-  /** e.g. "Gate A — The Inbox". */
+  /** e.g. "Stage A — The Inbox". */
   title: string;
-  format: GateFormat;
-  /** In-world label the gate's shell renders prominently: an app name, a
+  format: StageFormat;
+  /** In-world label the stage's shell renders prominently: an app name, a
    * channel handle, a site masthead, a URL-style tagline. */
   chrome: string;
-  /** One-line in-world hook shown while the gate is still locked. */
+  /** One-line in-world hook shown while the stage is still locked. */
   teaser: string;
-  /** Shown once unlocked, above the gate's stages — sets the scene. */
+  /** Shown once unlocked, above the stage's questions — sets the scene. */
   intro: string[];
   evidence: EvidenceItem[];
-  /** Three locks in Gates A and B, four in Gate C. */
-  stages: Stage[];
+  /** Three questions in Stages A and B, four in Stage C. */
+  questions: Question[];
 }
 
 export interface Session {
@@ -187,8 +195,9 @@ export interface Session {
   brief: string[];
   learningOutcomes: string[];
   /** Exactly three: sizes 3, 3, 4. Unlock in order. */
-  gates: [Gate, Gate, Gate];
-  /** Concatenated stage fragments, gate order then stage order (10 chars). */
+  stages: [Stage, Stage, Stage];
+  /** Concatenated question fragments, stage order then question order (10
+   * chars). */
   finalCode: string;
   finale: {
     prompt: string;

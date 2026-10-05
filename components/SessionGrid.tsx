@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Session } from "@/lib/types";
 import { accents } from "@/lib/accents";
 import { useProgress } from "@/lib/progress";
-import { allStages } from "@/lib/sessions/helpers";
+import { allQuestions } from "@/lib/sessions/helpers";
 
 /**
  * A content card from the template: white ground, navy hairline border, a
@@ -15,7 +15,7 @@ function SessionCard({ session }: { session: Session }) {
   const accent = accents[session.accent];
   const { progress } = useProgress(session.slug);
   const solvedCount = progress.solved.length;
-  const total = allStages(session).length;
+  const total = allQuestions(session).length;
 
   return (
     <Link
@@ -40,7 +40,7 @@ function SessionCard({ session }: { session: Session }) {
             </span>
           ) : solvedCount > 0 ? (
             <span className="rounded-full border border-navy-30 px-3 py-1 text-[11px] font-semibold label">
-              {solvedCount}/{total} locks
+              {solvedCount}/{total} questions
             </span>
           ) : null}
         </div>

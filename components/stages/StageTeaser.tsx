@@ -1,15 +1,14 @@
-import type { Gate } from "@/lib/types";
-import { FORMAT_LABEL } from "@/lib/gateFormat";
+import type { Stage } from "@/lib/types";
 import { Inline } from "../Inline";
 
-/** A locked gate: title, format and a one-line hook are visible, nothing
+/** A locked stage: title, format and a one-line hook are visible, nothing
  * else — the card that shows what's next without giving it away. */
-export function GateTeaser({
-  gate,
-  previousGateTitle,
+export function StageTeaser({
+  stage,
+  previousStageTitle,
 }: {
-  gate: Gate;
-  previousGateTitle: string;
+  stage: Stage;
+  previousStageTitle: string;
 }) {
   return (
     <section className="rounded-xl border border-dashed border-navy-30 bg-white px-5 py-6 text-center">
@@ -36,14 +35,16 @@ export function GateTeaser({
         </svg>
       </span>
       <p className="mt-3 text-[11px] font-semibold text-navy-55 label">
-        Locked · {FORMAT_LABEL[gate.format]}
+        Stage locked
       </p>
-      <h3 className="mt-1.5 text-lg font-bold text-navy-55">{gate.title}</h3>
+      <h3 className="mt-1.5 text-lg font-bold text-navy-55">
+        {stage.title}
+      </h3>
       <p className="mx-auto mt-2 max-w-sm text-sm italic leading-relaxed text-navy-55">
-        <Inline text={gate.teaser} />
+        <Inline text={stage.teaser} />
       </p>
       <p className="mt-3 text-xs font-semibold text-navy-30 label">
-        Unlocks after {previousGateTitle}
+        Unlocks after all questions in {previousStageTitle}
       </p>
     </section>
   );

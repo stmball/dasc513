@@ -15,7 +15,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: "DASC513 — Tutorial Activities",
+    default: "DASC513: Tutorial Activities",
     template: "%s · DASC513",
   },
   description:

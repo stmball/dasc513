@@ -1,16 +1,16 @@
-import type { EvidenceItem, Session, Stage } from "../types";
+import type { EvidenceItem, Session, Question } from "../types";
 
-export function allStages(session: Session): Stage[] {
-  return session.gates.flatMap((gate) => gate.stages);
+export function allQuestions(session: Session): Question[] {
+  return session.stages.flatMap((stage) => stage.questions);
 }
 
 export function allEvidence(session: Session): EvidenceItem[] {
-  return session.gates.flatMap((gate) => gate.evidence);
+  return session.stages.flatMap((stage) => stage.evidence);
 }
 
-/** Index (0, 1, 2) of the gate an evidence id belongs to, or -1 if unknown. */
-export function gateIndexOfEvidence(session: Session, evidenceId: string): number {
-  return session.gates.findIndex((gate) =>
-    gate.evidence.some((item) => item.id === evidenceId),
+/** Index (0, 1, 2) of the stage an evidence id belongs to, or -1 if unknown. */
+export function stageIndexOfEvidence(session: Session, evidenceId: string): number {
+  return session.stages.findIndex((stage) =>
+    stage.evidence.some((item) => item.id === evidenceId),
   );
 }

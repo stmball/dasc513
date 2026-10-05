@@ -5,20 +5,20 @@ import { useMemo, useState, type FormEvent } from "react";
 import type { Session } from "@/lib/types";
 import { accents } from "@/lib/accents";
 import { codeMatches } from "@/lib/answers";
-import { FORMAT_LABEL, FORMAT_LAUNCH_LABEL } from "@/lib/gateFormat";
-import { ALL_GATES_UNLOCKED } from "@/lib/devFlags";
+import { FORMAT_LAUNCH_LABEL } from "@/lib/stageFormat";
+import { ALL_STAGES_UNLOCKED } from "@/lib/devFlags";
 import { useProgress } from "@/lib/progress";
-import { allStages } from "@/lib/sessions/helpers";
+import { allQuestions } from "@/lib/sessions/helpers";
 import { Inline } from "./Inline";
-import { StagePanel, type StageState } from "./StagePanel";
-import { GateTeaser } from "./gates/GateTeaser";
+import { QuestionPanel, type QuestionState } from "./QuestionPanel";
+import { StageTeaser } from "./stages/StageTeaser";
 
 export function SessionRunner({ session }: { session: Session }) {
   const accent = accents[session.accent];
   const { progress, update, reset } = useProgress(session.slug);
-  const stages = useMemo(() => allStages(session), [session]);
+  const questions = useMemo(() => allQuestions(session), [session]);
 
-  const [expandedStages, setExpandedStages] = useState<string[]>([]);
+  const [expandedQuestions, setExpandedQuestions] = useState<string[]>([]);
   const [briefOpen, setBriefOpen] = useState(true);
   const [finalEntry, setFinalEntry] = useState("");
   const [finalWrong, setFinalWrong] = useState(false);
@@ -27,18 +27,18 @@ export function SessionRunner({ session }: { session: Session }) {
   const solved = useMemo(() => new Set(progress.solved), [progress.solved]);
   const opened = useMemo(() => new Set(progress.opened), [progress.opened]);
 
-  const gateSolved = (index: number) =>
-    session.gates[index].stages.every((stage) => solved.has(stage.id));
-  const gateUnlocked = (index: number) =>
-    ALL_GATES_UNLOCKED || index === 0 || gateSolved(index - 1);
+  const stageSolved = (index: number) =>
+    session.stages[index].questions.every((question) => solved.has(question.id));
+  const stageUnlocked = (index: number) =>
+    ALL_STAGES_UNLOCKED || index === 0 || stageSolved(index - 1);
 
-  const allSolved = stages.every((stage) => solved.has(stage.id));
+  const allSolved = questions.every((question) => solved.has(question.id));
 
-  function solveStage(stageId: string) {
+  function solveQuestion(questionId: string) {
     update((p) =>
-      p.solved.includes(stageId) ? p : { ...p, solved: [...p.solved, stageId] },
+      p.solved.includes(questionId) ? p : { ...p, solved: [...p.solved, questionId] },
     );
-    setExpandedStages((current) => [...current, stageId]);
+    setExpandedQuestions((current) => [...current, questionId]);
   }
 
   function submitFinal(event: FormEvent) {
@@ -51,8 +51,8 @@ export function SessionRunner({ session }: { session: Session }) {
     }
   }
 
-  const fragmentGroups = session.gates.map((gate) =>
-    gate.stages.map((stage) => (solved.has(stage.id) ? stage.fragment : null)),
+  const fragmentGroups = session.stages.map((stage) =>
+    stage.questions.map((question) => (solved.has(question.id) ? question.fragment : null)),
   );
 
   let globalIndex = 0;
@@ -72,7 +72,7 @@ export function SessionRunner({ session }: { session: Session }) {
             href="/"
             className="inline-flex items-center gap-2 text-xs text-white-70 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
-            ← All four tutorials
+          ← All tutorials
           </Link>
 
           <h1 className="mt-7 text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -85,7 +85,8 @@ export function SessionRunner({ session }: { session: Session }) {
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-10">
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
+        <div className="mx-auto max-w-3xl">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-navy-15 pb-4">
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-navy-55 label">
@@ -111,7 +112,7 @@ export function SessionRunner({ session }: { session: Session }) {
             </span>
           </div>
           <p className="text-xs text-navy-70 numeric">
-            {solved.size} / {stages.length} locks open
+            {solved.size} / {questions.length} questions open
           </p>
           <button
             type="button"
@@ -119,7 +120,7 @@ export function SessionRunner({ session }: { session: Session }) {
               if (confirmReset) {
                 reset();
                 setConfirmReset(false);
-                setExpandedStages([]);
+                setExpandedQuestions([]);
                 setFinalEntry("");
               } else {
                 setConfirmReset(true);
@@ -140,7 +141,7 @@ export function SessionRunner({ session }: { session: Session }) {
             className="flex w-full items-center justify-between gap-3 px-5 py-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-inset"
           >
             <span className="text-[11px] font-semibold text-navy-70 label">
-              Your brief · {session.subject.company} · {session.subject.product}
+              Brief: {session.subject.company} · {session.subject.product}
             </span>
             <span aria-hidden className="text-navy-55">
               {briefOpen ? "−" : "+"}
@@ -164,7 +165,7 @@ export function SessionRunner({ session }: { session: Session }) {
                   {session.learningOutcomes.map((outcome, i) => (
                     <li key={i} className="flex gap-2">
                       <span aria-hidden className="text-navy-30">
-                        —
+                        ·
                       </span>
                       <span>{outcome}</span>
                     </li>
@@ -174,31 +175,39 @@ export function SessionRunner({ session }: { session: Session }) {
             </div>
           ) : null}
         </section>
+        </div>
 
-        <div className="mt-8 space-y-4">
-          {session.gates.map((gate, gateIndex) => {
-            const unlocked = gateUnlocked(gateIndex);
+        <div className="mt-8 space-y-6">
+          {session.stages.map((stage, stageIndex) => {
+            const unlocked = stageUnlocked(stageIndex);
 
             if (!unlocked) {
               return (
-                <GateTeaser
-                  key={gate.id}
-                  gate={gate}
-                  previousGateTitle={session.gates[gateIndex - 1].title}
-                />
+                <div key={stage.id} className="mx-auto max-w-3xl">
+                  <StageTeaser
+                    stage={stage}
+                    previousStageTitle={session.stages[stageIndex - 1].title}
+                  />
+                </div>
               );
             }
 
-            const readCount = gate.evidence.filter((item) => opened.has(item.id)).length;
+            const readCount = stage.evidence.filter((item) => opened.has(item.id)).length;
 
             return (
-              <div key={gate.id} className="space-y-4">
-                <div className="rounded-xl border border-navy-15 bg-white px-5 py-4">
+              <div
+                key={stage.id}
+                className="grid gap-4 lg:grid-cols-[20rem_1fr] lg:items-start lg:gap-6"
+              >
+                {/* Left column: the sub-app stage — its brief and the launcher
+                    into the stage page. Sticky on desktop so it stays visible
+                    while the questions on the right are worked through. */}
+                <div className="rounded-xl border border-navy-15 bg-white px-5 py-4 lg:sticky lg:top-6">
                   <p className="text-[11px] font-semibold text-navy-55 label">
-                    {gate.title} · {FORMAT_LABEL[gate.format]}
+                    {stage.title}
                   </p>
                   <div className="mt-2 space-y-2 text-sm leading-relaxed text-navy-70">
-                    {gate.intro.map((paragraph, i) => (
+                    {stage.intro.map((paragraph, i) => (
                       <p key={i}>
                         <Inline text={paragraph} />
                       </p>
@@ -206,48 +215,51 @@ export function SessionRunner({ session }: { session: Session }) {
                   </div>
                   <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-navy-15 pt-4">
                     <a
-                      href={`/sessions/${session.slug}/${gate.id}`}
+                      href={`/sessions/${session.slug}/${stage.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-white ${accent.fillInteractive}`}
                     >
-                      {FORMAT_LAUNCH_LABEL[gate.format]} ↗
+                      {FORMAT_LAUNCH_LABEL[stage.format]} ↗
                     </a>
                     <p className="text-xs text-navy-55 numeric">
-                      {readCount} / {gate.evidence.length} read
+                      {readCount} / {stage.evidence.length} read
                     </p>
                   </div>
                 </div>
 
-                {gate.stages.map((stage) => {
-                  const index = globalIndex++;
-                  const state: StageState = solved.has(stage.id) ? "solved" : "current";
-                  return (
-                    <StagePanel
-                      key={stage.id}
-                      stage={stage}
-                      index={index}
-                      total={stages.length}
-                      state={state}
-                      accent={accent}
-                      onSolved={() => solveStage(stage.id)}
-                      expanded={expandedStages.includes(stage.id)}
-                      onToggleExpanded={() =>
-                        setExpandedStages((current) =>
-                          current.includes(stage.id)
-                            ? current.filter((id) => id !== stage.id)
-                            : [...current, stage.id],
-                        )
-                      }
-                    />
-                  );
-                })}
+                {/* Right column: this stage's questions. */}
+                <div className="space-y-4">
+                  {stage.questions.map((question) => {
+                    const index = globalIndex++;
+                    const state: QuestionState = solved.has(question.id) ? "solved" : "current";
+                    return (
+                      <QuestionPanel
+                        key={question.id}
+                        question={question}
+                        index={index}
+                        total={questions.length}
+                        state={state}
+                        accent={accent}
+                        onSolved={() => solveQuestion(question.id)}
+                        expanded={expandedQuestions.includes(question.id)}
+                        onToggleExpanded={() =>
+                          setExpandedQuestions((current) =>
+                            current.includes(question.id)
+                              ? current.filter((id) => id !== question.id)
+                              : [...current, question.id],
+                          )
+                        }
+                      />
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
 
           {allSolved ? (
-            <section className="relative overflow-hidden rounded-xl border border-navy-15 bg-white pt-1">
+            <section className="relative mx-auto max-w-3xl overflow-hidden rounded-xl border border-navy-15 bg-white pt-1">
               <span
                 aria-hidden
                 className="absolute inset-x-0 top-0 h-1 bg-navy"
@@ -311,7 +323,7 @@ export function SessionRunner({ session }: { session: Session }) {
                         className="border-l-2 border-navy py-0.5 pl-3 text-sm font-semibold"
                       >
                         Not the code. Read the fragments off the ten open
-                        locks, in order.
+                        questions, in order.
                       </p>
                     ) : null}
                   </form>

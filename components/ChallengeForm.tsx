@@ -1,10 +1,32 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, useSyncExternalStore, type FormEvent } from "react";
 import type { Challenge } from "@/lib/types";
 import type { AccentStyle } from "@/lib/accents";
 import { checkChallenge, parseNumber } from "@/lib/answers";
 import { Inline } from "./Inline";
+
+/** Fisher-Yates shuffle of the option indices, so choice answers appear in a
+ * fresh order each time the page loads. */
+function shuffleIndices(count: number): number[] {
+  const order = Array.from({ length: count }, (_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+/** False during the server render and the hydration pass, true once running on
+ * the client. Used to randomise option order without a hydration mismatch. */
+const emptySubscribe = () => () => {};
+function useIsClient(): boolean {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 export function ChallengeForm({
   challenge,
@@ -22,6 +44,16 @@ export function ChallengeForm({
   const [unitsOff, setUnitsOff] = useState(false);
 
   const isChoice = challenge.type === "single" || challenge.type === "multi";
+
+  // Authored order on the server and the hydration render, then a fresh random
+  // order on the client, so a refresh reshuffles without a hydration mismatch.
+  const isClient = useIsClient();
+  const optionOrder = useMemo(() => {
+    if (challenge.type !== "single" && challenge.type !== "multi") return [];
+    return isClient
+      ? shuffleIndices(challenge.options.length)
+      : challenge.options.map((_, i) => i);
+  }, [challenge, isClient]);
 
   function toggle(index: number) {
     setWrong(false);
@@ -69,7 +101,8 @@ export function ChallengeForm({
 
       {isChoice ? (
         <ul className="space-y-2">
-          {challenge.options.map((option, index) => {
+          {optionOrder.map((index) => {
+            const option = challenge.options[index];
             const checked = selected.includes(index);
             return (
               <li key={index}>
@@ -130,7 +163,7 @@ export function ChallengeForm({
               : "cursor-not-allowed bg-navy-30"
           }`}
         >
-          Try the lock
+          Submit answer
         </button>
         {wrong ? (
           // Errors carry a navy bar and bold navy type. No warning colour
@@ -140,9 +173,9 @@ export function ChallengeForm({
             className="border-l-2 border-navy py-0.5 pl-3 text-sm font-semibold"
           >
             {unitsOff
-              ? "The arithmetic is right but the units are not — re-read what the question asks you to enter."
+              ? "The arithmetic is right but the units are not. Re-read what the question asks you to enter."
               : attempts >= 2
-                ? "Not it. Go back to the evidence — the answer is in there, and it is worth the argument."
+                ? "Not it. Go back to the evidence: the answer is in there, and it is worth the argument."
                 : "Not it. Try again."}
           </p>
         ) : null}

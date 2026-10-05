@@ -75,10 +75,7 @@ export function SessionRunner({ session }: { session: Session }) {
             ← All four tutorials
           </Link>
 
-          <p className="mt-5 text-xs font-semibold text-white-70 label">
-            Tutorial {session.number} · {session.theme}
-          </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <h1 className="mt-7 text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {session.title}
           </h1>
           <span aria-hidden className="mt-5 block h-px w-24 bg-white" />

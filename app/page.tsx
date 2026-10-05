@@ -13,10 +13,7 @@ export default function Home() {
         </div>
 
         <div className="relative mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 lg:py-24">
-          <p className="text-xs font-semibold text-white-70 label">
-            DASC513 · Tutorial activities
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
             Four rooms, one company,
             <br className="hidden sm:block" /> and a great many documents.
           </h1>
@@ -66,9 +63,7 @@ export default function Home() {
 
       {/* Closing band: navy, like the cover. */}
       <footer className="bg-navy">
-        <div className="mx-auto w-full max-w-5xl px-4 py-8 text-xs text-white-70 sm:px-6">
-          DASC513 · Responsible AI for Health · Tutorial activities
-        </div>
+        <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6" />
       </footer>
     </main>
   );

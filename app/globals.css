@@ -78,15 +78,12 @@ body {
 }
 
 /*
- * The template uses Poppins for everything, including the small tracked-out
- * labels that would otherwise reach for a monospace face. There is no mono in
- * the brand, so labels are Poppins with letter-spacing instead, and numeric
- * columns lean on tabular figures rather than a different typeface.
+ * Poppins is used for everything; labels use normal casing and spacing rather
+ * than the template's tracked-out all-caps treatment. Numeric columns lean on
+ * tabular figures rather than a different typeface.
  */
 .label {
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
 }
 
 .numeric {

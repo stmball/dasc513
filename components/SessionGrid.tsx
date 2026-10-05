@@ -45,10 +45,7 @@ function SessionCard({ session }: { session: Session }) {
           ) : null}
         </div>
 
-        <p className="mt-5 text-[11px] font-semibold text-navy-70 label">
-          {session.theme}
-        </p>
-        <h3 className="mt-2 text-xl font-bold">{session.title}</h3>
+        <h3 className="mt-5 text-xl font-bold">{session.title}</h3>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-navy-70">
           {session.tagline}
         </p>

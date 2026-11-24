@@ -13,6 +13,7 @@ export function QuestionPanel({
   total,
   state,
   accent,
+  hideFragment = false,
   onSolved,
   expanded,
   onToggleExpanded,
@@ -22,6 +23,8 @@ export function QuestionPanel({
   total: number;
   state: QuestionState;
   accent: AccentStyle;
+  /** Hide the override-code fragment badge (sessions with `noCode`). */
+  hideFragment?: boolean;
   onSolved: () => void;
   expanded: boolean;
   onToggleExpanded: () => void;
@@ -46,11 +49,13 @@ export function QuestionPanel({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span
-              className={`flex h-8 w-8 items-center justify-center rounded text-sm font-bold text-white ${accent.fill}`}
-            >
-              {question.fragment}
-            </span>
+            {hideFragment ? null : (
+              <span
+                className={`flex h-8 w-8 items-center justify-center rounded text-sm font-bold text-white ${accent.fill}`}
+              >
+                {question.fragment}
+              </span>
+            )}
             <button
               type="button"
               onClick={onToggleExpanded}
@@ -124,16 +129,18 @@ export function QuestionPanel({
               <p className="text-[11px] font-semibold text-navy-55 label">
                 Debrief
               </p>
-              <span className="flex items-center gap-2">
-                <span className="text-[11px] font-semibold text-navy-55 label">
-                  Fragment
+              {hideFragment ? null : (
+                <span className="flex items-center gap-2">
+                  <span className="text-[11px] font-semibold text-navy-55 label">
+                    Fragment
+                  </span>
+                  <span
+                    className={`flex h-8 w-8 items-center justify-center rounded text-sm font-bold text-white ${accent.fill}`}
+                  >
+                    {question.fragment}
+                  </span>
                 </span>
-                <span
-                  className={`flex h-8 w-8 items-center justify-center rounded text-sm font-bold text-white ${accent.fill}`}
-                >
-                  {question.fragment}
-                </span>
-              </span>
+              )}
             </div>
             <div className="mt-3 space-y-3 text-sm leading-relaxed text-navy-90">
               {question.debrief.map((paragraph, i) => (

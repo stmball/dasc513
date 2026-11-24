@@ -43,6 +43,13 @@ export function checkChallenge(
         picked.every((value, index) => value === expected[index])
       );
     }
+    case "match": {
+      const placed = Array.isArray(response) ? response : [response];
+      return (
+        placed.length === challenge.answers.length &&
+        challenge.answers.every((answer, index) => placed[index] === String(answer))
+      );
+    }
     case "numeric": {
       const parsed = parseNumber(
         (Array.isArray(response) ? response[0] : response) ?? "",

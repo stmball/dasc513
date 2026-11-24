@@ -28,6 +28,67 @@ function useIsClient(): boolean {
   );
 }
 
+/** One draggable card in a match challenge. Draggable with a pointer, or
+ * picked up with a click/Enter so the exercise also works by touch and
+ * keyboard. A placed card also offers a "Return" button. */
+function MatchCard({
+  text,
+  held,
+  onPick,
+  onDragStart,
+  onDragEnd,
+  onReturn,
+}: {
+  text: string;
+  held: boolean;
+  onPick: () => void;
+  onDragStart: () => void;
+  onDragEnd: () => void;
+  onReturn?: () => void;
+}) {
+  return (
+    <div
+      draggable
+      onDragStart={(event) => {
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", text);
+        onDragStart();
+      }}
+      onDragEnd={onDragEnd}
+      className={`flex items-start gap-2 rounded-lg border bg-white px-3 py-2 text-sm ${
+        held ? "border-navy bg-navy-08 font-semibold" : "border-navy-30"
+      } cursor-grab active:cursor-grabbing`}
+    >
+      <span aria-hidden className="mt-0.5 select-none text-navy-30">
+        ⋮⋮
+      </span>
+      <button
+        type="button"
+        onClick={(event) => {
+          event.stopPropagation();
+          onPick();
+        }}
+        aria-pressed={held}
+        className="flex-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-navy"
+      >
+        <Inline text={text} />
+      </button>
+      {onReturn ? (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onReturn();
+          }}
+          className="shrink-0 text-xs text-navy-55 underline underline-offset-4 hover:text-navy hover:no-underline"
+        >
+          Return
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export function ChallengeForm({
   challenge,
   accent,
@@ -39,11 +100,28 @@ export function ChallengeForm({
 }) {
   const [selected, setSelected] = useState<number[]>([]);
   const [value, setValue] = useState("");
-  const [attempts, setAttempts] = useState(0);
   const [wrong, setWrong] = useState(false);
   const [unitsOff, setUnitsOff] = useState(false);
 
   const isChoice = challenge.type === "single" || challenge.type === "multi";
+  const isMatch = challenge.type === "match";
+  // Match challenge: placement[i] is the category item i has been dropped in
+  // (null = still in the pool); `held` is the card picked up by click/tap.
+  const itemCount = challenge.type === "match" ? challenge.items.length : 0;
+  const [placement, setPlacement] = useState<(number | null)[]>(() =>
+    Array.from({ length: itemCount }, () => null),
+  );
+  const [held, setHeld] = useState<number | null>(null);
+  const [draggingItem, setDraggingItem] = useState<number | null>(null);
+  const [overCategory, setOverCategory] = useState<number | null>(null);
+
+  function place(item: number, category: number | null) {
+    setWrong(false);
+    setPlacement((current) => current.map((c, i) => (i === item ? category : c)));
+    setHeld(null);
+    setDraggingItem(null);
+    setOverCategory(null);
+  }
 
   // Authored order on the server and the hydration render, then a fresh random
   // order on the client, so a refresh reshuffles without a hydration mismatch.
@@ -53,6 +131,14 @@ export function ChallengeForm({
     return isClient
       ? shuffleIndices(challenge.options.length)
       : challenge.options.map((_, i) => i);
+  }, [challenge, isClient]);
+  // Match cards are shuffled the same way, so the authored order never hints
+  // at the answer.
+  const itemOrder = useMemo(() => {
+    if (challenge.type !== "match") return [];
+    return isClient
+      ? shuffleIndices(challenge.items.length)
+      : challenge.items.map((_, i) => i);
   }, [challenge, isClient]);
 
   function toggle(index: number) {
@@ -71,12 +157,15 @@ export function ChallengeForm({
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    const response = isChoice ? selected.map(String) : [value];
+    const response = isMatch
+      ? placement.map((c) => (c === null ? "" : String(c)))
+      : isChoice
+        ? selected.map(String)
+        : [value];
     if (checkChallenge(challenge, response)) {
       onSolved();
       return;
     }
-    setAttempts((n) => n + 1);
     setWrong(true);
     // Right arithmetic, wrong units is a distractingly common near-miss.
     if (challenge.type === "numeric") {
@@ -89,9 +178,11 @@ export function ChallengeForm({
     }
   }
 
-  const canSubmit = isChoice
-    ? selected.length > 0
-    : value.trim().length > 0;
+  const canSubmit = isMatch
+    ? placement.every((c) => c !== null)
+    : isChoice
+      ? selected.length > 0
+      : value.trim().length > 0;
 
   return (
     <form onSubmit={submit} className="space-y-4">
@@ -99,7 +190,97 @@ export function ChallengeForm({
         <Inline text={challenge.prompt} />
       </p>
 
-      {isChoice ? (
+      {challenge.type === "match" ? (
+        <div className="space-y-4">
+          <p className="text-xs text-navy-70">
+            Drag each card into a category, or click a card and then click a
+            category. Click a placed card to pick it up again.
+          </p>
+          {/* The pool of cards not yet placed. */}
+          <div
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={(event) => {
+              event.preventDefault();
+              if (draggingItem !== null) place(draggingItem, null);
+            }}
+            className="flex min-h-[3rem] flex-col gap-2 rounded-lg border border-dashed border-navy-30 bg-navy-04 p-2"
+          >
+            {placement.every((c) => c !== null) ? (
+              <p className="px-1 py-2 text-xs text-navy-55">
+                All cards placed. Check them, then submit.
+              </p>
+            ) : null}
+            {itemOrder.map((index) =>
+              placement[index] === null ? (
+                <MatchCard
+                  key={index}
+                  text={challenge.items[index]}
+                  held={held === index}
+                  onPick={() => setHeld(held === index ? null : index)}
+                  onDragStart={() => setDraggingItem(index)}
+                  onDragEnd={() => {
+                    setDraggingItem(null);
+                    setOverCategory(null);
+                  }}
+                />
+              ) : null,
+            )}
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {challenge.categories.map((category, categoryIndex) => {
+              const over = overCategory === categoryIndex;
+              return (
+                <div
+                  key={categoryIndex}
+                  role="group"
+                  aria-label={category}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    setOverCategory(categoryIndex);
+                  }}
+                  onDragLeave={() => setOverCategory(null)}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    if (draggingItem !== null) place(draggingItem, categoryIndex);
+                  }}
+                  onClick={() => {
+                    if (held !== null) place(held, categoryIndex);
+                  }}
+                  className={`min-h-[5.5rem] rounded-lg border p-2 transition-colors ${
+                    over
+                      ? "border-navy bg-navy-08"
+                      : held !== null
+                        ? "cursor-pointer border-navy-55 bg-white hover:bg-navy-04"
+                        : "border-navy-15 bg-white"
+                  }`}
+                >
+                  <p className="mb-2 text-[11px] font-semibold text-navy-70 label">
+                    {category}
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {itemOrder.map((index) =>
+                      placement[index] === categoryIndex ? (
+                        <MatchCard
+                          key={index}
+                          text={challenge.items[index]}
+                          held={held === index}
+                          onPick={() => setHeld(held === index ? null : index)}
+                          onDragStart={() => setDraggingItem(index)}
+                          onDragEnd={() => {
+                            setDraggingItem(null);
+                            setOverCategory(null);
+                          }}
+                          onReturn={() => place(index, null)}
+                        />
+                      ) : null,
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : isChoice ? (
         <ul className="space-y-2">
           {optionOrder.map((index) => {
             const option = challenge.options[index];
@@ -174,9 +355,7 @@ export function ChallengeForm({
           >
             {unitsOff
               ? "The arithmetic is right but the units are not. Re-read what the question asks you to enter."
-              : attempts >= 2
-                ? "Not it. Go back to the evidence: the answer is in there, and it is worth the argument."
-                : "Not it. Try again."}
+              : "Not it. Try again."}
           </p>
         ) : null}
       </div>

@@ -31,7 +31,7 @@ export default function Home() {
       <section className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 lg:py-20">
         <div className="max-w-2xl space-y-4 text-base leading-relaxed text-navy-70">
           <p>
-            Each tutorial is a group activity with ten questions in three
+            Each tutorial is a group activity with ten to twelve questions in three
             stages. Read the evidence in each stage, then answer the questions
             on the control-room page. Solving a question reveals a debrief and
             one character of the final code. Completing a stage unlocks the

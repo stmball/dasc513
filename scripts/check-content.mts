@@ -11,10 +11,14 @@ const ok = (cond: boolean, msg: string) => {
   if (!cond) { fails++; console.log("  FAIL " + msg); }
 };
 
-const STAGE_SIZES = [3, 3, 4];
+// Default stage sizes; the bias room is built as 4 / 4 / 4 (twelve questions).
+const DEFAULT_STAGE_SIZES = [3, 3, 4];
+const STAGE_SIZES_BY_SLUG: Record<string, number[]> = { bias: [4, 4, 4] };
 
 for (const s of sessions) {
   console.log(`\n${s.slug}`);
+  const STAGE_SIZES = STAGE_SIZES_BY_SLUG[s.slug] ?? DEFAULT_STAGE_SIZES;
+  const TOTAL = STAGE_SIZES.reduce((a, b) => a + b, 0);
   const questions = allQuestions(s);
   const evidence = allEvidence(s);
 
@@ -24,10 +28,14 @@ for (const s of sessions) {
   });
 
   // fragments spell the code, in stage order then question order
-  ok(questions.map((q) => q.fragment).join("") === s.finalCode, "fragments !== finalCode");
-  ok(s.finalCode.length === 10, "finalCode is 10 characters");
-  ok(codeMatches(s.finalCode.toLowerCase(), s.finalCode), "code match is case-insensitive");
-  ok(questions.length === 10, "ten questions total");
+  if (s.noCode) {
+    ok(s.finalCode === "" && questions.every((q) => q.fragment === ""), "noCode session has no code or fragments");
+  } else {
+    ok(questions.map((q) => q.fragment).join("") === s.finalCode, "fragments !== finalCode");
+    ok(s.finalCode.length === TOTAL, `finalCode is ${TOTAL} characters`);
+    ok(codeMatches(s.finalCode.toLowerCase(), s.finalCode), "code match is case-insensitive");
+  }
+  ok(questions.length === TOTAL, `${TOTAL} questions total`);
 
   const ids = new Set(evidence.map((e) => e.id));
   ok(ids.size === evidence.length, "evidence ids unique");
@@ -57,6 +65,18 @@ for (const s of sessions) {
         const extra = c.options.map((_, i) => i).find((i) => !c.answers.includes(i));
         if (extra !== undefined) ok(!checkChallenge(c, [...c.answers, extra].map(String)), `${q.id} multi rejects superset`);
         ok(c.answers.every((a) => a >= 0 && a < c.options.length), `${q.id} multi indices in range`);
+      } else if (c.type === "match") {
+        ok(c.answers.length === c.items.length, `${q.id} match has one answer per item`);
+        ok(c.answers.every((a) => a >= 0 && a < c.categories.length), `${q.id} match indices in range`);
+        ok(checkChallenge(c, c.answers.map(String)), `${q.id} match answer accepted`);
+        ok(!checkChallenge(c, c.answers.map(() => "")), `${q.id} match rejects empty`);
+        const swapped = [...c.answers];
+        const other = swapped.findIndex((a) => a !== swapped[0]);
+        if (other > 0) {
+          [swapped[0], swapped[other]] = [swapped[other], swapped[0]];
+          ok(!checkChallenge(c, swapped.map(String)), `${q.id} match rejects a swapped pair`);
+        }
+        ok(c.categories.length >= 2, `${q.id} match has at least two categories`);
       } else if (c.type === "numeric") {
         ok(checkChallenge(c, [String(c.answer)]), `${q.id} numeric exact accepted`);
         ok(checkChallenge(c, [`${c.answer}${c.unit ? " " + c.unit : ""}`]), `${q.id} numeric with unit accepted`);

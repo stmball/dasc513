@@ -168,14 +168,20 @@ generic; you should almost never need to touch them to change a tutorial.
 
 Rules the validator enforces (`npm run check:content`):
 
-- Three stages per session, sized 3, 3, 4 (ten questions total), and the
-  question `fragment` characters concatenated in stage order then question
-  order must equal `finalCode` (10 characters).
+- Three stages per session, sized 3, 3, 4 (ten questions total) — except the
+  **bias room, which is 4, 4, 4 (twelve questions)**; the exception lives in
+  `STAGE_SIZES_BY_SLUG` in `scripts/check-content.mts`. The question `fragment`
+  characters concatenated in stage order then question order must equal
+  `finalCode` (one character per question: 10, or 12 for bias).
 - Every `question.evidenceIds` entry must exist in that question's own
   stage's `evidence` or an earlier stage's — never a later, still-locked
   stage's.
 - Answer indices must be in range; every challenge must accept its own answer
   and reject near-misses.
+- Challenge types: `single`, `multi`, `numeric`, `text`, and `match` — a
+  drag-and-drop classification (`items`, `categories`, `answers[i]` = category
+  index for item `i`; cards are shuffled on the client, and it also works by
+  click-then-click for touch and keyboard).
 - Question minutes should sum to roughly `durationMinutes` (120).
 
 Conventions worth keeping:
@@ -357,6 +363,13 @@ the script imports with explicit `.ts` extensions and `tsconfig.json` sets
 `allowImportingTsExtensions`.
 
 ## Known state / next steps
+
+- The bias room (`lib/sessions/bias.ts`) was rebuilt around twelve questions
+  (DPD, EOD, two bias-type questions, worst-case and mean-pairwise multiclass,
+  two oversampling, two undersampling, regression adjustment, threshold
+  adjustment) and sets `noCode: true`: no override code at all (no strip, no fragment
+  badges, no final entry). Solving all twelve questions completes the room and
+  shows the finale debrief. Its `fragment`s and `finalCode` are empty strings.
 
 - All four rooms run the three-stage, ten-question model (see *How a room
   works*). Stage themes: bias = inbox → chat → archive; transparency = wiki →

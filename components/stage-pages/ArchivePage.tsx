@@ -565,7 +565,7 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
   }
 
   function sidebarButtonClass(active: boolean) {
-    return `flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[13px] transition-colors ${
+    return `flex w-full items-start gap-2 rounded-md px-2.5 py-1.5 text-left text-[13px] transition-colors ${
       active ? "bg-[#0a84ff] text-white" : "text-slate-700 hover:bg-slate-200/70"
     }`;
   }
@@ -573,15 +573,27 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
   const breadcrumbTail =
     location === "root" ? "Records" : location === "all" ? "Records / All files" : `Records / ${currentFolderName}`;
 
-  const canGoBack = location !== "root" && hasFolders;
+  // The back button steps out one level at a time: file -> folder -> root.
+  const canGoBack = Boolean(selected) || (location !== "root" && hasFolders);
+  function goBack() {
+    if (selected) setSelectedId(null);
+    else setLocation("root");
+  }
 
   return (
     <>
       <GridDetailShell
         containerClassName={`bg-[#f6f6f7] ${SYSTEM_FONT}`}
         backButtonClassName="text-slate-500 hover:text-slate-900"
-        headerBar={
-          <>
+        maxWidthClassName="max-w-6xl"
+        headerBar={null}
+        hasSelection={false}
+        onBack={() => {}}
+        detail={null}
+        grid={
+          // One contained window: title bar, toolbar and body share a single
+          // rounded frame that fills the viewport, like a real Finder window.
+          <div className="flex min-h-[calc(100vh-7rem)] flex-col overflow-hidden rounded-xl border border-slate-300 bg-white shadow-xl">
             <div className="flex items-center gap-3 border-b border-slate-300 bg-[#ececec] px-4 py-2">
               <TrafficLights />
               <p className="flex-1 truncate text-center text-[13px] font-semibold text-slate-700">
@@ -593,16 +605,17 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
               <button
                 type="button"
                 disabled={!canGoBack}
-                onClick={() => setLocation("root")}
-                aria-label="Back to Records"
-                className={`flex h-6 w-6 items-center justify-center rounded text-sm ${
+                onClick={goBack}
+                aria-label="Back"
+                className={`flex h-6 w-6 items-center justify-center rounded text-lg leading-none ${
                   canGoBack ? "text-slate-600 hover:bg-slate-200" : "text-slate-300"
                 }`}
               >
                 ‹
               </button>
-              <p className="text-[13px] text-slate-500">
+              <p className="min-w-0 truncate text-[13px] text-slate-500">
                 {session.subject.company} / {breadcrumbTail}
+                {selected ? ` / ${selected.title}` : ""}
               </p>
               <span className="flex-1" />
               <div className="flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs text-slate-400">
@@ -613,11 +626,8 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
                 Search
               </div>
             </div>
-          </>
-        }
-        grid={
-          <div className="flex min-h-[28rem] gap-0 overflow-hidden rounded-b-xl border border-t-0 border-slate-300 bg-white">
-            <nav className="w-44 shrink-0 border-r border-slate-200 bg-[#f0f0f2] p-2.5">
+            <div className="flex flex-1">
+            <nav className="w-56 shrink-0 border-r border-slate-200 bg-[#f0f0f2] p-2.5">
               <p className="px-2.5 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
                 Favourites
               </p>
@@ -642,7 +652,7 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
                         className={sidebarButtonClass(active)}
                       >
                         <SidebarFolderIcon active={active} />
-                        <span className="truncate">{name}</span>
+                        <span className="line-clamp-2 leading-tight" title={name}>{name}</span>
                         <span className="ml-auto text-[11px] opacity-70">{count}</span>
                       </button>
                     );
@@ -650,8 +660,13 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
                 </>
               ) : null}
             </nav>
-            <div className="flex-1 p-5">
-              {location === "root" ? (
+            <div className={`min-w-0 flex-1 p-5 ${selected ? "bg-[#f6f6f7]" : "bg-white"}`}>
+              {selected ? (
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px]">
+                  <RecordSheet item={selected} />
+                  <PropertiesPanel item={selected} related={related} onSelect={openFile} />
+                </div>
+              ) : location === "root" ? (
                 <>
                   <RecentlyOpened ids={recentIds} evidence={stage.evidence} onOpen={openFile} />
                   <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 lg:grid-cols-5">
@@ -703,19 +718,9 @@ export function ArchivePage({ session, stage, opened, onOpen }: FormatPageProps)
                 </div>
               )}
             </div>
+            </div>
           </div>
         }
-        detail={
-          selected ? (
-            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px]">
-              <RecordSheet item={selected} />
-              <PropertiesPanel item={selected} related={related} onSelect={openFile} />
-            </div>
-          ) : null
-        }
-        hasSelection={Boolean(selected)}
-        onBack={() => setSelectedId(null)}
-        backLabel="← Back to the file list"
       />
       <BackLink slug={session.slug} />
     </>

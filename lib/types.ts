@@ -99,6 +99,18 @@ export type Challenge =
       answers: number[];
     }
   | {
+      /**
+       * Drag-and-drop classification: every item must be dropped into one
+       * category. `answers[i]` is the index into `categories` that item `i`
+       * belongs in. Items and categories are shown in authored order.
+       */
+      type: "match";
+      prompt: string;
+      items: string[];
+      categories: string[];
+      answers: number[];
+    }
+  | {
       type: "numeric";
       prompt: string;
       answer: number;
@@ -129,7 +141,8 @@ export interface Question {
   challenge: Challenge;
   /** Shown once the question is solved: the teaching point. */
   debrief: string[];
-  /** Character added to the session's final override code. */
+  /** Character added to the session's final override code (empty when the
+   * session sets `noCode`). */
   fragment: string;
 }
 
@@ -194,11 +207,18 @@ export interface Session {
   /** Your role in the fiction. */
   brief: string[];
   learningOutcomes: string[];
-  /** Exactly three: sizes 3, 3, 4. Unlock in order. */
+  /** Exactly three. Sizes are 3, 3, 4 by default (the bias room uses 4, 4,
+   * 4). Unlock in order. */
   stages: [Stage, Stage, Stage];
-  /** Concatenated question fragments, stage order then question order (10
-   * chars). */
+  /** Concatenated question fragments, stage order then question order (one
+   * character per question: 10 by default, 12 for sessions with 4/4/4
+   * stages). */
   finalCode: string;
+  /** Drop the override-code mechanic entirely: no code strip, no fragment
+   * badges, no final code entry. Solving every question completes the room and
+   * shows the finale debrief. Set `fragment: ""` on each question and
+   * `finalCode: ""`. */
+  noCode?: boolean;
   finale: {
     prompt: string;
     debrief: string[];

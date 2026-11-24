@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { Session } from "@/lib/types";
 import { accents } from "@/lib/accents";
 import { codeMatches } from "@/lib/answers";
@@ -33,6 +33,12 @@ export function SessionRunner({ session }: { session: Session }) {
     ALL_STAGES_UNLOCKED || index === 0 || stageSolved(index - 1);
 
   const allSolved = questions.every((question) => solved.has(question.id));
+
+  // No-code sessions are finished as soon as every question is solved.
+  const completeNow = Boolean(session.noCode) && allSolved && !progress.escaped;
+  useEffect(() => {
+    if (completeNow) update((p) => ({ ...p, escaped: true }));
+  }, [completeNow, update]);
 
   function solveQuestion(questionId: string) {
     update((p) =>
@@ -88,6 +94,7 @@ export function SessionRunner({ session }: { session: Session }) {
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
         <div className="mx-auto max-w-3xl">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-navy-15 pb-4">
+          {session.noCode ? null : (
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-navy-55 label">
               Code
@@ -111,6 +118,7 @@ export function SessionRunner({ session }: { session: Session }) {
               ))}
             </span>
           </div>
+          )}
           <p className="text-xs text-navy-70 numeric">
             {solved.size} / {questions.length} questions open
           </p>
@@ -241,6 +249,7 @@ export function SessionRunner({ session }: { session: Session }) {
                         total={questions.length}
                         state={state}
                         accent={accent}
+                        hideFragment={session.noCode}
                         onSolved={() => solveQuestion(question.id)}
                         expanded={expandedQuestions.includes(question.id)}
                         onToggleExpanded={() =>
@@ -268,7 +277,9 @@ export function SessionRunner({ session }: { session: Session }) {
                 <p className="text-[11px] font-semibold text-navy-55 label">
                   Final lock
                 </p>
-                <h2 className="mt-2 text-2xl font-bold">Override code</h2>
+                <h2 className="mt-2 text-2xl font-bold">
+                  {session.noCode ? "Audit complete" : "Override code"}
+                </h2>
                 <span
                   aria-hidden
                   className="mt-3 block h-px w-full bg-navy-15"
@@ -277,13 +288,15 @@ export function SessionRunner({ session }: { session: Session }) {
                   <Inline text={session.finale.prompt} />
                 </p>
 
-                {progress.escaped ? (
+                {progress.escaped || session.noCode ? (
                   <div className="mt-5 space-y-3 text-sm leading-relaxed text-navy-90">
-                    <p
-                      className={`inline-block rounded-lg px-5 py-3 text-2xl font-bold tracking-[0.2em] text-white ${accent.fill}`}
-                    >
-                      {session.finalCode}
-                    </p>
+                    {session.noCode ? null : (
+                      <p
+                        className={`inline-block rounded-lg px-5 py-3 text-2xl font-bold tracking-[0.2em] text-white ${accent.fill}`}
+                      >
+                        {session.finalCode}
+                      </p>
+                    )}
                     {session.finale.debrief.map((paragraph, i) => (
                       <p key={i}>
                         <Inline text={paragraph} />
@@ -308,7 +321,7 @@ export function SessionRunner({ session }: { session: Session }) {
                         setFinalEntry(event.target.value);
                         setFinalWrong(false);
                       }}
-                      placeholder="10 characters"
+                      placeholder={`${session.finalCode.length} characters`}
                       className="w-64 rounded-lg border border-navy-30 bg-white px-3 py-2 text-center text-lg font-bold uppercase tracking-[0.2em] placeholder:text-xs placeholder:font-normal placeholder:tracking-normal placeholder:text-navy-30 focus:border-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy"
                     />
                     <button
@@ -322,7 +335,7 @@ export function SessionRunner({ session }: { session: Session }) {
                         role="status"
                         className="border-l-2 border-navy py-0.5 pl-3 text-sm font-semibold"
                       >
-                        Not the code. Read the fragments off the ten open
+                        Not the code. Read the fragments off the {questions.length} open
                         questions, in order.
                       </p>
                     ) : null}
